@@ -8,4 +8,4 @@ Admin Menu Inspired from vMenu
 - menuv - https://github.com/ThymonA/menuv
 
 
-- Credits to @CsokiHUN - IMPLEMENTED HIS SPECTATE FROM  https://github.com/CsokiHUN/fl_spectate
+- Credits to @CsokiHUN - Implemented spectate option from his repo  https://github.com/CsokiHUN/fl_spectate
