@@ -1,6 +1,15 @@
 local ESX = exports['es_extended']:getSharedObject()
 local TSAdmins = {}
 
+local TSSpawnVehicle = function(model, coords, heading, cb)
+	if type(model) == 'string' then model = GetHashKey(model) end
+	CreateThread(function()
+		local entity = Citizen.InvokeNative(`CREATE_AUTOMOBILE`, model, coords.x, coords.y, coords.z, heading)
+		while not DoesEntityExist(entity) do Wait(50) end
+		cb(entity)
+	end)
+end
+
 RegisterNetEvent('onResourceStart', function()
     for k, v in ipairs(Admins) do
         TSAdmins[v] = {
@@ -1217,7 +1226,7 @@ RegisterNetEvent('ts-adminmenu:server:SpawnVehicle', function(veh)
             DeleteEntity(vehicle)
         end
         Wait(100)
-        ESX.OneSync.SpawnVehicle(model or `baller2`, GetEntityCoords(playerPed), GetEntityHeading(playerPed), function(car)
+        TSSpawnVehicle(model or `baller2`, GetEntityCoords(playerPed), GetEntityHeading(playerPed), function(car)
             local timeout = 50
             repeat
                 Wait(0)
