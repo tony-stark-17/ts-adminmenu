@@ -1686,10 +1686,10 @@ end)]]--
 
 
 ESX.RegisterServerCallback('ts-adminmenu:server:GetOnlinePlayers', function(source, cb)
-    local players = GetActivePlayers()
+    local players = ESX.GetPlayers()
     local plylist = {}
-    for k, v in ipairs(players) do
-        local plytable = {source = v, name = GetPlayerName(v)}
+    for i=1, #players, 1 do
+  	local plytable = {source = players[i], name = GetPlayerName(players[i])}
         table.insert(plylist,plytable)
     end
     table.sort(plylist, function(a, b) return a.name:upper() < b.name:upper() end)
