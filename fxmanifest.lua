@@ -13,10 +13,6 @@ files({
 
 ui_page("ui/index.html")
 
-escrow_ignore {
-	'server/admin_list.lua'
-}
-
 client_scripts {
 	'@pe-lualib/init.lua',
 	'@menuv/menuv.lua',
