@@ -1677,13 +1677,14 @@ end)]]--
 
 
 ESX.RegisterServerCallback('ts-adminmenu:server:GetOnlinePlayers', function(source, cb)
-    local players = ESX.GetExtendedPlayers()
-    local ply = players
-    for k, v in pairs(ply) do
-        v.name = GetPlayerName(v.playerId)
+    local players = GetActivePlayers()
+    local plylist = {}
+    for k, v in ipairs(players) do
+        local plytable = {source = v, name = GetPlayerName(v)}
+        table.insert(plylist,plytable)
     end
-    table.sort(ply, function(a, b) return a.name:upper() < b.name:upper() end)
-    cb(ply)
+    table.sort(plylist, function(a, b) return a.name:upper() < b.name:upper() end)
+    cb(plylist)
 end)
 
 ESX.RegisterServerCallback("ts-adminmenu:server:IsAllowed", function(source, cb, action, action2)
