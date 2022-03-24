@@ -5407,13 +5407,8 @@ local menu_onlineplayers = menu:AddButton({
 		ESX.TriggerServerCallback('ts-adminmenu:server:GetOnlinePlayers', function(plyList)
 			onlineplayers.data.ClearItems(onlineplayers)
 			for k, v in pairs(plyList) do
-				local icon = '🧍‍♂️'
-				if v.sex == 'f' then
-					icon = '🧍‍♀️'
-				end
-
 				onlineplayers:AddButton({
-					icon = icon,
+					icon = v.source,
 					label = v.name,
 					description = v.name .. ' ID: ' .. v.source,
 					value = v.source,
