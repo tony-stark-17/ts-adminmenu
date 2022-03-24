@@ -665,7 +665,7 @@ AddEventHandler('esx:playerLoaded', function(name, setCallback, deferrals)
     local Players = ESX.GetExtendedPlayers()
     for k, v in pairs(Players) do
         if CheckAllowed(v.source, 'MiscSettings_JoinQNotif', 'MiscSettings') then
-            TriggerClientEvent('ts-adminmenu:client:JoinQ', v.source,
+            TriggerClientEvent('ts-adminmenu:client:JoinQ', v.playerId,
                 '~o~' .. GetPlayerName(src) .. '~s~ Joined The Server')
         end
     end
