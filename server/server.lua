@@ -566,9 +566,18 @@ CheckAllowed = function(source, type, type2)
 end
 
 RegisterNetEvent('ts-adminmenu:server:PlayerJoined', function()
-    local xPlayer  = ESX.GetPlayerFromId(source)
+    local src = source
+    local xPlayer  = ESX.GetPlayerFromId(src)
+    local Players = ESX.GetExtendedPlayers()
+    for k, v in pairs(Players) do
+        if CheckAllowed(v.source, 'MiscSettings_JoinQNotif', 'MiscSettings') then
+            TriggerClientEvent('ts-adminmenu:client:JoinQ', v.source,
+                '~o~' .. GetPlayerName(src) .. '~s~ Joined The Server')
+        end
+    end
     TriggerClientEvent('ts-adminmenu:client:PlayerJoined', -1,xPlayer)
 end)
+
 
 RegisterNetEvent('ts-adminmenu:server:removeCar', function(plate)
     local src = source
@@ -660,16 +669,6 @@ AddEventHandler('playerDropped', function(reason)
     end
 end)
 
-AddEventHandler('esx:playerLoaded', function(name, setCallback, deferrals)
-    local src = source
-    local Players = ESX.GetExtendedPlayers()
-    for k, v in pairs(Players) do
-        if CheckAllowed(v.source, 'MiscSettings_JoinQNotif', 'MiscSettings') then
-            TriggerClientEvent('ts-adminmenu:client:JoinQ', v.playerId,
-                '~o~' .. GetPlayerName(src) .. '~s~ Joined The Server')
-        end
-    end
-end)
 
 RegisterNetEvent('ts-adminmenu:server:HealPlayer', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
