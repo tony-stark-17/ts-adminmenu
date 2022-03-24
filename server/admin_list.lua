@@ -1,4 +1,4 @@
-Admins = {)
+Admins = {}
 FullAccess = {}
 OnlinePlyOptions = {}
 OnlinePlyOptions_SendMessage = {}
