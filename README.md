@@ -18,3 +18,4 @@ Admin Menu Inspired from vMenu
 - Use Ace Permissions
 - Setup Config
 - Reduce Server Side Load on initialization
+- Make it standalone with config option for ESX
