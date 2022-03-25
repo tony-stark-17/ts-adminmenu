@@ -13,3 +13,7 @@ Admin Menu Inspired from vMenu
 ![image](https://user-images.githubusercontent.com/76168122/159921180-238b2ad0-aedb-458c-b1ad-03075fe95ad9.png)
 ![image](https://user-images.githubusercontent.com/76168122/159921196-bdd3cfd0-4da5-4fc2-bb78-a9eff335f2b1.png)
 ![image](https://user-images.githubusercontent.com/76168122/159921210-1c8c92fc-56ba-4131-862a-43d0662e2b08.png)
+
+## TODO
+- Use Ace Permissions
+- Setup Config
