@@ -7,7 +7,7 @@ Admin Menu Inspired from vMenu
 - ox_lib - https://github.com/overextended/ox_lib
 - menuv - https://github.com/ThymonA/menuv
 
-## Credits to @CsokiHUN - Implemented spectate option from his repo  https://github.com/CsokiHUN/fl_spectate
+-- Credits to @CsokiHUN - Implemented spectate option from his repo  https://github.com/CsokiHUN/fl_spectate
 
 ## SCREENSHOTS
 ![image](https://user-images.githubusercontent.com/76168122/159921180-238b2ad0-aedb-458c-b1ad-03075fe95ad9.png)
