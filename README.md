@@ -17,3 +17,4 @@ Admin Menu Inspired from vMenu
 ## TODO
 - Use Ace Permissions
 - Setup Config
+- Reduce Server Side Load on initialization
