@@ -21,3 +21,4 @@ Admin Menu Inspired from vMenu
 - Setup Config
 - Reduce Server Side Load on initialization
 - Make it standalone with config option for ESX
+- Remove okokTextUI and use free to use alternative
