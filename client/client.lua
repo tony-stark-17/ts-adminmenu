@@ -5483,44 +5483,24 @@ local rockstar_button = menu:AddButton({
     value = rockstar,
     description = 'Rockstar Settings',
 })
-
+	
 RegisterNetEvent('tsadmin:deleteVehicle', function(radius)
-	if radius and tonumber(radius) then
-		radius = tonumber(radius) + 0.01
-		local vehicles = ESX.Game.GetVehiclesInArea(GetEntityCoords(ESX.PlayerData.ped), radius)
-
-		for k,entity in ipairs(vehicles) do
-			local attempt = 0
-
-			while not NetworkHasControlOfEntity(entity) and attempt < 100 and DoesEntityExist(entity) do
-				Wait(100)
-				NetworkRequestControlOfEntity(entity)
-				attempt = attempt + 1
-			end
-
-			if DoesEntityExist(entity) and NetworkHasControlOfEntity(entity) then
-				ESX.Game.DeleteVehicle(entity)
-			end
-		end
-	else
-		local vehicle, attempt = ESX.Game.GetVehicleInDirection(), 0
-
-		if IsPedInAnyVehicle(ESX.PlayerData.ped, true) then
-			vehicle = GetVehiclePedIsIn(ESX.PlayerData.ped, false)
-		end
-
-		while not NetworkHasControlOfEntity(vehicle) and attempt < 100 and DoesEntityExist(vehicle) do
-			Wait(100)
-			NetworkRequestControlOfEntity(vehicle)
-			attempt = attempt + 1
-		end
-
-		if DoesEntityExist(vehicle) and NetworkHasControlOfEntity(vehicle) then
-			ESX.Game.DeleteVehicle(vehicle)
-		end
-	end
+    local ped = PlayerPedId()
+    local veh = GetVehiclePedIsUsing(ped)
+    if veh ~= 0 then
+        SetEntityAsMissionEntity(veh, true, true)
+        DeleteVehicle(veh)
+    else
+        local pcoords = GetEntityCoords(ped)
+        local vehicles = GetGamePool('CVehicle')
+        for k, v in pairs(vehicles) do
+            if #(pcoords - GetEntityCoords(v)) <= radius then
+                SetEntityAsMissionEntity(v, true, true)
+                DeleteVehicle(v)
+            end
+        end
+    end
 end)
-
 -- DELETE VEHICLE RADIUS
 ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
 	if allowed then
