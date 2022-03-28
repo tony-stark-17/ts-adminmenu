@@ -6,6 +6,9 @@ Admin Menu Inspired from vMenu
 - chHyperSound - https://github.com/charleshacks/chHyperSound
 - ox_lib - https://github.com/overextended/ox_lib
 - menuv - https://github.com/ThymonA/menuv
+- zf-context - https://github.com/zf-development/zf_context
+- okokTextUI (Not Important) / Will be replaced
+- oxmysql is needed
 
 ## Credits 
   - @CsokiHUN - Implemented spectate option from his repo  https://github.com/CsokiHUN/fl_spectate
