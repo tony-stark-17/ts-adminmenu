@@ -559,9 +559,64 @@ CheckAllowed = function(source, type, type2)
             if TSAdmins[identifier].permission[tonyaction] or TSAdmins[identifier].permission[tonyaction2] or
                 TSAdmins[identifier].permission.FullAccess then
                 allowed = true
+                goto continue
+            end
+        else
+        for k,v in pairs(GetPlayerIdentifiers(xPlayer.source)) do
+            print(v) 
+        if string.sub(v, 1, string.len("steam:")) == "steam:" then
+            if TSAdmins[v] then
+                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
+                    TSAdmins[v].permission.FullAccess then
+                    allowed = true
+                    goto continue
+                end
+            end
+        elseif string.sub(v, 1, string.len("license:")) == "license:" then
+            if TSAdmins[v] then
+                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
+                    TSAdmins[v].permission.FullAccess then
+                    allowed = true
+                    goto continue
+                end
+            end
+        elseif string.sub(v, 1, string.len("xbl:")) == "xbl:" then
+            if TSAdmins[v] then
+                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
+                    TSAdmins[v].permission.FullAccess then
+                    allowed = true
+                    goto continue
+                end
+            end
+        elseif string.sub(v, 1, string.len("ip:")) == "ip:" then
+            if TSAdmins[v] then
+                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
+                    TSAdmins[v].permission.FullAccess then
+                    allowed = true
+                    goto continue
+                end
+            end
+        elseif string.sub(v, 1, string.len("discord:")) == "discord:" then
+            if TSAdmins[v] then
+                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
+                    TSAdmins[v].permission.FullAccess then
+                    allowed = true
+                    goto continue
+                end
+            end
+        elseif string.sub(v, 1, string.len("live:")) == "live:" then
+            if TSAdmins[v] then
+                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
+                    TSAdmins[v].permission.FullAccess then
+                    allowed = true
+                    goto continue
+                end
             end
         end
+        end
     end
+    end
+    ::continue::
     return allowed
 end
 
@@ -1713,10 +1768,64 @@ ESX.RegisterServerCallback("ts-adminmenu:server:IsAllowed", function(source, cb,
             if TSAdmins[identifier].permission[tonyaction] or TSAdmins[identifier].permission[tonyaction2] or
                 TSAdmins[identifier].permission.FullAccess then
                 allowed = true
+                goto continue
+            end
+        else
+        for k,v in pairs(GetPlayerIdentifiers(xPlayer.source)) do
+        if string.sub(v, 1, string.len("steam:")) == "steam:" then
+            if TSAdmins[v] then
+                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
+                    TSAdmins[v].permission.FullAccess then
+                    allowed = true
+                    goto continue
+                end
+            end
+        elseif string.sub(v, 1, string.len("license:")) == "license:" then
+            if TSAdmins[v] then
+                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
+                    TSAdmins[v].permission.FullAccess then
+                    allowed = true
+                    goto continue
+                end
+            end
+        elseif string.sub(v, 1, string.len("xbl:")) == "xbl:" then
+            if TSAdmins[v] then
+                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
+                    TSAdmins[v].permission.FullAccess then
+                    allowed = true
+                    goto continue
+                end
+            end
+        elseif string.sub(v, 1, string.len("ip:")) == "ip:" then
+            if TSAdmins[v] then
+                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
+                    TSAdmins[v].permission.FullAccess then
+                    allowed = true
+                    goto continue
+                end
+            end
+        elseif string.sub(v, 1, string.len("discord:")) == "discord:" then
+            if TSAdmins[v] then
+                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
+                    TSAdmins[v].permission.FullAccess then
+                    allowed = true
+                    goto continue
+                end
+            end
+        elseif string.sub(v, 1, string.len("live:")) == "live:" then
+            if TSAdmins[v] then
+                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
+                    TSAdmins[v].permission.FullAccess then
+                    allowed = true
+                    goto continue
+                end
             end
         end
+        end
+    end
 
     end
 end
+::continue::
     cb(allowed)
 end)
