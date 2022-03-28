@@ -1132,7 +1132,7 @@ RegisterNetEvent('ts-adminmenu:server:DeleteVehicle', function(radi)
     local veh = GetVehiclePedIsIn(GetPlayerPed(xPlayer.source))
     if allowed then
         if veh ~= 0 then
-            DeleteEntity(vehicle)
+            DeleteEntity(veh)
         else
             veh = TSGetVehiclesInArea(GetEntityCoords(GetPlayerPed(xPlayer.source)), radius)
             for i = 1, #veh do
