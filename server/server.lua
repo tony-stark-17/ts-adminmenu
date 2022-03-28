@@ -18,8 +18,20 @@ local TSGetNearbyEntities = function(entities, coords, modelFilter, maxDistance,
 	return nearbyEntities
 end
 
+local TSGetPlayers = function()
+    local players = ESX.GetPlayers()
+    local plylist = {}
+    for i=1, #players, 1 do
+  	local plytable = {source = players[i], name = GetPlayerName(players[i])}
+        table.insert(plylist,plytable)
+    end
+    table.sort(plylist, function(a, b) return a.name:upper() < b.name:upper() end)
+    return plylist
+end
+
+
 local TSGetVehiclesInArea = function(coords, maxDistance, modelFilter)
-	return ESX.OneSync.GetNearbyEntities(GetAllVehicles(), coords, modelFilter, maxDistance)
+	return TSGetNearbyEntities(GetAllVehicles(), coords, modelFilter, maxDistance)
 end
 local TSSpawnVehicle = function(model, coords, heading, cb)
 	if type(model) == 'string' then model = GetHashKey(model) end
@@ -1332,7 +1344,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:PlayerFart', function(type)
     local src = source
     local farttype = type
-    local plyList = ESX.GetExtendedPlayers()
+    local plyList = TSGetPlayers()
     local allowed = CheckAllowed(src, 'TrollMenu_Fart', 'TrollMenu')
     if allowed then
         TriggerClientEvent('ts-adminmenu:client:PlayFart', src, plyList, farttype)
@@ -1767,15 +1779,9 @@ end)]]--
 
 
 
+
 ESX.RegisterServerCallback('ts-adminmenu:server:GetOnlinePlayers', function(source, cb)
-    local players = ESX.GetPlayers()
-    local plylist = {}
-    for i=1, #players, 1 do
-  	local plytable = {source = players[i], name = GetPlayerName(players[i])}
-        table.insert(plylist,plytable)
-    end
-    table.sort(plylist, function(a, b) return a.name:upper() < b.name:upper() end)
-    cb(plylist)
+    cb(TSGetPlayers())
 end)
 
 ESX.RegisterServerCallback("ts-adminmenu:server:IsAllowed", function(source, cb, action, action2)
