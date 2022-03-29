@@ -726,12 +726,6 @@ local vehmods = {
         modType = 10,
         price = 5.58
     },
-    windowTint = {
-        label = "Window Tint",
-        parent = 'cosmetics',
-        modType = 'windowTint',
-        price = 1.12
-    },
     modHorns = {
         label = "Horns",
         parent = 'cosmetics',
@@ -3959,6 +3953,7 @@ local isPrimary = true
 local isSecondary = false
 local isPearlescent = false
 local isWheel = false
+local isDash = false
 local isTyreSmoke = false
 
 local miscsettings = MenuV:CreateMenu(" ", 'Misc Settings', 'topright', 102, 0, 204, 'size-150', 'template1', 'menuv',
@@ -5742,6 +5737,12 @@ local LoadAdminMenu = function()
                 value = 'n'
             })
 
+            local dashc = vehicleoptions_vehicleop_mod_colormenu:AddCheckbox({
+                icon = '',
+                label = 'Dashboard Color',
+                value = 'n'
+            })
+
             local neonfront = vehicleoptions_vehicleop_mod_neon:AddCheckbox({
                 icon = '',
                 label = 'Enable Front Neon',
@@ -5905,6 +5906,14 @@ local LoadAdminMenu = function()
             wheelc:On('uncheck', function(item)
                 isWheel = false
             end)
+            dashc:On('check', function(item)
+                isDash = true
+            end)
+
+            dashc:On('uncheck', function(item)
+                isDash = false
+            end)
+            
 
             local vehicleoptions_vehrelated = vehicleoptions_vehicleop:AddButton({
 
@@ -6033,7 +6042,7 @@ local LoadAdminMenu = function()
                                 SetVehicleHeadlightsColour(veh, newValue)
                             end
                         end)
-			modbuttons['windowtint'] = vehicleoptions_vehicleop_mod:AddRange({
+			            modbuttons['windowtint'] = vehicleoptions_vehicleop_mod:AddRange({
                             icon = '',
                             label = "Window Tint",
                             min = 0,
@@ -6045,7 +6054,7 @@ local LoadAdminMenu = function()
                             local veh = GetVehiclePedIsUsing(PlayerPedId())
 
                             if veh ~= 0 then
-				SetVehicleWindowTint(veh,newValue)
+				                SetVehicleWindowTint(veh,newValue)
                             end
                         end)
                         for k, v in ipairs(colors) do
@@ -6060,11 +6069,32 @@ local LoadAdminMenu = function()
                                     if veh ~= 0 then
                                         local vehcolorp, vehcolors = GetVehicleColours(veh)
                                         local vehcolorperl, vehcolorwheel = GetVehicleExtraColours(veh)
-                                        if isPrimary and not isSecondary and not isPearlescent and not isWheel then
-                                            SetVehicleColours(veh, v.colorindex, vehcolors)
-                                        elseif isSecondary and not isPrimary and not isPearlescent and not isWheel then
+                                        if isPrimary then
+                                            SetVehicleColours(veh, v.colorindex, vehcolors) 
+                                        end
+                                        if isSecondary then
+                                            vehcolorp, vehcolors = GetVehicleColours(veh)
+                                            vehcolorperl, vehcolorwheel = GetVehicleExtraColours(veh)
                                             SetVehicleColours(veh, vehcolorp, v.colorindex)
-                                        elseif isPearlescent and not isPrimary and not isSecondary and not isWheel then
+                                        end
+                                        if isWheel then
+                                            vehcolorp, vehcolors = GetVehicleColours(veh)
+                                            vehcolorperl, vehcolorwheel = GetVehicleExtraColours(veh)
+                                            SetVehicleExtraColours(veh, vehcolorp, v.colorindex)
+                                        end
+                                        if isDash then
+                                            SetVehicleDashboardColor(veh, v.colorindex)
+                                        end
+                                        if isPearlescent then
+                                            vehcolorp, vehcolors = GetVehicleColours(veh)
+                                            vehcolorperl, vehcolorwheel = GetVehicleExtraColours(veh)
+                                            SetVehicleExtraColours(veh, v.colorindex, vehcolorwheel)
+                                        end
+                                        --[[if isPrimary and not isSecondary and not isPearlescent and not isWheel and not isDash then
+                                            SetVehicleColours(veh, v.colorindex, vehcolors)
+                                        elseif isSecondary and not isPrimary and not isPearlescent and not isWheel and not isDash then
+                                            SetVehicleColours(veh, vehcolorp, v.colorindex)
+                                        elseif isPearlescent and not isPrimary and not isSecondary and not isWheel and not isDash then
                                             SetVehicleExtraColours(veh, v.colorindex, vehcolorwheel)
                                         elseif isWheel and not isPearlescent and not isPrimary and not isSecondary then
                                             SetVehicleExtraColours(veh, vehcolorp, v.colorindex)
@@ -6099,7 +6129,7 @@ local LoadAdminMenu = function()
                                         else
                                             SetVehicleColours(veh, v.colorindex, v.colorindex)
                                             SetVehicleExtraColours(veh, v.colorindex, v.colorindex)
-                                        end
+                                        end]]--
                                     end
                                 end
                             })
