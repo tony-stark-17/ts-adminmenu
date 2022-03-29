@@ -7304,13 +7304,12 @@ local LoadAdminMenu = function()
                     for k, v in pairs(ply) do
                         local dist = #(GetEntityCoords(GetPlayerPed(v) - GetEntityCoords(PlayerPedId())))
                         if dist < 250 then
-                            if not plynamet[k] then
                                 plynamet[k] = CreateFakeMpGamerTag(GetPlayerPed(v),
                                     GetPlayerName(v) .. ': ' .. GetPlayerServerId(v), false, false, "", 0)
                                 SetMpGamerTagVisibility(plynamet[k], 2, 1) -- set the visibility of component 2(healthArmour) to true
                                 SetMpGamerTagAlpha(plynamet[k], 2, 255) -- set the alpha of component 2(healthArmour) to 255
                                 SetMpGamerTagHealthBarColor(plynamet[k], 129) -- set component 2(healthArmour) color to 129(HUD_COLOUR_YOGA)
-                            end
+                            
                         else
                             if plynamet[k] then
                                 RemoveMpGamerTag(plynamet[k])
