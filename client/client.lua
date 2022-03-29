@@ -7242,8 +7242,12 @@ local LoadAdminMenu = function()
                         local coords = GetEntityCoords(GetPlayerPed(v))
                         local dist = #(coords - GetEntityCoords(PlayerPedId()))
                         if dist < 250 then
-                            if not plyblips[sid] then
+                            
                                 if v ~= PlayerId() then
+				    if plyblips[sid] then					
+					RemoveBlip(plyblips[sid])
+                                	plyblips[sid] = nil
+				    end
                                     local bliptony = AddBlipForEntity(GetPlayerPed(v))
                                     SetBlipSprite(bliptony, 1)
                                     SetBlipNameToPlayerName(bliptony, v)
@@ -7253,7 +7257,7 @@ local LoadAdminMenu = function()
                                     SetBlipCategory(bliptony, 7)
                                     plyblips[sid] = bliptony
                                 end
-                            end
+                            
                         else
                             if plyblips[sid] then
                                 RemoveBlip(plyblips[sid])
