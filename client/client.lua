@@ -6033,6 +6033,21 @@ local LoadAdminMenu = function()
                                 SetVehicleHeadlightsColour(veh, newValue)
                             end
                         end)
+			modbuttons['windowtint'] = vehicleoptions_vehicleop_mod:AddRange({
+                            icon = '',
+                            label = "Window Tint",
+                            min = 0,
+                            max = GetNumVehicleWindowTints(),
+                            value = GetVehicleWindowTint(GetVehiclePedIsUsing(PlayerPedId())),
+                            saveOnUpdate = true
+                        })
+                        modbuttons['windowtint']:On('select', function(item, newValue, oldValue)
+                            local veh = GetVehiclePedIsUsing(PlayerPedId())
+
+                            if veh ~= 0 then
+				SetVehicleWindowTint(veh,newValue)
+                            end
+                        end)
                         for k, v in ipairs(colors) do
                             vehicleoptions_vehicleop_mod_colors:AddButton({
                                 icon = '',
