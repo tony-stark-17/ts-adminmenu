@@ -174,7 +174,7 @@ CreateThread(function()
 	end
 end)
 
-RegisterCommand("spectateoff", function()
+RegisterCommand(TConfig.spectateof, function()
 	if Panel.selectedPlayer then
 		TriggerEvent("chat:addMessage", {
 			args = { "Server", "Spectate turned off" },
@@ -183,4 +183,4 @@ RegisterCommand("spectateoff", function()
 		Panel:spectateoff()
 	end
 end)
-RegisterKeyMapping("spectateoff", "Spectate Kikapcsolas", "keyboard", "e")
+RegisterKeyMapping(TConfig.spectateof, "Spectate Kikapcsolas", "keyboard", TConfig.spectateoffkey)
