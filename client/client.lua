@@ -4351,6 +4351,7 @@ local LoadOnlinePlayersEach = function()
         -------------------------------------------------------------------------
         -- REVIVE
         ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+            print(allowed)
             if allowed then
                 local onlineplayers_each_revive = onlineplayers_each:AddButton({
                     icon = '❤️',
@@ -4363,6 +4364,7 @@ local LoadOnlinePlayersEach = function()
                     end
                 })
                 RegisterCommand('rv', function(source, args, raw)
+                    print(args[1])
                     if args[1] then
                         TriggerServerEvent('ts-adminmenu:server:RevivePlayer', args[1])
                     else
@@ -6686,7 +6688,7 @@ local LoadMiscSettings = function()
                     end
                 end
             })
-            RegisterCommand('ann', function()
+            RegisterCommand(TConfig.Announce, function()
                 local keyboard = exports["nh-keyboard"]:KeyboardInput({
                     header = "TS Announcer",
                     rows = {{
@@ -7455,8 +7457,7 @@ local LoadTrollMenu = function()
     end, 'RockstarEditor', 'MiscSettings')
 end
 
-
-RegisterCommand('tsadmin', function()
+RegisterCommand(TConfig.OpenAdminmenu, function()
     ESX.TriggerServerCallback('ts-adminmenu:server:IsAllowed', function(allowed)
         if allowed then
             MenuV:CloseAll(function()
@@ -7469,9 +7470,9 @@ RegisterCommand('tsadmin', function()
     end, 'OpenAdminmenu')
 end)
 
-RegisterKeyMapping('tsadmin', 'TS Adminmenu', 'keyboard', 'f11')
+RegisterKeyMapping(TConfig.OpenAdminmenu, 'TS Adminmenu', 'keyboard', TConfig.OpenMenuDefultKey)
 
-RegisterCommand('tsgetmenu', function()
+RegisterCommand(TConfig.DebugTable, function()
     TriggerEvent('table', menu)
 end)
 
@@ -7488,10 +7489,10 @@ local LoadAdminMenu = function()
         loadtimeout = true
     ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
         if allowed then
-            RegisterCommand("toggleNoClip", function(source, rawCommand)
+            RegisterCommand(TConfig.ToggleNoClipMode, function(source, rawCommand)
                 ToggleNoClipMode()
             end)
-            RegisterKeyMapping('toggleNoClip', 'Noclip', 'keyboard', 'INSERT')
+            RegisterKeyMapping(TConfig.ToggleNoClipMode, 'Noclip', 'keyboard', TConfig.OpenMenuNoclipDefultKey)
         end
     end, 'PlayerOptions_Noclip', 'PlayerOptions')
     menu:ClearItems()
