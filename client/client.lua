@@ -3964,214 +3964,212 @@ local isDash = false
 local isInt = false
 local isTyreSmoke = false
 
-
-
 local LoadOnlinePlayersEach = function()
-        onlineplayers_each:ClearItems()
-        -----------------------------------------------------------------------------
-        -- SEND MESSAGE
-        ----------------------------------------------------------------------------
-    
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local onlineplayers_each_sendm = onlineplayers_each:AddButton({
-                    icon = '💬',
-                    label = "Send Private Message",
-                    description = "Send private message to player",
-                    value = "sendm",
-                    false,
-                    select = function(i)
-                        local keyboard = exports["nh-keyboard"]:KeyboardInput({
-                            header = "TS Admin Menu",
-                            rows = {{
-                                id = 0,
-                                txt = "Message"
-                            }}
-                        })
-                        if keyboard ~= nil then
-                            if keyboard[1].input == nil then
-                                return
-                            end
-                            TriggerServerEvent('ts-adminmenu:server:SendMessage', selectedPlayer, keyboard[1].input)
-                        end
-                    end
-                })
-            end
-        end, 'OnlinePlyOptions_SendMessage', 'OnlinePlyOptions')
-        -----------------------------------------------------------------------------
-        -- CHANGE SKIN
-        ----------------------------------------------------------------------------
-    
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local onlineplayers_each_sendm = onlineplayers_each:AddButton({
-                    icon = '💬',
-                    label = "Change Skin",
-                    description = "Change skin option for player",
-                    value = "changesk",
-                    false,
-                    select = function(i)
-    
-                        TriggerServerEvent('ts-adminmenu:server:ChangeSkin', selectedPlayer)
-                    end
-                })
-            end
-        end, 'OnlinePlyOptions_ChangeSkin', 'OnlinePlyOptions')
-    
-        -------------------------------------------------------------------------
-        -- SHOW INVENTORY
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local onlineplayers_each_openinv = onlineplayers_each:AddButton({
-                    icon = '📂',
-                    label = "Show Inventory",
-                    description = "Show Player Inventory",
-                    value = "openinv",
-                    false,
-                    select = function(i)
-                        MenuV:CloseAll()
-                        TriggerServerEvent('ts-adminmenu:server:ShowInventory', selectedPlayer)
-                        selectedPlayer = 0
-                    end
-                })
-            end
-        end, 'OnlinePlyOptions_OpenInventory', 'OnlinePlyOptions')
-    
-        -------------------------------------------------------------------------
-        -- SET JOB
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local onlineplayers_each_setjob = onlineplayers_each:AddButton({
-                    icon = '📗',
-                    label = "Set Job",
-                    description = "Change Player Job",
-                    value = "setj",
-                    false,
-                    select = function(i)
-                        ESX.TriggerServerCallback('ts-adminmenu:server:GetJobs', function(jobs)
-                            local myMenu = {{
-                                id = 1,
-                                header = 'TS Job List',
-                                txt = ''
-                            }}
-                            local count = 1
-                            for k, v in pairs(jobs) do
-                                local grade = 0
-                                for i, j in pairs(v.grades) do
-                                    grade = grade + 1
-                                end
-                                count = count + 1
-                                table.insert(myMenu, {
-                                    id = count,
-                                    header = v.label .. ' - ' .. v.name,
-                                    txt = 'Grades = ' .. grade - 1,
-                                    params = {
-                                        event = 'ts-adminmenu:client:setgrade',
-                                        isServer = false,
-                                        args = {
-                                            job = v.name,
-                                            max = grade
-                                        }
-                                    }
-                                })
-                            end
-                            exports['zf_context']:openMenu(myMenu)
-                        end)
-                    end
-                })
-                RegisterCommand('sjob', function(source, args, raw)
-                    TriggerServerEvent('ts-adminmenu:server:SetJob', args[1], args[2], args[3])
-                end)
-            end
-        end, 'OnlinePlyOptions_SetJob', 'OnlinePlyOptions')
-    
-        RegisterNetEvent('ts-adminmenu:client:setgrade', function(data)
-            local job = data.job
-            local max = tonumber(data.max) - 1
-            local keyboard = exports["nh-keyboard"]:KeyboardInput({
-                header = "TS Admin Menu",
-                rows = {{
-                    id = 0,
-                    txt = "Max Grade: " .. max
-                }}
-            })
-            if keyboard ~= nil then
-                if keyboard[1].input == nil then
-                    return
-                end
-                TriggerServerEvent('ts-adminmenu:server:SetJob', selectedPlayer, job, keyboard[1].input)
-            end
-        end)
-    
-        -------------------------------------------------------------------------
-        -- ADD INVENTORY ITEM
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local SelectItems = function()
-                    local Items = exports.ox_inventory:Items()
-    
-                    local myMenu = {{
-                        id = 1,
-                        header = 'Give Inventory Item',
-                        txt = ''
-                    }}
-                    local count = 2
-    
-                    for k, v in pairs(Items) do
-                        table.insert(myMenu, {
-                            id = count,
-                            header = v.label,
-                            txt = 'Give ' .. v.name,
-                            params = {
-                                event = 'ts-adminmenu:client:GiveItem',
-                                isServer = false,
-                                args = {
-                                    item = v.name,
-                                    plyid = selectedPlayer
-                                }
-                            }
-                        })
-                        count = count + 1
-                    end
-                    exports['zf_context']:openMenu(myMenu)
-                end
-                local onlineplayers_each_giveitem = onlineplayers_each:AddButton({
-                    icon = '🎁',
-                    label = "Give Player Item",
-                    description = "Give Item",
-                    value = "giveinv",
-                    false,
-                    select = function(i)
-                        SelectItems()
-                    end
-                })
-            end
-        end, 'OnlinePlyOptions_GiveItem', 'OnlinePlyOptions')
-    
-        -- NAME
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local SelectItems = function()
+    onlineplayers_each:ClearItems()
+    -----------------------------------------------------------------------------
+    -- SEND MESSAGE
+    ----------------------------------------------------------------------------
+
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local onlineplayers_each_sendm = onlineplayers_each:AddButton({
+                icon = '💬',
+                label = "Send Private Message",
+                description = "Send private message to player",
+                value = "sendm",
+                false,
+                select = function(i)
                     local keyboard = exports["nh-keyboard"]:KeyboardInput({
                         header = "TS Admin Menu",
                         rows = {{
                             id = 0,
-                            txt = "Item Code"
+                            txt = "Message"
                         }}
                     })
                     if keyboard ~= nil then
                         if keyboard[1].input == nil then
                             return
                         end
-                        local data = {
-                            item = keyboard[1].input,
-                            plyid = selectedPlayer
-                        }
-                        TriggerEvent('ts-adminmenu:client:GiveItem', data)
+                        TriggerServerEvent('ts-adminmenu:server:SendMessage', selectedPlayer, keyboard[1].input)
                     end
                 end
-                RegisterCommand('gi', function(source, args, raw)
-                    --[[if args[1] then
+            })
+        end
+    end, 'OnlinePlyOptions_SendMessage', 'OnlinePlyOptions')
+    -----------------------------------------------------------------------------
+    -- CHANGE SKIN
+    ----------------------------------------------------------------------------
+
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local onlineplayers_each_sendm = onlineplayers_each:AddButton({
+                icon = '💬',
+                label = "Change Skin",
+                description = "Change skin option for player",
+                value = "changesk",
+                false,
+                select = function(i)
+
+                    TriggerServerEvent('ts-adminmenu:server:ChangeSkin', selectedPlayer)
+                end
+            })
+        end
+    end, 'OnlinePlyOptions_ChangeSkin', 'OnlinePlyOptions')
+
+    -------------------------------------------------------------------------
+    -- SHOW INVENTORY
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local onlineplayers_each_openinv = onlineplayers_each:AddButton({
+                icon = '📂',
+                label = "Show Inventory",
+                description = "Show Player Inventory",
+                value = "openinv",
+                false,
+                select = function(i)
+                    MenuV:CloseAll()
+                    TriggerServerEvent('ts-adminmenu:server:ShowInventory', selectedPlayer)
+                    selectedPlayer = 0
+                end
+            })
+        end
+    end, 'OnlinePlyOptions_OpenInventory', 'OnlinePlyOptions')
+
+    -------------------------------------------------------------------------
+    -- SET JOB
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local onlineplayers_each_setjob = onlineplayers_each:AddButton({
+                icon = '📗',
+                label = "Set Job",
+                description = "Change Player Job",
+                value = "setj",
+                false,
+                select = function(i)
+                    ESX.TriggerServerCallback('ts-adminmenu:server:GetJobs', function(jobs)
+                        local myMenu = {{
+                            id = 1,
+                            header = 'TS Job List',
+                            txt = ''
+                        }}
+                        local count = 1
+                        for k, v in pairs(jobs) do
+                            local grade = 0
+                            for i, j in pairs(v.grades) do
+                                grade = grade + 1
+                            end
+                            count = count + 1
+                            table.insert(myMenu, {
+                                id = count,
+                                header = v.label .. ' - ' .. v.name,
+                                txt = 'Grades = ' .. grade - 1,
+                                params = {
+                                    event = 'ts-adminmenu:client:setgrade',
+                                    isServer = false,
+                                    args = {
+                                        job = v.name,
+                                        max = grade
+                                    }
+                                }
+                            })
+                        end
+                        exports['zf_context']:openMenu(myMenu)
+                    end)
+                end
+            })
+            RegisterCommand(TConfig.Setjob, function(source, args, raw)
+                TriggerServerEvent('ts-adminmenu:server:SetJob', args[1], args[2], args[3])
+            end)
+        end
+    end, 'OnlinePlyOptions_SetJob', 'OnlinePlyOptions')
+
+    RegisterNetEvent('ts-adminmenu:client:setgrade', function(data)
+        local job = data.job
+        local max = tonumber(data.max) - 1
+        local keyboard = exports["nh-keyboard"]:KeyboardInput({
+            header = "TS Admin Menu",
+            rows = {{
+                id = 0,
+                txt = "Max Grade: " .. max
+            }}
+        })
+        if keyboard ~= nil then
+            if keyboard[1].input == nil then
+                return
+            end
+            TriggerServerEvent('ts-adminmenu:server:SetJob', selectedPlayer, job, keyboard[1].input)
+        end
+    end)
+
+    -------------------------------------------------------------------------
+    -- ADD INVENTORY ITEM
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local SelectItems = function()
+                local Items = exports.ox_inventory:Items()
+
+                local myMenu = {{
+                    id = 1,
+                    header = 'Give Inventory Item',
+                    txt = ''
+                }}
+                local count = 2
+
+                for k, v in pairs(Items) do
+                    table.insert(myMenu, {
+                        id = count,
+                        header = v.label,
+                        txt = 'Give ' .. v.name,
+                        params = {
+                            event = 'ts-adminmenu:client:GiveItem',
+                            isServer = false,
+                            args = {
+                                item = v.name,
+                                plyid = selectedPlayer
+                            }
+                        }
+                    })
+                    count = count + 1
+                end
+                exports['zf_context']:openMenu(myMenu)
+            end
+            local onlineplayers_each_giveitem = onlineplayers_each:AddButton({
+                icon = '🎁',
+                label = "Give Player Item",
+                description = "Give Item",
+                value = "giveinv",
+                false,
+                select = function(i)
+                    SelectItems()
+                end
+            })
+        end
+    end, 'OnlinePlyOptions_GiveItem', 'OnlinePlyOptions')
+
+    -- NAME
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local SelectItems = function()
+                local keyboard = exports["nh-keyboard"]:KeyboardInput({
+                    header = "TS Admin Menu",
+                    rows = {{
+                        id = 0,
+                        txt = "Item Code"
+                    }}
+                })
+                if keyboard ~= nil then
+                    if keyboard[1].input == nil then
+                        return
+                    end
+                    local data = {
+                        item = keyboard[1].input,
+                        plyid = selectedPlayer
+                    }
+                    TriggerEvent('ts-adminmenu:client:GiveItem', data)
+                end
+            end
+            RegisterCommand(TConfig.GiveItem, function(source, args, raw)
+                --[[if args[1] then
                 local plyid = args[1]
                 local item = args[2]
                 local max = tonumber(args[3])
@@ -4183,308 +4181,307 @@ local LoadOnlinePlayersEach = function()
                     end
                 end
             else]] --
+                local keyboard = exports["nh-keyboard"]:KeyboardInput({
+                    header = "TS Admin Menu",
+                    rows = {{
+                        id = 0,
+                        txt = "Player ID"
+                    }, {
+                        id = 1,
+                        txt = "Item Name"
+                    }}
+                })
+                if keyboard ~= nil then
+                    if keyboard[1].input == nil or keyboard[2].input == nil then
+                        return
+                    end
+                    local data = {
+                        item = keyboard[2].input,
+                        plyid = keyboard[1].input
+                    }
+                    TriggerEvent('ts-adminmenu:client:GiveItem', data)
+
+                end
+                -- end
+
+            end)
+            local onlineplayers_each_giveitemname = onlineplayers_each:AddButton({
+                icon = '🎁',
+                label = "Give Player Item",
+                description = "Give Item",
+                value = "giveitem",
+                false,
+                select = function(i)
+                    SelectItems()
+                end
+            })
+        end
+    end, 'OnlinePlyOptions_GiveItemName', 'OnlinePlyOptions')
+
+    -------------------------------------------------------------------------
+    -- REMOVE INVENTORY ITEM
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local onlineplayers_each_removeitem = onlineplayers_each:AddButton({
+                icon = '🗑',
+                label = "Remove Inventory Item",
+                description = "Remove Item",
+                value = "removeinv",
+                false,
+                select = function(i)
+                    TriggerServerEvent('ts-adminmenu:server:GetItems', selectedPlayer)
+                end
+            })
+        end
+    end, 'OnlinePlyOptions_RemoveInventoryItem', 'OnlinePlyOptions')
+    -------------------------------------------------------------------------
+    -- GIVE ACCOUNT MONEY
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local onlineplayers_each_givem = onlineplayers_each:AddButton({
+                icon = '💵',
+                label = "Give Account Money",
+                description = "Give Money",
+                value = "givemon",
+                false,
+                select = function(i)
                     local keyboard = exports["nh-keyboard"]:KeyboardInput({
-                        header = "TS Admin Menu",
+                        header = "Give Account Money - TSADMIN",
                         rows = {{
                             id = 0,
-                            txt = "Player ID"
+                            txt = "Account Name (money, bank, black_money)"
                         }, {
                             id = 1,
-                            txt = "Item Name"
+                            txt = "Amount"
                         }}
                     })
+
                     if keyboard ~= nil then
                         if keyboard[1].input == nil or keyboard[2].input == nil then
                             return
                         end
-                        local data = {
-                            item = keyboard[2].input,
-                            plyid = keyboard[1].input
-                        }
-                        TriggerEvent('ts-adminmenu:client:GiveItem', data)
-    
+                        TriggerServerEvent('ts-adminmenu:server:GiveAccMoney', selectedPlayer, keyboard[1].input,
+                            keyboard[2].input)
                     end
-                    -- end
-    
-                end)
-                local onlineplayers_each_giveitemname = onlineplayers_each:AddButton({
-                    icon = '🎁',
-                    label = "Give Player Item",
-                    description = "Give Item",
-                    value = "giveitem",
-                    false,
-                    select = function(i)
-                        SelectItems()
-                    end
-                })
-            end
-        end, 'OnlinePlyOptions_GiveItemName', 'OnlinePlyOptions')
-    
-        -------------------------------------------------------------------------
-        -- REMOVE INVENTORY ITEM
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local onlineplayers_each_removeitem = onlineplayers_each:AddButton({
-                    icon = '🗑',
-                    label = "Remove Inventory Item",
-                    description = "Remove Item",
-                    value = "removeinv",
-                    false,
-                    select = function(i)
-                        TriggerServerEvent('ts-adminmenu:server:GetItems', selectedPlayer)
-                    end
-                })
-            end
-        end, 'OnlinePlyOptions_RemoveInventoryItem', 'OnlinePlyOptions')
-        -------------------------------------------------------------------------
-        -- GIVE ACCOUNT MONEY
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local onlineplayers_each_givem = onlineplayers_each:AddButton({
-                    icon = '💵',
-                    label = "Give Account Money",
-                    description = "Give Money",
-                    value = "givemon",
-                    false,
-                    select = function(i)
-                        local keyboard = exports["nh-keyboard"]:KeyboardInput({
-                            header = "Give Account Money - TSADMIN",
-                            rows = {{
-                                id = 0,
-                                txt = "Account Name (money, bank, black_money)"
-                            }, {
-                                id = 1,
-                                txt = "Amount"
-                            }}
-                        })
-    
-                        if keyboard ~= nil then
-                            if keyboard[1].input == nil or keyboard[2].input == nil then
-                                return
-                            end
-                            TriggerServerEvent('ts-adminmenu:server:GiveAccMoney', selectedPlayer, keyboard[1].input,
-                                keyboard[2].input)
+
+                end
+            })
+        end
+    end, 'OnlinePlyOptions_GiveMoney', 'OnlinePlyOptions')
+    -------------------------------------------------------------------------
+    -- REMOVE ACCOUNT MONEY
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local onlineplayers_each_removem = onlineplayers_each:AddButton({
+                icon = '💵',
+                label = "Remove Account Money",
+                description = "Remove Money",
+                value = "givemon",
+                false,
+                select = function(i)
+                    local keyboard = exports["nh-keyboard"]:KeyboardInput({
+                        header = "Remove Account Money - TSADMIN",
+                        rows = {{
+                            id = 0,
+                            txt = "Account Name (money, bank, black_money)"
+                        }, {
+                            id = 1,
+                            txt = "Amount"
+                        }}
+                    })
+
+                    if keyboard ~= nil then
+                        if keyboard[1].input == nil or keyboard[2].input == nil then
+                            return
                         end
-    
+                        TriggerServerEvent('ts-adminmenu:server:RemoveAccMoney', selectedPlayer, keyboard[1].input,
+                            keyboard[2].input)
                     end
-                })
-            end
-        end, 'OnlinePlyOptions_GiveMoney', 'OnlinePlyOptions')
-        -------------------------------------------------------------------------
-        -- REMOVE ACCOUNT MONEY
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local onlineplayers_each_removem = onlineplayers_each:AddButton({
-                    icon = '💵',
-                    label = "Remove Account Money",
-                    description = "Remove Money",
-                    value = "givemon",
-                    false,
-                    select = function(i)
-                        local keyboard = exports["nh-keyboard"]:KeyboardInput({
-                            header = "Remove Account Money - TSADMIN",
-                            rows = {{
-                                id = 0,
-                                txt = "Account Name (money, bank, black_money)"
-                            }, {
-                                id = 1,
-                                txt = "Amount"
-                            }}
-                        })
-    
-                        if keyboard ~= nil then
-                            if keyboard[1].input == nil or keyboard[2].input == nil then
-                                return
-                            end
-                            TriggerServerEvent('ts-adminmenu:server:RemoveAccMoney', selectedPlayer, keyboard[1].input,
-                                keyboard[2].input)
+
+                end
+            })
+        end
+    end, 'OnlinePlyOptions_RemoveMoney', 'OnlinePlyOptions')
+    -------------------------------------------------------------------------
+    -- GIVE/REMOVE LICENSE
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local onlineplayers_each_lic = onlineplayers_each:AddButton({
+                icon = '✨',
+                label = "Add / Remove License",
+                description = "Add / Remove License",
+                value = "addrmlicense",
+                false,
+                select = function(i)
+                    local keyboard = exports["nh-keyboard"]:KeyboardInput({
+                        header = "TS Admin Menu - License Manager",
+                        rows = {{
+                            id = 0,
+                            txt = "License Name"
+                        }}
+                    })
+                    if keyboard ~= nil then
+                        if keyboard[1].input == nil then
+                            return
                         end
-    
+                        TriggerServerEvent('ts-adminmenu:server:ToggleLicense', selectedPlayer, keyboard[1].input)
                     end
-                })
-            end
-        end, 'OnlinePlyOptions_RemoveMoney', 'OnlinePlyOptions')
-        -------------------------------------------------------------------------
-        -- GIVE/REMOVE LICENSE
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local onlineplayers_each_lic = onlineplayers_each:AddButton({
-                    icon = '✨',
-                    label = "Add / Remove License",
-                    description = "Add / Remove License",
-                    value = "addrmlicense",
-                    false,
-                    select = function(i)
-                        local keyboard = exports["nh-keyboard"]:KeyboardInput({
-                            header = "TS Admin Menu - License Manager",
-                            rows = {{
-                                id = 0,
-                                txt = "License Name"
-                            }}
-                        })
-                        if keyboard ~= nil then
-                            if keyboard[1].input == nil then
-                                return
-                            end
-                            TriggerServerEvent('ts-adminmenu:server:ToggleLicense', selectedPlayer, keyboard[1].input)
-                        end
-                    end
-                })
-            end
-        end, 'OnlinePlyOptions_License', 'OnlinePlyOptions')
-        -------------------------------------------------------------------------
-        -- HEAL PLAYER
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local onlineplayers_each_heal = onlineplayers_each:AddButton({
-                    icon = '✨',
-                    label = "Heal Player",
-                    description = "Heal Player",
-                    value = "heal",
-                    false,
-                    select = function(i)
-                        TriggerServerEvent('ts-adminmenu:server:HealPlayer', selectedPlayer)
-                    end
-                })
-            end
-        end, 'OnlinePlyOptions_Heal', 'OnlinePlyOptions')
-        -------------------------------------------------------------------------
-        -- REVIVE
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            print(allowed)
-            if allowed then
-                local onlineplayers_each_revive = onlineplayers_each:AddButton({
-                    icon = '❤️',
-                    label = "Revive Player",
-                    description = "Revive Player",
-                    value = "rev",
-                    false,
-                    select = function(i)
-                        TriggerServerEvent('ts-adminmenu:server:RevivePlayer', selectedPlayer)
-                    end
-                })
-                RegisterCommand('rv', function(source, args, raw)
-                    print(args[1])
-                    if args[1] then
-                        TriggerServerEvent('ts-adminmenu:server:RevivePlayer', args[1])
-                    else
-                        TriggerServerEvent('ts-adminmenu:server:RevivePlayer', GetPlayerServerId(PlayerId()))
-                    end
-                end)
-            end
-        end, 'OnlinePlyOptions_Revive', 'OnlinePlyOptions')
-    
-    
-        -------------------------------------------------------------------------
-        -- GOTO
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local onlineplayers_each_goto = onlineplayers_each:AddButton({
-                    icon = '🛸',
-                    label = "Teleport To Player",
-                    description = "Teleport to Player",
-                    value = "goto",
-                    false,
-                    select = function(i)
-                        TriggerServerEvent('ts-adminmenu:server:Goto', selectedPlayer)
-                    end
-                })
-                RegisterCommand('gt', function(source, args, raw)
-                    if args[1] then
-                        TriggerServerEvent('ts-adminmenu:server:Goto', args[1])
-                    end
-                end)
-            end
-        end, 'OnlinePlyOptions_Goto', 'OnlinePlyOptions')
-        -------------------------------------------------------------------------
-        -- BRING
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local onlineplayers_each_bring = onlineplayers_each:AddButton({
-                    icon = '🚀',
-                    label = "Bring Player",
-                    description = "Bring Player",
-                    value = "bring",
-                    false,
-                    select = function(i)
-                        TriggerServerEvent('ts-adminmenu:server:Bring', selectedPlayer)
-                    end
-                })
-                RegisterCommand('br', function(source, args, raw)
-                    if args[1] then
-                        TriggerServerEvent('ts-adminmenu:server:Bring', args[1])
-                    end
-                end)
-            end
-        end, 'OnlinePlyOptions_Bring', 'OnlinePlyOptions')
-        -------------------------------------------------------------------------
-        -- SET WAYPOINT
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local onlineplayers_each_waypoint = onlineplayers_each:AddButton({
-                    icon = '🔍',
-                    label = "Set Waypoint",
-                    description = "Set waypoint to player coords",
-                    value = "waypointgoto",
-                    false,
-                    select = function(i)
-                        TriggerServerEvent('ts-adminmenu:server:SetWaypoint', selectedPlayer)
-                    end
-                })
-            end
-        end, 'OnlinePlyOptions_SetWaypoint', 'OnlinePlyOptions')
-        -------------------------------------------------------------------------
-        -- PRINT IDENTIFIERS
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local onlineplayers_each_printid = onlineplayers_each:AddButton({
-                    icon = '💾',
-                    label = "Print Identifiers",
-                    description = "Print player identifiers",
-                    value = "printid",
-                    false,
-                    select = function(i)
-                        TriggerServerEvent('ts-adminmenu:server:PrintID', selectedPlayer)
-                    end
-                })
-            end
-        end, 'OnlinePlyOptions_PRINTID', 'OnlinePlyOptions')
-        -------------------------------------------------------------------------
-        -- KILL PLAYER
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local onlineplayers_each_killp = onlineplayers_each:AddButton({
-                    icon = '🔪',
-                    label = "Kill Player",
-                    description = "Kill Player",
-                    value = "killp",
-                    false,
-                    select = function(i)
-                        TriggerServerEvent('ts-adminmenu:server:KillPlayer', selectedPlayer)
-                    end
-                })
-            end
-        end, 'OnlinePlyOptions_KillPlayer', 'OnlinePlyOptions')
-        -------------------------------------------------------------------------
-        -- KICK PLAYER
-        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-            if allowed then
-                local onlineplayers_each_kickp = onlineplayers_each:AddButton({
-                    icon = '🦶🏽',
-                    label = "Kick Player",
-                    description = "Kick Player",
-                    value = "kickp",
-                    false,
-                    select = function(i)
-                        TriggerServerEvent('ts-adminmenu:server:KickPlayer', selectedPlayer)
-                    end
-                })
-            end
-        end, 'OnlinePlyOptions_KickPlayer', 'OnlinePlyOptions')
-        
-        -------------------------------------------------------------------------
-    
-        ----------------------------------------------------------------------------
+                end
+            })
+        end
+    end, 'OnlinePlyOptions_License', 'OnlinePlyOptions')
+    -------------------------------------------------------------------------
+    -- HEAL PLAYER
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local onlineplayers_each_heal = onlineplayers_each:AddButton({
+                icon = '✨',
+                label = "Heal Player",
+                description = "Heal Player",
+                value = "heal",
+                false,
+                select = function(i)
+                    TriggerServerEvent('ts-adminmenu:server:HealPlayer', selectedPlayer)
+                end
+            })
+        end
+    end, 'OnlinePlyOptions_Heal', 'OnlinePlyOptions')
+    -------------------------------------------------------------------------
+    -- REVIVE
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        print(allowed)
+        if allowed then
+            local onlineplayers_each_revive = onlineplayers_each:AddButton({
+                icon = '❤️',
+                label = "Revive Player",
+                description = "Revive Player",
+                value = "rev",
+                false,
+                select = function(i)
+                    TriggerServerEvent('ts-adminmenu:server:RevivePlayer', selectedPlayer)
+                end
+            })
+            RegisterCommand(TConfig.Revive, function(source, args, raw)
+                print(args[1])
+                if args[1] then
+                    TriggerServerEvent('ts-adminmenu:server:RevivePlayer', args[1])
+                else
+                    TriggerServerEvent('ts-adminmenu:server:RevivePlayer', GetPlayerServerId(PlayerId()))
+                end
+            end)
+        end
+    end, 'OnlinePlyOptions_Revive', 'OnlinePlyOptions')
+
+    -------------------------------------------------------------------------
+    -- GOTO
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local onlineplayers_each_goto = onlineplayers_each:AddButton({
+                icon = '🛸',
+                label = "Teleport To Player",
+                description = "Teleport to Player",
+                value = "goto",
+                false,
+                select = function(i)
+                    TriggerServerEvent('ts-adminmenu:server:Goto', selectedPlayer)
+                end
+            })
+            RegisterCommand(TConfig.Goto, function(source, args, raw)
+                if args[1] then
+                    TriggerServerEvent('ts-adminmenu:server:Goto', args[1])
+                end
+            end)
+        end
+    end, 'OnlinePlyOptions_Goto', 'OnlinePlyOptions')
+    -------------------------------------------------------------------------
+    -- BRING
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local onlineplayers_each_bring = onlineplayers_each:AddButton({
+                icon = '🚀',
+                label = "Bring Player",
+                description = "Bring Player",
+                value = "bring",
+                false,
+                select = function(i)
+                    TriggerServerEvent('ts-adminmenu:server:Bring', selectedPlayer)
+                end
+            })
+            RegisterCommand(TConfig.bring, function(source, args, raw)
+                if args[1] then
+                    TriggerServerEvent('ts-adminmenu:server:Bring', args[1])
+                end
+            end)
+        end
+    end, 'OnlinePlyOptions_Bring', 'OnlinePlyOptions')
+    -------------------------------------------------------------------------
+    -- SET WAYPOINT
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local onlineplayers_each_waypoint = onlineplayers_each:AddButton({
+                icon = '🔍',
+                label = "Set Waypoint",
+                description = "Set waypoint to player coords",
+                value = "waypointgoto",
+                false,
+                select = function(i)
+                    TriggerServerEvent('ts-adminmenu:server:SetWaypoint', selectedPlayer)
+                end
+            })
+        end
+    end, 'OnlinePlyOptions_SetWaypoint', 'OnlinePlyOptions')
+    -------------------------------------------------------------------------
+    -- PRINT IDENTIFIERS
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local onlineplayers_each_printid = onlineplayers_each:AddButton({
+                icon = '💾',
+                label = "Print Identifiers",
+                description = "Print player identifiers",
+                value = "printid",
+                false,
+                select = function(i)
+                    TriggerServerEvent('ts-adminmenu:server:PrintID', selectedPlayer)
+                end
+            })
+        end
+    end, 'OnlinePlyOptions_PRINTID', 'OnlinePlyOptions')
+    -------------------------------------------------------------------------
+    -- KILL PLAYER
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local onlineplayers_each_killp = onlineplayers_each:AddButton({
+                icon = '🔪',
+                label = "Kill Player",
+                description = "Kill Player",
+                value = "killp",
+                false,
+                select = function(i)
+                    TriggerServerEvent('ts-adminmenu:server:KillPlayer', selectedPlayer)
+                end
+            })
+        end
+    end, 'OnlinePlyOptions_KillPlayer', 'OnlinePlyOptions')
+    -------------------------------------------------------------------------
+    -- KICK PLAYER
+    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+        if allowed then
+            local onlineplayers_each_kickp = onlineplayers_each:AddButton({
+                icon = '🦶🏽',
+                label = "Kick Player",
+                description = "Kick Player",
+                value = "kickp",
+                false,
+                select = function(i)
+                    TriggerServerEvent('ts-adminmenu:server:KickPlayer', selectedPlayer)
+                end
+            })
+        end
+    end, 'OnlinePlyOptions_KickPlayer', 'OnlinePlyOptions')
+
+    -------------------------------------------------------------------------
+
+    ----------------------------------------------------------------------------
 end
 local LoadVehicleOptions = function()
     vehicleoptions:ClearItems()
@@ -4493,7 +4490,7 @@ local LoadVehicleOptions = function()
     vehicleoptions_vehicleop_mod_colormenu:ClearItems()
     for k, v in pairs(vehicleslist) do
         if spawnermenu[k] then
-        spawnermenu[k]:ClearItems()
+            spawnermenu[k]:ClearItems()
         end
     end
     -- DELETE VEHICLE RADIUS
@@ -4875,275 +4872,273 @@ local LoadVehicleOptions = function()
             intc:On('uncheck', function(item)
                 isInt = false
             end)
-            
-            
 
             local vehicleoptions_vehrelated = vehicleoptions_vehicleop:AddButton({
 
                 icon = '🚙',
                 label = 'Mod Menu',
                 value = 'vehicleoptions_vehicleop',
-                description = 'Vehicle Mod Menu',
+                description = 'Vehicle Mod Menu'
             })
             vehicleoptions_vehrelated:On("select", function()
                 local ped = PlayerPedId()
-                    local veh = GetVehiclePedIsIn(ped, false)
-                    if veh ~= 0 then
-                        vehicleoptions_vehicleop_mod_tyresmoke:ClearItems()
-                        vehicleoptions_vehicleop_mod_colors:ClearItems()
-                        vehicleoptions_vehicleop_mod_matte:ClearItems()
-                        vehicleoptions_vehicleop_mod_metal:ClearItems()
-                        vehicleoptions_vehicleop_mod:ClearItems()
-                        vehicleoptions_vehicleop_mod:AddButton({
-                            icon = '',
-                            label = 'Vehicle Color',
-                            value = vehicleoptions_vehicleop_mod_colormenu,
-                            description = 'Vehicle Color Menu'
-                        })
+                local veh = GetVehiclePedIsIn(ped, false)
+                if veh ~= 0 then
+                    vehicleoptions_vehicleop_mod_tyresmoke:ClearItems()
+                    vehicleoptions_vehicleop_mod_colors:ClearItems()
+                    vehicleoptions_vehicleop_mod_matte:ClearItems()
+                    vehicleoptions_vehicleop_mod_metal:ClearItems()
+                    vehicleoptions_vehicleop_mod:ClearItems()
+                    vehicleoptions_vehicleop_mod:AddButton({
+                        icon = '',
+                        label = 'Vehicle Color',
+                        value = vehicleoptions_vehicleop_mod_colormenu,
+                        description = 'Vehicle Color Menu'
+                    })
 
-                        for k, v in pairs(vehmods) do
-                            if v.modType and type(v.modType) == 'number' then
-                                if v.modType == 17 then
-                                    modbuttons[k] = vehicleoptions_vehicleop_mod:AddCheckbox({
-                                        icon = '',
-                                        label = v.label,
-                                        value = 'n'
-                                    })
-                                    modbuttons[k]:On('check', function()
-                                        ToggleVehicleMod(veh, 18, true)
-                                    end)
+                    for k, v in pairs(vehmods) do
+                        if v.modType and type(v.modType) == 'number' then
+                            if v.modType == 17 then
+                                modbuttons[k] = vehicleoptions_vehicleop_mod:AddCheckbox({
+                                    icon = '',
+                                    label = v.label,
+                                    value = 'n'
+                                })
+                                modbuttons[k]:On('check', function()
+                                    ToggleVehicleMod(veh, 18, true)
+                                end)
 
-                                    modbuttons[k]:On('uncheck', function()
-                                        ToggleVehicleMod(veh, 18, false)
+                                modbuttons[k]:On('uncheck', function()
+                                    ToggleVehicleMod(veh, 18, false)
 
-                                    end)
-                                    goto continue
+                                end)
+                                goto continue
+                            end
+                            SetVehicleModKit(veh, 0)
+                            local max = GetNumVehicleMods(veh, v.modType)
+                            if max ~= 0 then
+                                local tonymod = GetVehicleMod(veh, v.modType)
+                                if tonymod == -1 then
+                                    tonymod = 0
+                                else
+                                    tonymod = tonymod + 1
                                 end
-                                SetVehicleModKit(veh, 0)
-                                local max = GetNumVehicleMods(veh, v.modType)
-                                if max ~= 0 then
-                                    local tonymod = GetVehicleMod(veh, v.modType)
-                                    if tonymod == -1 then
-                                        tonymod = 0
-                                    else
-                                        tonymod = tonymod + 1
-                                    end
-                                    modbuttons[k] = vehicleoptions_vehicleop_mod:AddRange({
-                                        icon = '',
-                                        label = v.label,
-                                        min = 0,
-                                        max = max,
-                                        value = tonymod,
-                                        saveOnUpdate = true
-                                    })
-                                    modbuttons[k]:On('select', function(item, newValue, oldValue)
-                                        local veh = GetVehiclePedIsIn(PlayerPedId(), false)
-                                        if veh ~= 0 then
-                                            if newValue == 0 then
-                                                SetVehicleMod(veh, v.modType, max, false)
-                                            else
-                                                SetVehicleMod(veh, v.modType, newValue - 1, false)
-                                            end
-                                        end
-                                    end)
-                                end
-
-                            elseif v.modType and v.modType == 'plateIndex' then
-
-                                SetVehicleModKit(veh, 0)
-                                local tonymod = GetVehicleNumberPlateTextIndex(veh)
                                 modbuttons[k] = vehicleoptions_vehicleop_mod:AddRange({
                                     icon = '',
                                     label = v.label,
                                     min = 0,
-                                    max = 4,
+                                    max = max,
                                     value = tonymod,
                                     saveOnUpdate = true
                                 })
                                 modbuttons[k]:On('select', function(item, newValue, oldValue)
                                     local veh = GetVehiclePedIsIn(PlayerPedId(), false)
                                     if veh ~= 0 then
-                                        SetVehicleNumberPlateTextIndex(veh, newValue)
-                                    end
-                                end)
-                            elseif v.modType and v.modType == 'livery2' then
-
-                                SetVehicleLivery(veh, 0)
-                                local tonymod = GetVehicleLiveryCount(veh)
-                                if tonymod ~= -1 then
-                                    modbuttons[k] = vehicleoptions_vehicleop_mod:AddRange({
-                                        icon = '',
-                                        label = v.label,
-                                        min = 1,
-                                        max = tonymod,
-                                        value = 0,
-                                        saveOnUpdate = true
-                                    })
-                                    modbuttons[k]:On('select', function(item, newValue, oldValue)
-                                        local veh = GetVehiclePedIsIn(PlayerPedId(), false)
-                                        if veh ~= 0 then
-                                            SetVehicleLivery(veh, newValue)
-                                        end
-                                    end)
-                                end
-                            end
-                            ::continue::
-                        end
-
-                        modbuttons['xenon'] = vehicleoptions_vehicleop_mod:AddRange({
-                            icon = '',
-                            label = "Headlights Color",
-                            min = 0,
-                            max = 12,
-                            value = 0,
-                            saveOnUpdate = true
-                        })
-                        modbuttons['xenon']:On('select', function(item, newValue, oldValue)
-                            local veh = GetVehiclePedIsUsing(PlayerPedId())
-
-                            if veh ~= 0 then
-                                ToggleVehicleMod(veh, 22, true) -- toggle xenon
-                                SetVehicleHeadlightsColour(veh, newValue)
-                            end
-                        end)
-			            modbuttons['windowtint'] = vehicleoptions_vehicleop_mod:AddRange({
-                            icon = '',
-                            label = "Window Tint",
-                            min = 0,
-                            max = GetNumVehicleWindowTints(),
-                            value = GetVehicleWindowTint(GetVehiclePedIsUsing(PlayerPedId())),
-                            saveOnUpdate = true
-                        })
-                        modbuttons['windowtint']:On('select', function(item, newValue, oldValue)
-                            local veh = GetVehiclePedIsUsing(PlayerPedId())
-
-                            if veh ~= 0 then
-				                SetVehicleWindowTint(veh,newValue)
-                            end
-                        end)
-                        for k, v in ipairs(colors) do
-                            vehicleoptions_vehicleop_mod_colors:AddButton({
-                                icon = '',
-                                label = v.name,
-                                value = v.colorindex,
-                                description = 'Apply ' .. v.name .. ' Color to vehicle',
-                                select = function(i)
-                                    local ped = PlayerPedId()
-                                    veh = GetVehiclePedIsIn(ped, false)
-                                    if veh ~= 0 then
-                                        local vehcolorp, vehcolors = GetVehicleColours(veh)
-                                        local vehcolorperl, vehcolorwheel = GetVehicleExtraColours(veh)
-                                        if isPrimary then
-                                            SetVehicleColours(veh, v.colorindex, vehcolors) 
-                                        end
-                                        if isSecondary then
-                                            vehcolorp, vehcolors = GetVehicleColours(veh)
-                                            vehcolorperl, vehcolorwheel = GetVehicleExtraColours(veh)
-                                            SetVehicleColours(veh, vehcolorp, v.colorindex)
-                                        end
-                                        if isWheel then
-                                            vehcolorp, vehcolors = GetVehicleColours(veh)
-                                            vehcolorperl, vehcolorwheel = GetVehicleExtraColours(veh)
-                                            SetVehicleExtraColours(veh, vehcolorp, v.colorindex)
-                                        end
-                                        if isDash then
-                                            SetVehicleDashboardColor(veh, v.colorindex)
-                                        end
-                                        if isInt then
-                                            SetVehicleInteriorColor(veh, v.colorindex)
-                                        end
-                                        if isPearlescent then
-                                            vehcolorp, vehcolors = GetVehicleColours(veh)
-                                            vehcolorperl, vehcolorwheel = GetVehicleExtraColours(veh)
-                                            SetVehicleExtraColours(veh, v.colorindex, vehcolorwheel)
-                                        end
-                                    end
-                                end
-                            })
-                        end
-                        for k, v in ipairs(tyrecolors) do
-                            vehicleoptions_vehicleop_mod_tyresmoke:AddButton({
-                                icon = '',
-                                label = v.name,
-                                value = 'tyr',
-                                description = 'Apply ' .. v.name .. ' Color to Tyre Smoke',
-                                select = function(i)
-                                    local ped = PlayerPedId()
-                                    veh = GetVehiclePedIsIn(ped, false)
-                                    if veh ~= 0 then
-                                        ToggleVehicleMod(veh, 20, true)
-                                        SetVehicleTyreSmokeColor(veh, v.r, v.g, v.b)
-                                    end
-                                end
-                            })
-                        end
-                        for k, v in ipairs(mattecolors) do
-                            vehicleoptions_vehicleop_mod_matte:AddButton({
-                                icon = '',
-                                label = v.name,
-                                value = v.colorindex,
-                                description = 'Apply ' .. v.name .. ' Color to vehicle',
-                                select = function(i)
-                                    local ped = PlayerPedId()
-                                    veh = GetVehiclePedIsIn(ped, false)
-                                    if veh ~= 0 then
-                                        local vehcolorp, vehcolors = GetVehicleColours(veh)
-                                        if isPrimary and not isSecondary then
-                                            SetVehicleColours(veh, v.colorindex, vehcolors)
-                                        elseif isSecondary and not isPrimary then
-                                            SetVehicleColours(veh, vehcolorp, v.colorindex)
+                                        if newValue == 0 then
+                                            SetVehicleMod(veh, v.modType, max, false)
                                         else
-                                            SetVehicleColours(veh, v.colorindex, v.colorindex)
+                                            SetVehicleMod(veh, v.modType, newValue - 1, false)
                                         end
                                     end
-                                end
-                            })
-                        end
-                        for k, v in ipairs(metalcolors) do
-                            vehicleoptions_vehicleop_mod_metal:AddButton({
-                                icon = '',
-                                label = v.name,
-                                value = v.colorindex,
-                                description = 'Apply ' .. v.name .. ' Color to vehicle',
-                                select = function(i)
-                                    local ped = PlayerPedId()
-                                    veh = GetVehiclePedIsIn(ped, false)
-                                    if veh ~= 0 then
-                                        local vehcolorp, vehcolors = GetVehicleColours(veh)
-                                        if isPrimary and not isSecondary then
-                                            SetVehicleColours(veh, v.colorindex, vehcolors)
-                                        elseif isSecondary and not isPrimary then
-                                            SetVehicleColours(veh, vehcolorp, v.colorindex)
-                                        else
-                                            SetVehicleColours(veh, v.colorindex, v.colorindex)
-                                        end
-                                    end
-                                end
-                            })
-                        end
-                        for extraID = 0, 20 do
-                            if DoesExtraExist(veh, extraID) then
-                                modbuttons['extra' .. extraID] =
-                                    vehicleoptions_vehicleop_mod:AddCheckbox({
-                                        icon = '',
-                                        label = 'Extra ' .. extraID,
-                                        value = 'n'
-                                    })
-                                modbuttons['extra' .. extraID]:On('check', function(item)
-                                    SetVehicleExtra(veh, extraID, 0)
                                 end)
+                            end
 
-                                modbuttons['extra' .. extraID]:On('uncheck', function(item)
-                                    SetVehicleExtra(veh, extraID, 1)
+                        elseif v.modType and v.modType == 'plateIndex' then
 
+                            SetVehicleModKit(veh, 0)
+                            local tonymod = GetVehicleNumberPlateTextIndex(veh)
+                            modbuttons[k] = vehicleoptions_vehicleop_mod:AddRange({
+                                icon = '',
+                                label = v.label,
+                                min = 0,
+                                max = 4,
+                                value = tonymod,
+                                saveOnUpdate = true
+                            })
+                            modbuttons[k]:On('select', function(item, newValue, oldValue)
+                                local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+                                if veh ~= 0 then
+                                    SetVehicleNumberPlateTextIndex(veh, newValue)
+                                end
+                            end)
+                        elseif v.modType and v.modType == 'livery2' then
+
+                            SetVehicleLivery(veh, 0)
+                            local tonymod = GetVehicleLiveryCount(veh)
+                            if tonymod ~= -1 then
+                                modbuttons[k] = vehicleoptions_vehicleop_mod:AddRange({
+                                    icon = '',
+                                    label = v.label,
+                                    min = 1,
+                                    max = tonymod,
+                                    value = 0,
+                                    saveOnUpdate = true
+                                })
+                                modbuttons[k]:On('select', function(item, newValue, oldValue)
+                                    local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+                                    if veh ~= 0 then
+                                        SetVehicleLivery(veh, newValue)
+                                    end
                                 end)
                             end
                         end
-                        MenuV:OpenMenu(vehicleoptions_vehicleop_mod)
-                    else
-                        ESX.ShowNotification("You are not in any vehicle")
+                        ::continue::
                     end
-                
+
+                    modbuttons['xenon'] = vehicleoptions_vehicleop_mod:AddRange({
+                        icon = '',
+                        label = "Headlights Color",
+                        min = 0,
+                        max = 12,
+                        value = 0,
+                        saveOnUpdate = true
+                    })
+                    modbuttons['xenon']:On('select', function(item, newValue, oldValue)
+                        local veh = GetVehiclePedIsUsing(PlayerPedId())
+
+                        if veh ~= 0 then
+                            ToggleVehicleMod(veh, 22, true) -- toggle xenon
+                            SetVehicleHeadlightsColour(veh, newValue)
+                        end
+                    end)
+                    modbuttons['windowtint'] = vehicleoptions_vehicleop_mod:AddRange({
+                        icon = '',
+                        label = "Window Tint",
+                        min = 0,
+                        max = GetNumVehicleWindowTints(),
+                        value = GetVehicleWindowTint(GetVehiclePedIsUsing(PlayerPedId())),
+                        saveOnUpdate = true
+                    })
+                    modbuttons['windowtint']:On('select', function(item, newValue, oldValue)
+                        local veh = GetVehiclePedIsUsing(PlayerPedId())
+
+                        if veh ~= 0 then
+                            SetVehicleWindowTint(veh, newValue)
+                        end
+                    end)
+                    for k, v in ipairs(colors) do
+                        vehicleoptions_vehicleop_mod_colors:AddButton({
+                            icon = '',
+                            label = v.name,
+                            value = v.colorindex,
+                            description = 'Apply ' .. v.name .. ' Color to vehicle',
+                            select = function(i)
+                                local ped = PlayerPedId()
+                                veh = GetVehiclePedIsIn(ped, false)
+                                if veh ~= 0 then
+                                    local vehcolorp, vehcolors = GetVehicleColours(veh)
+                                    local vehcolorperl, vehcolorwheel = GetVehicleExtraColours(veh)
+                                    if isPrimary then
+                                        SetVehicleColours(veh, v.colorindex, vehcolors)
+                                    end
+                                    if isSecondary then
+                                        vehcolorp, vehcolors = GetVehicleColours(veh)
+                                        vehcolorperl, vehcolorwheel = GetVehicleExtraColours(veh)
+                                        SetVehicleColours(veh, vehcolorp, v.colorindex)
+                                    end
+                                    if isWheel then
+                                        vehcolorp, vehcolors = GetVehicleColours(veh)
+                                        vehcolorperl, vehcolorwheel = GetVehicleExtraColours(veh)
+                                        SetVehicleExtraColours(veh, vehcolorp, v.colorindex)
+                                    end
+                                    if isDash then
+                                        SetVehicleDashboardColor(veh, v.colorindex)
+                                    end
+                                    if isInt then
+                                        SetVehicleInteriorColor(veh, v.colorindex)
+                                    end
+                                    if isPearlescent then
+                                        vehcolorp, vehcolors = GetVehicleColours(veh)
+                                        vehcolorperl, vehcolorwheel = GetVehicleExtraColours(veh)
+                                        SetVehicleExtraColours(veh, v.colorindex, vehcolorwheel)
+                                    end
+                                end
+                            end
+                        })
+                    end
+                    for k, v in ipairs(tyrecolors) do
+                        vehicleoptions_vehicleop_mod_tyresmoke:AddButton({
+                            icon = '',
+                            label = v.name,
+                            value = 'tyr',
+                            description = 'Apply ' .. v.name .. ' Color to Tyre Smoke',
+                            select = function(i)
+                                local ped = PlayerPedId()
+                                veh = GetVehiclePedIsIn(ped, false)
+                                if veh ~= 0 then
+                                    ToggleVehicleMod(veh, 20, true)
+                                    SetVehicleTyreSmokeColor(veh, v.r, v.g, v.b)
+                                end
+                            end
+                        })
+                    end
+                    for k, v in ipairs(mattecolors) do
+                        vehicleoptions_vehicleop_mod_matte:AddButton({
+                            icon = '',
+                            label = v.name,
+                            value = v.colorindex,
+                            description = 'Apply ' .. v.name .. ' Color to vehicle',
+                            select = function(i)
+                                local ped = PlayerPedId()
+                                veh = GetVehiclePedIsIn(ped, false)
+                                if veh ~= 0 then
+                                    local vehcolorp, vehcolors = GetVehicleColours(veh)
+                                    if isPrimary and not isSecondary then
+                                        SetVehicleColours(veh, v.colorindex, vehcolors)
+                                    elseif isSecondary and not isPrimary then
+                                        SetVehicleColours(veh, vehcolorp, v.colorindex)
+                                    else
+                                        SetVehicleColours(veh, v.colorindex, v.colorindex)
+                                    end
+                                end
+                            end
+                        })
+                    end
+                    for k, v in ipairs(metalcolors) do
+                        vehicleoptions_vehicleop_mod_metal:AddButton({
+                            icon = '',
+                            label = v.name,
+                            value = v.colorindex,
+                            description = 'Apply ' .. v.name .. ' Color to vehicle',
+                            select = function(i)
+                                local ped = PlayerPedId()
+                                veh = GetVehiclePedIsIn(ped, false)
+                                if veh ~= 0 then
+                                    local vehcolorp, vehcolors = GetVehicleColours(veh)
+                                    if isPrimary and not isSecondary then
+                                        SetVehicleColours(veh, v.colorindex, vehcolors)
+                                    elseif isSecondary and not isPrimary then
+                                        SetVehicleColours(veh, vehcolorp, v.colorindex)
+                                    else
+                                        SetVehicleColours(veh, v.colorindex, v.colorindex)
+                                    end
+                                end
+                            end
+                        })
+                    end
+                    for extraID = 0, 20 do
+                        if DoesExtraExist(veh, extraID) then
+                            modbuttons['extra' .. extraID] =
+                                vehicleoptions_vehicleop_mod:AddCheckbox({
+                                    icon = '',
+                                    label = 'Extra ' .. extraID,
+                                    value = 'n'
+                                })
+                            modbuttons['extra' .. extraID]:On('check', function(item)
+                                SetVehicleExtra(veh, extraID, 0)
+                            end)
+
+                            modbuttons['extra' .. extraID]:On('uncheck', function(item)
+                                SetVehicleExtra(veh, extraID, 1)
+
+                            end)
+                        end
+                    end
+                    MenuV:OpenMenu(vehicleoptions_vehicleop_mod)
+                else
+                    ESX.ShowNotification("You are not in any vehicle")
+                end
+
             end)
         end
     end, 'VehicleRelated_Modmenu', 'VehicleRelatedOptions')
@@ -5283,8 +5278,8 @@ local LoadVehicleOptions = function()
             local torqueinterval = nil
             local engineinterval = nil
             local orgspeed = nil
-			local torquespeed = 1.0
-			local enginespeed = 1.0
+            local torquespeed = 1.0
+            local enginespeed = 1.0
             local vehicleoptions_vehicleop_torqueen = vehicleoptions_vehicleop:AddCheckbox({
                 icon = '🚀',
                 label = 'Enable Torque Multiplier',
@@ -5307,27 +5302,27 @@ local LoadVehicleOptions = function()
             })
 
             vehicleoptions_vehicleop_torqueen:On('check', function(item)
-				local ped = PlayerPedId()
-				torqueinterval = SetInterval(function()
-					local veh = GetVehiclePedIsIn(ped, false)
-					if veh ~= 0 then
-							SetVehicleCheatPowerIncrease(veh, torquespeed)
-					end
-				end, 0)
+                local ped = PlayerPedId()
+                torqueinterval = SetInterval(function()
+                    local veh = GetVehiclePedIsIn(ped, false)
+                    if veh ~= 0 then
+                        SetVehicleCheatPowerIncrease(veh, torquespeed)
+                    end
+                end, 0)
             end)
 
             vehicleoptions_vehicleop_torqueen:On('uncheck', function(item)
-				if torqueinterval then
+                if torqueinterval then
                     ClearInterval(torqueinterval)
                     torqueinterval = nil
                 end
             end)
-			vehicleoptions_vehicleop_torque:On('change', function(item, newValue, oldValue)
-				local speed = 1.0
+            vehicleoptions_vehicleop_torque:On('change', function(item, newValue, oldValue)
+                local speed = 1.0
                 for i = 1, newValue, 1 do
                     speed = (speed * 2.0)
-				end
-				torquespeed = speed
+                end
+                torquespeed = speed
             end)
             local vehicleoptions_vehicleop_enginem_R = vehicleoptions_vehicleop:AddRange({
                 icon = '🚀',
@@ -5340,13 +5335,13 @@ local LoadVehicleOptions = function()
 
             vehicleoptions_vehicleop_enginem:On('check', function(item)
                 local ped = PlayerPedId()
-				local veh = GetVehiclePedIsIn(ped, false)
+                local veh = GetVehiclePedIsIn(ped, false)
                 orgspeed = GetVehicleEstimatedMaxSpeed(veh)
-				if enginespeed == 1.0 then
-				ModifyVehicleTopSpeed(veh, 1.0)
-				else
-					ModifyVehicleTopSpeed(veh, orgspeed * enginespeed)
-				end
+                if enginespeed == 1.0 then
+                    ModifyVehicleTopSpeed(veh, 1.0)
+                else
+                    ModifyVehicleTopSpeed(veh, orgspeed * enginespeed)
+                end
             end)
 
             vehicleoptions_vehicleop_enginem:On('uncheck', function(item)
@@ -5359,14 +5354,14 @@ local LoadVehicleOptions = function()
                 local ped = PlayerPedId()
 
                 local veh = GetVehiclePedIsIn(ped, false)
-				local speed = 1.0
-				for i = 1, newValue, 1 do
-					speed = (speed * 2.0)
-				end
-				enginespeed = speed
-				if orgspeed then
-                ModifyVehicleTopSpeed(veh, orgspeed * enginespeed)
-				end
+                local speed = 1.0
+                for i = 1, newValue, 1 do
+                    speed = (speed * 2.0)
+                end
+                enginespeed = speed
+                if orgspeed then
+                    ModifyVehicleTopSpeed(veh, orgspeed * enginespeed)
+                end
             end)
         end
     end, 'VehicleRelated_MultiplierSpeed', 'VehicleRelatedOptions')
@@ -7106,22 +7101,22 @@ local LoadMiscSettings = function()
                         local coords = GetEntityCoords(GetPlayerPed(v))
                         local dist = #(coords - GetEntityCoords(PlayerPedId()))
                         if dist < 250 then
-                            
-                                if v ~= PlayerId() then
-				    if plyblips[sid] then					
-					RemoveBlip(plyblips[sid])
-                                	plyblips[sid] = nil
-				    end
-                                    local bliptony = AddBlipForEntity(GetPlayerPed(v))
-                                    SetBlipSprite(bliptony, 1)
-                                    SetBlipNameToPlayerName(bliptony, v)
-                                    SetBlipScale(bliptony, 1.0)
-                                    SetBlipAlpha(bliptony, 255)
-                                    SetBlipColour(bliptony, 0)
-                                    SetBlipCategory(bliptony, 7)
-                                    plyblips[sid] = bliptony
+
+                            if v ~= PlayerId() then
+                                if plyblips[sid] then
+                                    RemoveBlip(plyblips[sid])
+                                    plyblips[sid] = nil
                                 end
-                            
+                                local bliptony = AddBlipForEntity(GetPlayerPed(v))
+                                SetBlipSprite(bliptony, 1)
+                                SetBlipNameToPlayerName(bliptony, v)
+                                SetBlipScale(bliptony, 1.0)
+                                SetBlipAlpha(bliptony, 255)
+                                SetBlipColour(bliptony, 0)
+                                SetBlipCategory(bliptony, 7)
+                                plyblips[sid] = bliptony
+                            end
+
                         else
                             if plyblips[sid] then
                                 RemoveBlip(plyblips[sid])
@@ -7487,94 +7482,92 @@ local loadtimeout = false
 local LoadAdminMenu = function()
     if not loadtimeout then
         loadtimeout = true
-    ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
-        if allowed then
-            RegisterCommand(TConfig.ToggleNoClipMode, function(source, rawCommand)
-                ToggleNoClipMode()
-            end)
-            RegisterKeyMapping(TConfig.ToggleNoClipMode, 'Noclip', 'keyboard', TConfig.OpenMenuNoclipDefultKey)
-        end
-    end, 'PlayerOptions_Noclip', 'PlayerOptions')
-    menu:ClearItems()
-    LoadPlayerOptions()
-    LoadVehicleOptions()
-    LoadMiscSettings()
-    LoadTrollMenu()
-    
-    onlineplayers_each:On('OnClose', function()
-        selectedPlayer = 0
-    end)
-    menu:On('OnClose', function()
-        selectedPlayer = 0
-    end)
-    onlineplayers:On('OnClose', function()
-        selectedPlayer = 0
-    end)
-    
+        ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
+            if allowed then
+                RegisterCommand(TConfig.ToggleNoClipMode, function(source, rawCommand)
+                    ToggleNoClipMode()
+                end)
+                RegisterKeyMapping(TConfig.ToggleNoClipMode, 'Noclip', 'keyboard', TConfig.OpenMenuNoclipDefultKey)
+            end
+        end, 'PlayerOptions_Noclip', 'PlayerOptions')
+        menu:ClearItems()
+        LoadPlayerOptions()
+        LoadVehicleOptions()
+        LoadMiscSettings()
+        LoadTrollMenu()
+        LoadOnlinePlayersEach()
 
-    local menu_onlineplayers = menu:AddButton({
-        icon = '🧍‍♂️',
-        label = 'Online Players',
-        value = onlineplayers,
-        description = 'Show Online Players',
-        select = function(i)
-            ESX.TriggerServerCallback('ts-adminmenu:server:GetOnlinePlayers', function(plyList)
-                onlineplayers:ClearItems()
-                for k, v in pairs(plyList) do
-                    onlineplayers:AddButton({
-                        icon = v.source,
-                        label = v.name,
-                        description = v.name .. ' ID: ' .. v.source,
-                        value = v.source,
-                        false,
-                        select = function(i)
-                            local ply = {
-                                source = v.source,
-                                name = v.name
-                            }
-                            OpenPlayersMenu(ply)
-                        end
-                    })
-                end
-            end)
-        end
-    })
+        onlineplayers_each:On('OnClose', function()
+            selectedPlayer = 0
+        end)
+        menu:On('OnClose', function()
+            selectedPlayer = 0
+        end)
+        onlineplayers:On('OnClose', function()
+            selectedPlayer = 0
+        end)
 
-    local menu_playerrelated = menu:AddButton({
-        icon = '🧍‍♂️',
-        label = 'Player Related Options',
-        value = playeroptions,
-        description = 'Show Player Related Options'
-    })
+        local menu_onlineplayers = menu:AddButton({
+            icon = '🧍‍♂️',
+            label = 'Online Players',
+            value = onlineplayers,
+            description = 'Show Online Players',
+            select = function(i)
+                ESX.TriggerServerCallback('ts-adminmenu:server:GetOnlinePlayers', function(plyList)
+                    onlineplayers:ClearItems()
+                    for k, v in pairs(plyList) do
+                        onlineplayers:AddButton({
+                            icon = v.source,
+                            label = v.name,
+                            description = v.name .. ' ID: ' .. v.source,
+                            value = v.source,
+                            false,
+                            select = function(i)
+                                local ply = {
+                                    source = v.source,
+                                    name = v.name
+                                }
+                                OpenPlayersMenu(ply)
+                            end
+                        })
+                    end
+                end)
+            end
+        })
 
-    
-    local menu_vehiclerelated = menu:AddButton({
-        icon = '🚙',
-        label = 'Vehicle Related Options',
-        value = vehicleoptions,
-        description = 'Show Vehicle Related Options'
-    })
+        local menu_playerrelated = menu:AddButton({
+            icon = '🧍‍♂️',
+            label = 'Player Related Options',
+            value = playeroptions,
+            description = 'Show Player Related Options'
+        })
 
-    
-    local miscsettings_button = menu:AddButton({
-        icon = '🚧',
-        label = 'Misc Settings',
-        value = miscsettings,
-        description = 'Misc Settings'
-    })
-    local trolllmenu_button = menu:AddButton({
-        icon = '🚧',
-        label = 'Troll Menu',
-        value = trollmenu,
-        description = 'Open Troll Menu'
-    })
-    local rockstar_button = menu:AddButton({
-        icon = '📸',
-        label = 'Rockstar Editor',
-        value = rockstar,
-        description = 'Rockstar Settings'
-    })
-    -------------------------------------------------------------------------
+        local menu_vehiclerelated = menu:AddButton({
+            icon = '🚙',
+            label = 'Vehicle Related Options',
+            value = vehicleoptions,
+            description = 'Show Vehicle Related Options'
+        })
+
+        local miscsettings_button = menu:AddButton({
+            icon = '🚧',
+            label = 'Misc Settings',
+            value = miscsettings,
+            description = 'Misc Settings'
+        })
+        local trolllmenu_button = menu:AddButton({
+            icon = '🚧',
+            label = 'Troll Menu',
+            value = trollmenu,
+            description = 'Open Troll Menu'
+        })
+        local rockstar_button = menu:AddButton({
+            icon = '📸',
+            label = 'Rockstar Editor',
+            value = rockstar,
+            description = 'Rockstar Settings'
+        })
+        -------------------------------------------------------------------------
         -- SPECTATE PLAYER
         ESX.TriggerServerCallback("ts-adminmenu:server:IsAllowed", function(allowed)
             if allowed then
@@ -7591,14 +7584,11 @@ local LoadAdminMenu = function()
             end
         end, 'OnlinePlyOptions_Spectate', 'OnlinePlyOptions')
 
-    Wait(5000)
-    loadtimeout = false
+        Wait(5000)
+        loadtimeout = false
+    end
+
 end
-
-    
-end
-
-
 
 -- EVENTS / FUNC
 RegisterNetEvent("ts-adminmenu:record", function()
@@ -8234,7 +8224,7 @@ RegisterNetEvent('ts-adminmenu:client:PlayFart', function(plyList, type)
     exports['zf_context']:openMenu(myMenu)
 end)
 
-RegisterCommand('loadadminmenu', function()
+RegisterCommand(TConfig.LoadAdminMenu, function()
     LoadAdminMenu()
 end)
 
