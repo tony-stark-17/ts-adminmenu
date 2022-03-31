@@ -7495,6 +7495,7 @@ local LoadAdminMenu = function()
         end
     end, 'PlayerOptions_Noclip', 'PlayerOptions')
     menu:ClearItems()
+    LoadOnlinePlayersEach()
     LoadPlayerOptions()
     LoadVehicleOptions()
     LoadMiscSettings()
