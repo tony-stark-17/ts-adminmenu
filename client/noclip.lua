@@ -28,7 +28,7 @@ ENABLE_NO_CLIP_SOUND = true
 
 local eps = 0.01
 
--- Variables --
+---- Variables ----
 local isNoClipping = false
 local playerPed = PlayerPedId()
 local playerId = PlayerId()
@@ -91,7 +91,8 @@ function SetNoClip(val)
         if (isNoClipping) then
 
             SetEntityAlpha(noClippingEntity, 51, 0)
-            exports['okokTextUI']:Open('LEFT SHIFT - GO IN CURRENT SPEED<br>H - CHANGE SPEED <br> Current Speed - '..Speeds[index].label, 'darkblue', 'left')
+            TriggerEvent('cd_drawtextui:ShowUI', 'show', 'LEFT SHIFT - GO IN CURRENT SPEED<br>H - CHANGE SPEED <br> Current Speed - '..Speeds[index].label)
+
             -- Start a No CLip thread
             Citizen.CreateThread(function()
 
@@ -126,14 +127,14 @@ function SetNoClip(val)
                     SetPoliceIgnorePlayer(pPed, true);
                     if IsControlJustPressed(0, 74) then
                         if index ~= #Speeds then
-                            exports['okokTextUI']:Close()
+                            TriggerEvent('cd_drawtextui:HideUI')
                             index = index+1
                             NO_CLIP_FAST_SPEED = Speeds[index].speed
-                            exports['okokTextUI']:Open('LEFT SHIFT - GO IN CURRENT SPEED<br>H - CHANGE SPEED <br> Current Speed - '..Speeds[index].label, 'darkblue', 'left')
+                            TriggerEvent('cd_drawtextui:ShowUI', 'show', 'LEFT SHIFT - GO IN CURRENT SPEED<br>H - CHANGE SPEED <br> Current Speed - '..Speeds[index].label)
                         else
-                            exports['okokTextUI']:Close()
+                            TriggerEvent('cd_drawtextui:HideUI')
                             NO_CLIP_FAST_SPEED = Speeds[1].speed
-                            exports['okokTextUI']:Open('LEFT SHIFT - GO IN CURRENT SPEED<br>H - CHANGE SPEED <br> Current Speed - '..Speeds[1].label, 'darkblue', 'left')
+                            TriggerEvent('cd_drawtextui:ShowUI', 'show', 'LEFT SHIFT - GO IN CURRENT SPEED<br>H - CHANGE SPEED <br> Current Speed - '..Speeds[index].label)
                             index = 1
                         end
                     end
@@ -208,7 +209,7 @@ function SetNoClip(val)
 
         else
             ResetEntityAlpha(noClippingEntity)
-            exports['okokTextUI']:Close()
+            TriggerEvent('cd_drawtextui:HideUI')
             local data = {
                 ['Player'] = GetPlayerServerId(playerId), -- You need to set source here
                 ['Log'] = 'adminmenu-noclip', -- Log name
