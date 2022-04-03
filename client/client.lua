@@ -7529,8 +7529,8 @@ local LoadAdminMenu = function()
                         value = tsplytable,
                         false,
                         select = function(i)
-                            local select = i.Value
-                            OpenPlayersMenu(select)
+                            local btnVal = i.Value
+                            OpenPlayersMenu(btnVal)
                         end
                     })
                 end
