@@ -7521,18 +7521,16 @@ local LoadAdminMenu = function()
             ESX.TriggerServerCallback('ts-adminmenu:server:GetOnlinePlayers', function(plyList)
                 onlineplayers:ClearItems()
                 for k, v in pairs(plyList) do
+                    local tsplytable = {source = v.source, name = v.name}
                     onlineplayers:AddButton({
                         icon = v.source,
                         label = v.name,
                         description = v.name .. ' ID: ' .. v.source,
-                        value = v.source,
+                        value = tsplytable,
                         false,
                         select = function(i)
-                            local ply = {
-                                source = v.source,
-                                name = v.name
-                            }
-                            OpenPlayersMenu(ply)
+                            local select = i.Value
+                            OpenPlayersMenu(select)
                         end
                     })
                 end
