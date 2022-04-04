@@ -7170,7 +7170,7 @@ local LoadMiscSettings = function()
                     for k, v in pairs(ply) do
                         local dist = #(GetEntityCoords(GetPlayerPed(v) - GetEntityCoords(PlayerPedId())))
                         if dist < 230 then
-                            if not plynamet[k] or IsMpGamerTagActive(plynamet[k]) then
+                            if not plynamet[k] or not IsMpGamerTagActive(plynamet[k]) then
                                 plynamet[k] = CreateFakeMpGamerTag(GetPlayerPed(v),
                                     GetPlayerName(v) .. ': ' .. GetPlayerServerId(v), false, false, "", 0)
                                 SetMpGamerTagVisibility(plynamet[k], 2, 1) -- set the visibility of component 2(healthArmour) to true
