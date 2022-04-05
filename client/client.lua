@@ -7168,7 +7168,7 @@ local LoadMiscSettings = function()
                 if plynameon then
                     local ply = GetActivePlayers()
                     for k, v in pairs(ply) do
-                        local dist = #(GetEntityCoords(GetPlayerPed(v) - GetEntityCoords(PlayerPedId())))
+                        local dist = #(GetEntityCoords(GetPlayerPed(v)) - GetEntityCoords(PlayerPedId()))
                         if dist < 230 then
                             if not plynamet[k] or not IsMpGamerTagActive(plynamet[k]) then
                                 plynamet[k] = CreateFakeMpGamerTag(GetPlayerPed(v),
