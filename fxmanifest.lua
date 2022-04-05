@@ -14,7 +14,7 @@ files({
 ui_page("ui/index.html")
 
 client_scripts {
-	'@pe-lualib/init.lua',
+	'@ox_lib/init.lua',
 	'@menuv/menuv.lua',
 	'client/noclip.lua',
 	'client/client.lua',
