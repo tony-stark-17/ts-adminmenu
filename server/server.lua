@@ -938,7 +938,7 @@ RegisterNetEvent('ts-adminmenu:server:Goto', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
     local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_Goto', 'OnlinePlyOptions')
-    local yPlyCoords = yPlayer.getCoords(true)
+    local yPlyCoords = yPlayer.getCoords()
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -968,7 +968,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:Bring', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local xPlyCoords = xPlayer.getCoords(true)
+    local xPlyCoords = xPlayer.getCoords()
     local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_Bring', 'OnlinePlyOptions')
     if allowed then
         local data = {
