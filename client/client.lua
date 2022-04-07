@@ -5338,33 +5338,36 @@ local LoadVehicleOptions = function()
 
             vehicleoptions_vehicleop_enginem:On('check', function(item)
                 local ped = PlayerPedId()
-				local veh = GetVehiclePedIsIn(ped, false)
+		local veh = GetVehiclePedIsIn(ped, false)
                 orgspeed = GetVehicleEstimatedMaxSpeed(veh)
-				if enginespeed == 1.0 then
+		engineinterval = SetInterval(function()					
+			if enginespeed == 1.0 then
 				ModifyVehicleTopSpeed(veh, 1.0)
-				else
-					ModifyVehicleTopSpeed(veh, orgspeed * enginespeed)
-				end
+			else
+				ModifyVehicleTopSpeed(veh, orgspeed * enginespeed)
+			end
+		end, 0)
+				
             end)
 
             vehicleoptions_vehicleop_enginem:On('uncheck', function(item)
                 local ped = PlayerPedId()
                 local veh = GetVehiclePedIsIn(ped, false)
-                ModifyVehicleTopSpeed(veh, 1.0)
                 orgspeed = nil
+		if engineinterval then
+			ClearInterval(engineinterval)
+			engineinterval = nil
+		end
             end)
             vehicleoptions_vehicleop_enginem_R:On('change', function(item, newValue, oldValue)
                 local ped = PlayerPedId()
 
                 local veh = GetVehiclePedIsIn(ped, false)
-				local speed = 1.0
-				for i = 1, newValue, 1 do
-					speed = (speed * 2.0)
-				end
-				enginespeed = speed
-				if orgspeed then
-                ModifyVehicleTopSpeed(veh, orgspeed * enginespeed)
-				end
+		local speed = 1.0
+		for i = 1, newValue, 1 do
+			speed = (speed * 2.0)
+		end
+		enginespeed = speed
             end)
         end
     end, 'VehicleRelated_MultiplierSpeed', 'VehicleRelatedOptions')
