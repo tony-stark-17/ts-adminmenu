@@ -1,6 +1,14 @@
 # ts-adminmenu
 Admin Menu Inspired from vMenu
 
+## Installation Guide
+Add this to server.cfg
+
+```exec /path/to/ts-adminmenu/server/admin_list.cfg```
+
+Configure Admins in the admin_list.cfg 
+
+
 ## DEPENDENCIES
 - chHyperSound - https://github.com/charleshacks/chHyperSound
 - ox_lib - https://github.com/overextended/ox_lib
@@ -17,7 +25,7 @@ Admin Menu Inspired from vMenu
 ![image](https://user-images.githubusercontent.com/76168122/159921210-1c8c92fc-56ba-4131-862a-43d0662e2b08.png)
 
 ## TODO
-- Use Ace Permissions
+-<del> Use Ace Permissions</del>
 - Setup Config
 - Reduce Server Side Load on initialization
 - Make it standalone with config option for ESX
