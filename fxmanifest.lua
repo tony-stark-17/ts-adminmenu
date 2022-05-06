@@ -6,7 +6,10 @@ description 'TS Admin Menu'
 lua54 'yes'
 
 
-shared_script 'config.lua'
+shared_scripts {
+	'config.lua',
+	'@ox_lib/init.lua'
+}
 files({
 	"ui/*",
 })
@@ -14,7 +17,6 @@ files({
 ui_page("ui/index.html")
 
 client_scripts {
-	'@ox_lib/init.lua',
 	'@menuv/menuv.lua',
 	'client/noclip.lua',
 	'client/client.lua',
@@ -27,5 +29,3 @@ server_scripts {
 	'server/server.lua',
 	'server/spectate_serv.lua'
 }
-
-

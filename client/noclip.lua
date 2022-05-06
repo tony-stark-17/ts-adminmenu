@@ -91,8 +91,9 @@ function SetNoClip(val)
         if (isNoClipping) then
 
             SetEntityAlpha(noClippingEntity, 51, 0)
-            TriggerEvent('cd_drawtextui:ShowUI', 'show', 'LEFT SHIFT - GO IN CURRENT SPEED<br>H - CHANGE SPEED <br> Current Speed - '..Speeds[index].label)
-
+            lib.showTextUI('LEFT SHIFT - GO IN CURRENT SPEED  \nH - CHANGE SPEED  \nCurrent Speed - '..Speeds[index].label, {
+                position = "right-center",
+            })
             -- Start a No CLip thread
             Citizen.CreateThread(function()
 
@@ -127,14 +128,18 @@ function SetNoClip(val)
                     SetPoliceIgnorePlayer(pPed, true);
                     if IsControlJustPressed(0, 74) then
                         if index ~= #Speeds then
-                            TriggerEvent('cd_drawtextui:HideUI')
+                            lib.hideTextUI()
                             index = index+1
                             NO_CLIP_FAST_SPEED = Speeds[index].speed
-                            TriggerEvent('cd_drawtextui:ShowUI', 'show', 'LEFT SHIFT - GO IN CURRENT SPEED<br>H - CHANGE SPEED <br> Current Speed - '..Speeds[index].label)
+                            lib.showTextUI('LEFT SHIFT - GO IN CURRENT SPEED  \nH - CHANGE SPEED  \nCurrent Speed - '..Speeds[index].label, {
+                                position = "right-center",
+                            })
                         else
-                            TriggerEvent('cd_drawtextui:HideUI')
+                            lib.hideTextUI()
                             NO_CLIP_FAST_SPEED = Speeds[1].speed
-                            TriggerEvent('cd_drawtextui:ShowUI', 'show', 'LEFT SHIFT - GO IN CURRENT SPEED<br>H - CHANGE SPEED <br> Current Speed - '..Speeds[index].label)
+                            lib.showTextUI('LEFT SHIFT - GO IN CURRENT SPEED  \nH - CHANGE SPEED  \nCurrent Speed - '..Speeds[index].label, {
+                                position = "right-center",
+                            })
                             index = 1
                         end
                     end
@@ -209,7 +214,7 @@ function SetNoClip(val)
 
         else
             ResetEntityAlpha(noClippingEntity)
-            TriggerEvent('cd_drawtextui:HideUI')
+            lib.hideTextUI()
             local data = {
                 ['Player'] = GetPlayerServerId(playerId), -- You need to set source here
                 ['Log'] = 'adminmenu-noclip', -- Log name

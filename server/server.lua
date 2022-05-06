@@ -1,5 +1,4 @@
 local ESX = exports['es_extended']:getSharedObject()
-local TSAdmins = {}
 
 local TSGetNearbyEntities = function(entities, coords, modelFilter, maxDistance, isPed)
 	local nearbyEntities = {}
@@ -42,613 +41,54 @@ local TSSpawnVehicle = function(model, coords, heading, cb)
 	end)
 end
 
-RegisterNetEvent('onResourceStart', function()
-    for k, v in ipairs(Admins) do
-        TSAdmins[v] = {
-            permission = {
-                OpenAdminmenu = true
-            }
-        }
-        for i, j in ipairs(FullAccess) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.FullAccess = true
-            end
-        end
-        for i, j in ipairs(OnlinePlyOptions) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions = true
-            end
-        end
 
-        for i, j in ipairs(PlayerOptions) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelatedOptions) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelatedOptions = true
-            end
-        end
-
-        for i, j in ipairs(MiscSettings) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.MiscSettings = true
-            end
-        end
-        for i, j in ipairs(TrollMenu) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.TrollMenu = true
-            end
-        end
-        for i, j in ipairs(OnlinePlyOptions_SendMessage) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_SendMessage = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_Heal) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_Heal = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_Revive) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_Revive = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_OpenInventory) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_OpenInventory = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_SetJob) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_SetJob = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_RemoveInventoryItem) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_RemoveInventoryItem = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_GiveItem) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_GiveItem = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_GiveItemName) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_GiveItemName = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_GiveMoney) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_GiveMoney = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_RemoveMoney) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_RemoveMoney = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_Goto) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_Goto = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_Bring) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_Bring = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_SetWaypoint) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_SetWaypoint = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_PRINTID) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_PRINTID = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_KillPlayer) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_KillPlayer = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_KickPlayer) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_KickPlayer = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_License) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_License = true
-            end
-        end
-
-        for i, j in ipairs(PlayerOptions_God) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_God = true
-            end
-        end
-
-        for i, j in ipairs(PlayerOptions_Invisible) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_Invisible = true
-            end
-        end
-        for i, j in ipairs(PlayerOptions_Stamina) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_Stamina = true
-            end
-        end
-        for i, j in ipairs(PlayerOptions_FastRun) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_FastRun = true
-            end
-        end
-        for i, j in ipairs(PlayerOptions_FastSwim) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_FastSwim = true
-            end
-        end
-        for i, j in ipairs(PlayerOptions_SuperJump) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_SuperJump = true
-            end
-        end
-        for i, j in ipairs(PlayerOptions_NoRagdoll) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_NoRagdoll = true
-            end
-        end
-        for i, j in ipairs(PlayerOptions_NeverWanted) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_NeverWanted = true
-            end
-        end
-        for i, j in ipairs(PlayerOptions_StayInVeh) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_StayInVeh = true
-            end
-        end
-
-        for i, j in ipairs(PlayerOptions_Heal) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_Heal = true
-            end
-        end
-
-        for i, j in ipairs(PlayerOptions_Revive) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_Revive = true
-            end
-        end
-
-        for i, j in ipairs(PlayerOptions_Armor) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_Armor = true
-            end
-        end
-
-        for i, j in ipairs(PlayerOptions_CleanClothes) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_CleanClothes = true
-            end
-        end
-
-        for i, j in ipairs(PlayerOptions_WetClothes) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_WetClothes = true
-            end
-        end
-
-        for i, j in ipairs(PlayerOptions_DryClothes) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_DryClothes = true
-            end
-        end
-
-        for i, j in ipairs(PlayerOptions_Suicide) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_Suicide = true
-            end
-        end
-
-        for i, j in ipairs(PlayerOptions_Freeze) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_Freeze = true
-            end
-        end
-
-        for i, j in ipairs(PlayerOptions_Noclip) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_Noclip = true
-            end
-        end
-
-        for i, j in ipairs(PlayerOptions_GiveCar) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_GiveCar = true
-            end
-        end
-
-        for i, j in ipairs(PlayerOptions_DeleteCar) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_DeleteCar = true
-            end
-        end
-
-        for i, j in ipairs(PlayerOptions_ChangeSkin) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_ChangeSkin = true
-            end
-        end
-
-        for i, j in ipairs(PlayerOptions_ChangePed) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.PlayerOptions_ChangePed = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_Spawner) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_Spawner = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_Modmenu) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_Modmenu = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_Freeze) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_Freeze = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_NumberPlate) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_NumberPlate = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_DoorMenu) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_DoorMenu = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_MultiplierSpeed) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_MultiplierSpeed = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_FlipVehicle) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_FlipVehicle = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_DeleteVehicle) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_DeleteVehicle = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_UnlockVehicle) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_UnlockVehicle = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_InfiniteFuel) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_InfiniteFuel = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_NoBikeHelmet) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_NoBikeHelmet = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_Godmode) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_Godmode = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_Repair) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_Repair = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_Wash) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_Wash = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_KeepClean) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_KeepClean = true
-            end
-        end
-
-        for i, j in ipairs(VehicleRelated_SetDirt) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.VehicleRelated_SetDirt = true
-            end
-        end
-
-        for i, j in ipairs(MiscSettings_Teleport) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.MiscSettings_Teleport = true
-            end
-        end
-
-        for i, j in ipairs(MiscSettings_ShowCoords) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.MiscSettings_ShowCoords = true
-            end
-        end
-
-        for i, j in ipairs(MiscSettings_ClearArea) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.MiscSettings_ClearArea = true
-            end
-        end
-
-        for i, j in ipairs(MiscSettings_ThermalVision) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.MiscSettings_ThermalVision = true
-            end
-        end
-
-        for i, j in ipairs(MiscSettings_NightVision) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.MiscSettings_NightVision = true
-            end
-        end
-
-        for i, j in ipairs(MiscSettings_PlayerBlips) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.MiscSettings_PlayerBlips = true
-            end
-        end
-
-        for i, j in ipairs(MiscSettings_PlayerNames) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.MiscSettings_PlayerNames = true
-            end
-        end
-
-        for i, j in ipairs(MiscSettings_Timecycle) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.MiscSettings_Timecycle = true
-            end
-        end
-
-        for i, j in ipairs(MiscSettings_JoinQNotif) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.MiscSettings_JoinQNotif = true
-            end
-        end
-
-        for i, j in ipairs(MiscSettings_Kill) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.MiscSettings_Kill = true
-            end
-        end
-
-        for i, j in ipairs(MiscSettings_Announce) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.MiscSettings_Announce = true
-            end
-        end
-
-        for i, j in ipairs(MiscSettings_PropSpawn) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.MiscSettings_PropSpawn = true
-            end
-        end
-
-        for i, j in ipairs(MiscSettings_StaffChat) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.MiscSettings_StaffChat = true
-            end
-        end
-
-        for i, j in ipairs(MiscSettings_Relog) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.MiscSettings_Relog = true
-            end
-        end
-
-        for i, j in ipairs(TrollMenu_Fart) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.TrollMenu_Fart = true
-            end
-        end
-
-        for i, j in ipairs(TrollMenu_Truck) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.TrollMenu_Truck = true
-            end
-        end
-
-        for i, j in ipairs(TrollMenu_Clown) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.TrollMenu_Clown = true
-            end
-        end
-
-        for i, j in ipairs(TrollMenu_Merry) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.TrollMenu_Merry = true
-            end
-        end
-
-        for i, j in ipairs(TrollMenu_Flash) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.TrollMenu_Flash = true
-            end
-        end
-
-        for i, j in ipairs(TrollMenu_FakeSound) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.TrollMenu_FakeSound = true
-            end
-        end
-
-        for i, j in ipairs(TrollMenu_Lag) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.TrollMenu_Lag = true
-            end
-        end
-
-        for i, j in ipairs(TrollMenu_BlowTyre) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.TrollMenu_BlowTyre = true
-            end
-        end
-
-        for i, j in ipairs(TrollMenu_Eject) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.TrollMenu_Eject = true
-            end
-        end
-
-        for i, j in ipairs(TrollMenu_Crash) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.TrollMenu_Crash = true
-            end
-        end
-
-        for i, j in ipairs(OnlinePlyOptions_Spectate) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.OnlinePlyOptions_Spectate = true
-            end
-        end
-        for i, j in ipairs(RockstarEditor) do
-            if TSAdmins[j] then
-                TSAdmins[j].permission.RockstarEditor = true
-            end
-        end
-
+local IsPlayerAllowed = function(ply,obj)
+    
+    local hasPermission = false
+    if IsPlayerAceAllowed(ply,'TSAdmin.admin') then
+        print('allowed')
+    if IsPlayerAceAllowed(ply,obj) or IsPlayerAceAllowed(ply,'TSAdmin.FullAccess') then
+        hasPermission = true
     end
+end
+    return hasPermission
+end
 
+lib.callback.register('ts-adminmenu:getAuthorization', function(source, obj)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local group = xPlayer.getGroup()
+    local allowed = false
+    if IsPlayerAllowed(source,obj) and xPlayer and (group == 'admin' or group == 'superadmin') then
+        allowed = true
+    end
+    return allowed
 end)
 
 RegisterCommand('tsadminlist', function(source, args, raw)
     local src = source
     local xPlayer = ESX.GetPlayerFromId(source)
     if xPlayer then
+        print(IsPlayerAceAllowed(src,'TSAdmin.admin'))
         local group = xPlayer.getGroup()
-        --print(group)
         if group == 'admin' or group == 'superadmin' then
             TriggerClientEvent('table', src, PlyList)
         end
     end
 end)
 
-CheckAllowed = function(source, type, type2)
+CheckAllowed = function(source, type)
     local src = source
     local xPlayer = ESX.GetPlayerFromId(src)
     local group = xPlayer.getGroup()
-    local identifier = xPlayer.getIdentifier()
     local tonyaction = type
-    local tonyaction2 = type2
     local allowed = false
     if group == 'admin' or group == 'superadmin' then
         allowed = true
     else
-        if TSAdmins[identifier] then
-            if TSAdmins[identifier].permission[tonyaction] or TSAdmins[identifier].permission[tonyaction2] or
-                TSAdmins[identifier].permission.FullAccess then
-                allowed = true
-                goto continue
-            end
-        else
-        for k,v in pairs(GetPlayerIdentifiers(xPlayer.source)) do
-            print(v) 
-        if string.sub(v, 1, string.len("steam:")) == "steam:" then
-            if TSAdmins[v] then
-                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
-                    TSAdmins[v].permission.FullAccess then
-                    allowed = true
-                    goto continue
-                end
-            end
-        elseif string.sub(v, 1, string.len("license:")) == "license:" then
-            if TSAdmins[v] then
-                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
-                    TSAdmins[v].permission.FullAccess then
-                    allowed = true
-                    goto continue
-                end
-            end
-        elseif string.sub(v, 1, string.len("xbl:")) == "xbl:" then
-            if TSAdmins[v] then
-                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
-                    TSAdmins[v].permission.FullAccess then
-                    allowed = true
-                    goto continue
-                end
-            end
-        elseif string.sub(v, 1, string.len("ip:")) == "ip:" then
-            if TSAdmins[v] then
-                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
-                    TSAdmins[v].permission.FullAccess then
-                    allowed = true
-                    goto continue
-                end
-            end
-        elseif string.sub(v, 1, string.len("discord:")) == "discord:" then
-            if TSAdmins[v] then
-                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
-                    TSAdmins[v].permission.FullAccess then
-                    allowed = true
-                    goto continue
-                end
-            end
-        elseif string.sub(v, 1, string.len("live:")) == "live:" then
-            if TSAdmins[v] then
-                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
-                    TSAdmins[v].permission.FullAccess then
-                    allowed = true
-                    goto continue
-                end
-            end
-        end
+        if IsPlayerAllowed(xPlayer.source,tonyaction) then
+            allowed = true
         end
     end
-    end
-    ::continue::
     return allowed
 end
 
@@ -657,7 +97,7 @@ RegisterNetEvent('ts-adminmenu:server:PlayerJoined', function()
     local xPlayer  = ESX.GetPlayerFromId(src)
     local Players = ESX.GetExtendedPlayers()
     for k, v in pairs(Players) do
-        if CheckAllowed(v.source, 'MiscSettings_JoinQNotif', 'MiscSettings') then
+        if CheckAllowed(v.source, 'TSAdmin.MiscSettings.JoinQNotif') then
             TriggerClientEvent('ts-adminmenu:client:JoinQ', v.source,
                 '~o~' .. GetPlayerName(src) .. '~s~ Joined The Server')
         end
@@ -669,7 +109,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:removeCar', function(plate)
     local src = source
     local plate = plate
-    local allowed = CheckAllowed(src, 'PlayerOptions_DeleteCar', 'PlayerOptions')
+    local allowed = CheckAllowed(src, 'TSAdmin.PlayerOptions.DeleteCar')
     if allowed then
         MySQL.query('DELETE FROM owned_vehicles WHERE plate = @plate', {
             ['@plate'] = plate
@@ -683,7 +123,7 @@ RegisterNetEvent('ts-adminmenu:server:giveCar', function(ply, props)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(tonumber(ply))
     local vehProps = props
-    local allowed = CheckAllowed(xPlayer.source, 'PlayerOptions_GiveCar', 'PlayerOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.PlayerOptions.GiveCar')
     if allowed then
         MySQL.query('INSERT INTO owned_vehicles (owner, plate, vehicle) VALUES (@owner, @plate, @vehicle)', {
             ['@owner'] = yPlayer.identifier,
@@ -700,7 +140,7 @@ RegisterNetEvent('ts-adminmenu:server:SetPed', function(plyId, ped)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(plyId)
     local ped2 = ped
-    local allowed = CheckAllowed(xPlayer.source, 'PlayerOptions_ChangePed', 'PlayerOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.PlayerOptions.ChangePed')
     if yPlayer and allowed then
         TriggerClientEvent('ts-adminmenu:client:SetPed', yPlayer.source, ped2)
     end
@@ -709,7 +149,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:ShowInventory', function(ply)
     local src = source
     local Ply = ply
-    local allowed = CheckAllowed(src, 'OnlinePlyOptions_OpenInventory', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(src, 'TSAdmin.OnlinePlyOptions.OpenInventory')
     if allowed then
         local inv = exports.ox_inventory:Inventory(tonumber(Ply))
         TriggerClientEvent('ox_inventory:viewInventory', src, inv)
@@ -737,7 +177,7 @@ RegisterNetEvent('ts-adminmenu:server:playerDied', function(data)
         msg = '~o~' .. xPlayer.getName() .. '~s~ died Reason: ' .. reason
     end
     for k, v in pairs(Players) do
-        if CheckAllowed(v.playerId, 'MiscSettings_Kill', 'MiscSettings') then
+        if CheckAllowed(v.playerId, 'TSAdmin.MiscSettings.Kill') then
             TriggerClientEvent('ts-adminmenu:client:killnotif', v.playerId, msg)
         end
     end
@@ -749,7 +189,7 @@ AddEventHandler('playerDropped', function(reason)
     local reason = reason
     local Players = ESX.GetExtendedPlayers()
     for k, v in pairs(Players) do
-        if CheckAllowed(v.source, 'MiscSettings_JoinQNotif', 'MiscSettings') then
+        if CheckAllowed(v.source, 'TSAdmin.MiscSettings.JoinQNotif') then
             TriggerClientEvent('ts-adminmenu:client:JoinQ', v.playerId,
                 '~o~' .. GetPlayerName(src) .. '~s~ Left The Server Reason: ~y~' .. reason .. '~s~')
         end
@@ -760,7 +200,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:HealPlayer', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_Heal', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.Heal')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -788,10 +228,9 @@ RegisterNetEvent('ts-adminmenu:server:HealPlayer', function(pid)
     end
 end)
 
-ESX.RegisterServerCallback('ts-adminmenu:server:GetJobs', function(source, cb)
+lib.callback.register('ts-adminmenu:server:GetJobs', function(source)
     local jobs = ESX.GetJobs()
-    cb(jobs)
-
+    return jobs
 end)
 
 RegisterNetEvent('ts-adminmenu:server:SetJob', function(pid, job, grade)
@@ -799,7 +238,7 @@ RegisterNetEvent('ts-adminmenu:server:SetJob', function(pid, job, grade)
     local job = job
     local grade = tonumber(grade)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_SetJob', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.SetJob')
     if allowed then
 
         if ESX.DoesJobExist(job, grade) then
@@ -833,9 +272,10 @@ RegisterNetEvent('ts-adminmenu:server:SetJob', function(pid, job, grade)
     end
 end)
 RegisterNetEvent('ts-adminmenu:server:GiveAccMoney', function(pid, acc, amount)
+    print("REACHSER")
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_GiveMoney', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.GiveMoney')
     local account = acc
     local money = tonumber(amount)
     if allowed then
@@ -871,7 +311,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:RemoveAccMoney', function(pid, acc, amount)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_GiveMoney', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.GiveMoney')
     local account = acc
     local money = tonumber(amount)
     if allowed then
@@ -907,7 +347,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:RevivePlayer', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_Revive', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.Revive')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -937,7 +377,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:Goto', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_Goto', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.Goto')
     local yPlyCoords = yPlayer.getCoords()
     if allowed then
         local data = {
@@ -969,7 +409,7 @@ RegisterNetEvent('ts-adminmenu:server:Bring', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
     local xPlyCoords = xPlayer.getCoords()
-    local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_Bring', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.Bring')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -999,7 +439,7 @@ RegisterNetEvent('ts-adminmenu:server:SetWaypoint', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
     local yPlyCoords = yPlayer.getCoords(true)
-    local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_SetWaypoint', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.SetWaypoint')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1030,7 +470,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:PrintID', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_PRINTID', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.PRINTID')
     local steamid, license, xbl, ip, discord, liveid = nil, nil, nil, nil, nil, nil
     if allowed then
         local data = {
@@ -1077,7 +517,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:KillPlayer', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_KillPlayer', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.KillPlayer')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1107,7 +547,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:KickPlayer', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_KickPlayer', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.KickPlayer')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1136,9 +576,9 @@ end)
 
 RegisterNetEvent('ts-adminmenu:server:DeleteVehicle', function(radi)
     local xPlayer = ESX.GetPlayerFromId(source)
-    local allowed = CheckAllowed(xPlayer.source, 'VehicleRelated_DeleteVehicle', 'VehicleRelatedOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.VehicleRelatedOptions.DeleteVehicle')
     local radius = 1.0
-    if radi then
+    if radi ~= nil then
         radius = tonumber(radi) + 0.0
     end
     local veh = GetVehiclePedIsIn(GetPlayerPed(xPlayer.source))
@@ -1146,9 +586,9 @@ RegisterNetEvent('ts-adminmenu:server:DeleteVehicle', function(radi)
         if veh ~= 0 then
             DeleteEntity(veh)
         else
-            veh = TSGetVehiclesInArea(GetEntityCoords(GetPlayerPed(xPlayer.source)), radius)
-            for i = 1, #veh do
-                DeleteEntity(veh[i].entity)
+            local vehs = TSGetVehiclesInArea(GetEntityCoords(GetPlayerPed(xPlayer.source)), radius)
+            for i = 1, #vehs do
+                DeleteEntity(vehs[i].entity)
                 local data = {
                     ['Player'] = xPlayer.source, -- You need to set source here
                     ['Log'] = 'adminmenu-spawncar', -- Log name
@@ -1161,7 +601,7 @@ RegisterNetEvent('ts-adminmenu:server:DeleteVehicle', function(radi)
             end
         end
         
-        TriggerClientEvent('tsadmin:deleteVehicle', xPlayer.source, radius)
+        TriggerClientEvent('esx:deleteVehicle', xPlayer.source, radius)
     else
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1178,7 +618,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:ChangeSkin', function(ply)
     local yPlayer = ESX.GetPlayerFromId(ply)
     local xPlayer = ESX.GetPlayerFromId(source)
-    local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_ChangeSkin', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.ChangeSkin')
     yPlayer.triggerEvent('esx_skin:openSaveableMenu')
 end)
 
@@ -1186,7 +626,7 @@ RegisterNetEvent('ts-adminmenu:server:SendMessage', function(pid, msg)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
     local message = msg
-    local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_SendMessage', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.SendMessage')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1222,8 +662,8 @@ RegisterNetEvent('ts-adminmenu:server:GiveItem', function(pid, item, count)
     local titem = item
     local amount = count
     local yPlayer = ESX.GetPlayerFromId(playerId)
-    local allowed = CheckAllowed(source, 'OnlinePlyOptions_GiveItem', 'OnlinePlyOptions') or
-                        CheckAllowed(source, 'OnlinePlyOptions_GiveItemName', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(source, 'TSAdmin.OnlinePlyOptions.GiveItem') or
+                        CheckAllowed(source, 'TSAdmin.OnlinePlyOptions.GiveItemName')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1256,7 +696,7 @@ RegisterNetEvent('ts-adminmenu:server:GetItems', function(pid)
     local playerId = pid
     local yPlayer = ESX.GetPlayerFromId(playerId)
     local item = exports.ox_inventory:Inventory(playerId).items
-    local allowed = CheckAllowed(source, 'OnlinePlyOptions_RemoveInventoryItem', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(source, 'TSAdmin.OnlinePlyOptions.RemoveInventoryItem')
     if allowed then
         table.sort(item, function(a, b)
             return a.name:upper() < b.name:upper()
@@ -1271,7 +711,7 @@ RegisterNetEvent('ts-adminmenu:server:RemoveItem', function(pid, item, count)
     local yPlayer = ESX.GetPlayerFromId(playerId)
     local titem = item
     local amount = count
-    local allowed = CheckAllowed(source, 'OnlinePlyOptions_RemoveInventoryItem', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(source, 'TSAdmin.OnlinePlyOptions.RemoveInventoryItem')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1305,7 +745,7 @@ RegisterNetEvent('ts-adminmenu:server:SpawnVehicle', function(veh)
     local playerPed = GetPlayerPed(source)
     local model = veh
     local vehicle = GetVehiclePedIsIn(playerPed)
-    local allowed = CheckAllowed(source, 'VehicleRelated_Spawner', 'VehicleRelatedOptions')
+    local allowed = CheckAllowed(source, 'TSAdmin.VehicleRelatedOptions.Spawner')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1345,7 +785,7 @@ RegisterNetEvent('ts-adminmenu:server:PlayerFart', function(type)
     local src = source
     local farttype = type
     local plyList = TSGetPlayers()
-    local allowed = CheckAllowed(src, 'TrollMenu_Fart', 'TrollMenu')
+    local allowed = CheckAllowed(src, 'TSAdmin.TrollMenu.Fart')
     if allowed then
         TriggerClientEvent('ts-adminmenu:client:PlayFart', src, plyList, farttype)
     end
@@ -1353,7 +793,7 @@ end)
 
 RegisterNetEvent('ts-adminmenu:server:propspawner', function()
     local src = source
-    local allowed = CheckAllowed(src, 'MiscSettings_PropSpawn', 'MiscSettings')
+    local allowed = CheckAllowed(src, 'TSAdmin.MiscSettings.PropSpawn')
     if allowed then
         exports.oxmysql:query('SELECT * FROM props_spawn ORDER BY id DESC', {}, function(result)
             TriggerClientEvent('lg: openPropMenu', src, result)
@@ -1366,7 +806,7 @@ RegisterNetEvent('ts-adminmenu:server:SendStaff', function(txt)
     local msg = txt
     local xPlayer = ESX.GetPlayerFromId(src)
     local time = os.date('%H:%M')
-    local allowed = CheckAllowed(src, 'MiscSettings_StaffChat', 'MiscSettings')
+    local allowed = CheckAllowed(src, 'TSAdmin.MiscSettings.StaffChat')
     if allowed then
         TriggerClientEvent('chat:addMessage', -1, {
             template = '<div class="chat-message staff"><i class="fas fa-shield-alt"></i> <b><span style="color: #1ebc62">[STAFF] {0}</span>&nbsp;<span style="font-size: 14px; color: #e1e1e1;">{2}</span></b><div style="margin-top: 5px; font-weight: 300;">{1}</div></div>',
@@ -1376,13 +816,14 @@ RegisterNetEvent('ts-adminmenu:server:SendStaff', function(txt)
 end)
 
 RegisterNetEvent('ts-adminmenu:server:PlayFartFromServer', function(data)
+    print(data)
     local src = source
     local xPlayer = ESX.GetPlayerFromId(src)
     local farttype = data.type
     local ply = data.ply
     local yPlayer = ESX.GetPlayerFromId(ply)
     local netId = NetworkGetNetworkIdFromEntity(GetPlayerPed(yPlayer.source))
-    local allowed = CheckAllowed(src, 'TrollMenu_Fart', 'TrollMenu')
+    local allowed = CheckAllowed(src, 'TSAdmin.TrollMenu.Fart')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1420,7 +861,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:TruckPunchlinePly', function(data)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TrollMenu_Truck', 'TrollMenu')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.Truck')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1450,7 +891,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:ClownAttackPly', function(data)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TrollMenu_Clown', 'TrollMenu')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.Clown')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1480,7 +921,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:MerryAttackPly', function(data)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TrollMenu_Merry', 'TrollMenu')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.Merry')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1510,7 +951,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:FlashPly', function(data)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TrollMenu_Flash', 'TrollMenu')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.Flash')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1538,16 +979,17 @@ RegisterNetEvent('ts-adminmenu:server:FlashPly', function(data)
 end)
 
 RegisterNetEvent('ts-adminmenu:server:Announce', function(txt)
-    local allowed = CheckAllowed(source, 'MiscSettings_Announce', 'MiscSettings')
+    local allowed = CheckAllowed(source, 'TSAdmin.MiscSettings.Announce')
     if allowed then
         TriggerClientEvent('bvrtck_announce:annouce', -1, txt)
     end
 end)
 
 RegisterNetEvent('ts-adminmenu:server:FakeCallply', function(data2)
+    print(data2.plyid, data2.type)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data2.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TrollMenu_FakeSound', 'TrollMenu')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.FakeSound')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1577,7 +1019,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:LagGame', function(data2)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data2.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TrollMenu_Lag', 'TrollMenu')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.Lag')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1607,7 +1049,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:BlowPly', function(data2)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data2.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TrollMenu_BlowTyre', 'TrollMenu')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.BlowTyre')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1637,7 +1079,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:EjectPly', function(data2)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data2.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TrollMenu_Eject', 'TrollMenu')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.Eject')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1667,7 +1109,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:Crashply', function(data2)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data2.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TrollMenu_Crash', 'TrollMenu')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.Crash')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1701,7 +1143,7 @@ RegisterNetEvent("ts-adminmenu:server:ToggleLicense", function(playerId, license
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(playerId)
-    local allowed = CheckAllowed(xPlayer.source, 'OnlinePlyOptions_License', 'OnlinePlyOptions')
+    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.License')
     if allowed then
         local found = false
         TriggerEvent("esx_license:getLicensesList", function(licenses)
@@ -1761,105 +1203,8 @@ RegisterNetEvent("ts-adminmenu:server:ToggleLicense", function(playerId, license
         TriggerEvent('Boost-Logs:SendLog', data)
     end
 end)
---[[
-RegisterNetEvent('esx:playerLoaded', function(plyId, xPly)
-    local ply = xPly
-    ply.name = GetPlayerName(ply.playerId)
-    table.insert(PlyList, ply)
-end)]]--
---[[
-RegisterNetEvent('esx:playerLogout', function(playerId)
-    local plyid = playerId
-    for k, v in pairs(PlyList) do
-        if v.source == plyid then
-            PlyList[k] = nil
-        end
-    end
-end)]]--
 
-
-
-
-ESX.RegisterServerCallback('ts-adminmenu:server:GetOnlinePlayers', function(source, cb)
-    cb(TSGetPlayers())
+lib.callback.register('ts-adminmenu:server:GetOnlinePlayers', function(source)
+    return TSGetPlayers()
 end)
 
-ESX.RegisterServerCallback("ts-adminmenu:server:IsAllowed", function(source, cb, action, action2)
-    local src = source
-    --print(src)
-    local xPlayer = ESX.GetPlayerFromId(src)
-    local allowed = false
-    if xPlayer then
-    local group = xPlayer.getGroup()
-    local identifier = xPlayer.getIdentifier()
-    local tonyaction = action
-    local tonyaction2 = action2 or action
-    --print(tonyaction, tonyaction2)
-    if group == 'admin' or group == 'superadmin' then
-        allowed = true
-    else
-        if TSAdmins[identifier] then
-            if TSAdmins[identifier].permission[tonyaction] or TSAdmins[identifier].permission[tonyaction2] or
-                TSAdmins[identifier].permission.FullAccess then
-                allowed = true
-                goto continue
-            end
-        else
-        for k,v in pairs(GetPlayerIdentifiers(xPlayer.source)) do
-        if string.sub(v, 1, string.len("steam:")) == "steam:" then
-            if TSAdmins[v] then
-                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
-                    TSAdmins[v].permission.FullAccess then
-                    allowed = true
-                    goto continue
-                end
-            end
-        elseif string.sub(v, 1, string.len("license:")) == "license:" then
-            if TSAdmins[v] then
-                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
-                    TSAdmins[v].permission.FullAccess then
-                    allowed = true
-                    goto continue
-                end
-            end
-        elseif string.sub(v, 1, string.len("xbl:")) == "xbl:" then
-            if TSAdmins[v] then
-                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
-                    TSAdmins[v].permission.FullAccess then
-                    allowed = true
-                    goto continue
-                end
-            end
-        elseif string.sub(v, 1, string.len("ip:")) == "ip:" then
-            if TSAdmins[v] then
-                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
-                    TSAdmins[v].permission.FullAccess then
-                    allowed = true
-                    goto continue
-                end
-            end
-        elseif string.sub(v, 1, string.len("discord:")) == "discord:" then
-            if TSAdmins[v] then
-                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
-                    TSAdmins[v].permission.FullAccess then
-                    allowed = true
-                    goto continue
-                end
-            end
-        elseif string.sub(v, 1, string.len("live:")) == "live:" then
-            if TSAdmins[v] then
-                if TSAdmins[v].permission[tonyaction] or TSAdmins[v].permission[tonyaction2] or
-                    TSAdmins[v].permission.FullAccess then
-                    allowed = true
-                    goto continue
-                end
-            end
-        end
-        end
-    end
-
-    end
-end
-::continue::
-    cb(allowed)
-end)
