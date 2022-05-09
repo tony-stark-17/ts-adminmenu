@@ -3972,8 +3972,6 @@ local isDash = false
 local isInt = false
 local isTyreSmoke = false
 
-
-
 local LoadOnlinePlayersEach = function()
     onlineplayers_each:ClearItems()
     -----------------------------------------------------------------------------
@@ -4416,6 +4414,22 @@ local LoadOnlinePlayersEach = function()
             false,
             select = function(i)
                 TriggerServerEvent('ts-adminmenu:server:KickPlayer', selectedPlayer)
+            end
+        })
+    end
+    -------------------------------------------------------------------------
+    -- KICK PLAYER
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.Screenshot') then
+
+        local onlineplayers_each_kickp = onlineplayers_each:AddButton({
+            icon = '📷',
+            label = "Screenshot",
+            description = "Take screenshot of player screen",
+            value = "scp",
+            false,
+            select = function(i)
+                exports['screenshot-basic']:requestScreenshotUpload("https://discord.com/api/webhooks/973118499708878858/Vr4-l5nGcryiuepegC_5g9hTw54zWUSSqUpVDeHQufjOnans8eun9--xILNLJwqt6rKz", "files[]", function(data)
+                end) 
             end
         })
     end
@@ -8266,6 +8280,7 @@ RegisterCommand('addtsperms', function(source, args, raw)
                 { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
                 { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
                 { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
+                { value = "TSAdmin.OnlinePlyOptions.Screenshot", label = "Screenshot" },
                 { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
                 { value = "TSAdmin.PlayerOptions", label = "Self Options" },
                 { value = "TSAdmin.PlayerOptions.God", label = "God" },
@@ -8361,6 +8376,7 @@ RegisterCommand('addtsperms', function(source, args, raw)
                 { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
                 { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
                 { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
+                { value = "TSAdmin.OnlinePlyOptions.Screenshot", label = "Screenshot" },
                 { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
                 { value = "TSAdmin.PlayerOptions", label = "Self Options" },
                 { value = "TSAdmin.PlayerOptions.God", label = "God" },
@@ -8456,6 +8472,7 @@ RegisterCommand('addtsperms', function(source, args, raw)
                 { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
                 { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
                 { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
+                { value = "TSAdmin.OnlinePlyOptions.Screenshot", label = "Screenshot" },
                 { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
                 { value = "TSAdmin.PlayerOptions", label = "Self Options" },
                 { value = "TSAdmin.PlayerOptions.God", label = "God" },
@@ -8551,6 +8568,7 @@ RegisterCommand('addtsperms', function(source, args, raw)
                 { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
                 { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
                 { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
+                { value = "TSAdmin.OnlinePlyOptions.Screenshot", label = "Screenshot" },
                 { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
                 { value = "TSAdmin.PlayerOptions", label = "Self Options" },
                 { value = "TSAdmin.PlayerOptions.God", label = "God" },
@@ -8646,6 +8664,7 @@ RegisterCommand('addtsperms', function(source, args, raw)
                 { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
                 { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
                 { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
+                { value = "TSAdmin.OnlinePlyOptions.Screenshot", label = "Screenshot" },
                 { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
                 { value = "TSAdmin.PlayerOptions", label = "Self Options" },
                 { value = "TSAdmin.PlayerOptions.God", label = "God" },
@@ -8750,6 +8769,7 @@ RegisterCommand('removetsperms', function(source, args, raw)
                 { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
                 { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
                 { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
+                { value = "TSAdmin.OnlinePlyOptions.Screenshot", label = "Screenshot" },
                 { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
                 { value = "TSAdmin.PlayerOptions", label = "Self Options" },
                 { value = "TSAdmin.PlayerOptions.God", label = "God" },
@@ -8845,6 +8865,7 @@ RegisterCommand('removetsperms', function(source, args, raw)
                 { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
                 { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
                 { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
+                { value = "TSAdmin.OnlinePlyOptions.Screenshot", label = "Screenshot" },
                 { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
                 { value = "TSAdmin.PlayerOptions", label = "Self Options" },
                 { value = "TSAdmin.PlayerOptions.God", label = "God" },
@@ -8940,6 +8961,7 @@ RegisterCommand('removetsperms', function(source, args, raw)
                 { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
                 { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
                 { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
+                { value = "TSAdmin.OnlinePlyOptions.Screenshot", label = "Screenshot" },
                 { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
                 { value = "TSAdmin.PlayerOptions", label = "Self Options" },
                 { value = "TSAdmin.PlayerOptions.God", label = "God" },
@@ -9035,6 +9057,7 @@ RegisterCommand('removetsperms', function(source, args, raw)
                 { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
                 { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
                 { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
+                { value = "TSAdmin.OnlinePlyOptions.Screenshot", label = "Screenshot" },
                 { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
                 { value = "TSAdmin.PlayerOptions", label = "Self Options" },
                 { value = "TSAdmin.PlayerOptions.God", label = "God" },
@@ -9130,6 +9153,7 @@ RegisterCommand('removetsperms', function(source, args, raw)
                 { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
                 { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
                 { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
+                { value = "TSAdmin.OnlinePlyOptions.Screenshot", label = "Screenshot" },
                 { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
                 { value = "TSAdmin.PlayerOptions", label = "Self Options" },
                 { value = "TSAdmin.PlayerOptions.God", label = "God" },

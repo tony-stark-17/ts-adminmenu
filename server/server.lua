@@ -839,6 +839,8 @@ RegisterNetEvent('ts-adminmenu:server:KillPlayer', function(pid)
     end
 end)
 
+
+
 RegisterNetEvent('ts-adminmenu:server:KickPlayer', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
