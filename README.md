@@ -4,7 +4,7 @@ Admin Menu Inspired from vMenu
 ## Installation Guide
 Add this to server.cfg
 
-```exec /path/to/ts-adminmenu/server/admin_list.cfg```
+```exec @ts-adminmenu/server/admin_list.cfg```
 
 Configure Admins in the admin_list.cfg 
 
