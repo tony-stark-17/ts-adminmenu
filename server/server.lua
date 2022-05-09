@@ -1,4 +1,5 @@
 local ESX = exports['es_extended']:getSharedObject()
+local BanList = {}
 
 local TSGetNearbyEntities = function(entities, coords, modelFilter, maxDistance, isPed)
 	local nearbyEntities = {}
@@ -16,6 +17,87 @@ local TSGetNearbyEntities = function(entities, coords, modelFilter, maxDistance,
 
 	return nearbyEntities
 end
+
+local function OnPlayerConnecting(name, setKickReason, deferrals)
+    local player = source
+    deferrals.defer()
+    local banned
+    local banid
+    local identifiers = GetPlayerIdentifiers(player)
+    deferrals.update("Checking Bans")
+    for k,v in pairs(identifiers)do               
+        for i,j in pairs(BanList) do
+            for t,s in pairs(j) do
+                if tostring(v) == tostring(s) then
+                    banid = i
+                    banned = true
+                end
+                
+            end
+            if banned then break end
+        end
+    end
+    Citizen.Wait(0)
+    if banned then
+        deferrals.done("You are banned from this server by - TS Admin Menu - Ban ID: "..banid)
+    else
+        deferrals.done()
+    end
+end
+
+AddEventHandler("playerConnecting", OnPlayerConnecting)
+
+local unban = function(bid)
+    local Data = LoadResourceFile(GetCurrentResourceName(), "bans.json")
+    local bid = tonumber(bid)
+    local content = json.decode(Data)
+    local oldData = content[bid]
+    table.remove(content, bid)
+    local saved = SaveResourceFile(GetCurrentResourceName(), "bans.json", json.encode(content, {indent = true}), -1)
+    if saved then
+        print("Saved Bans.json")
+    end
+    for k,v in pairs(BanList) do
+        for t,s in pairs(v) do
+            for i,j in pairs(oldData) do
+                if tostring(j) == tostring(s) then
+                    table.remove(BanList, k)
+                    break
+                end
+            end
+            
+        end
+    end
+end
+
+RegisterCommand('tsunban', function(source,args,raw)
+    if source == 0 then unban(args[1]) return end
+    local allowed = CheckAllowed(source,'TSAdmin.MiscSettings.Unban')
+    if allowed then
+        unban(args[1])
+    end
+end, true)
+
+RegisterNetEvent('ts-adminmenu:server:UnbanPlayer', function(data)
+    local allowed = CheckAllowed(source,'TSAdmin.MiscSettings.Unban')
+    if allowed then
+        unban(data[1])
+    end
+end)
+
+Citizen.CreateThread(function()
+    local Data = LoadResourceFile(GetCurrentResourceName(), "bans.json")
+
+    if not Data or Data == '' then
+        Data = "[]"
+    local saved = SaveResourceFile(GetCurrentResourceName(), "bans.json", "[]", -1)
+    if saved then
+        print("Saved Bans.json")
+    end
+    end
+    BanList = json.decode(Data)
+end)
+  
 
 local TSGetPlayers = function()
     local players = ESX.GetPlayers()
@@ -46,7 +128,6 @@ local IsPlayerAllowed = function(ply,obj)
     
     local hasPermission = false
     if IsPlayerAceAllowed(ply,'TSAdmin.admin') then
-        print('allowed')
     if IsPlayerAceAllowed(ply,obj) or IsPlayerAceAllowed(ply,'TSAdmin.FullAccess') then
         hasPermission = true
     end
@@ -56,11 +137,13 @@ end
 
 lib.callback.register('ts-adminmenu:getAuthorization', function(source, obj)
     local xPlayer = ESX.GetPlayerFromId(source)
-    local group = xPlayer.getGroup()
     local allowed = false
+    if xPlayer then
+    local group = xPlayer.getGroup()
     if IsPlayerAllowed(source,obj) and xPlayer and (group == 'admin' or group == 'superadmin') then
         allowed = true
     end
+end
     return allowed
 end)
 
@@ -68,7 +151,6 @@ RegisterCommand('tsadminlist', function(source, args, raw)
     local src = source
     local xPlayer = ESX.GetPlayerFromId(source)
     if xPlayer then
-        print(IsPlayerAceAllowed(src,'TSAdmin.admin'))
         local group = xPlayer.getGroup()
         if group == 'admin' or group == 'superadmin' then
             TriggerClientEvent('table', src, PlyList)
@@ -105,6 +187,155 @@ RegisterNetEvent('ts-adminmenu:server:PlayerJoined', function()
     TriggerClientEvent('ts-adminmenu:client:PlayerJoined', -1,xPlayer)
 end)
 
+function tablelength(T)
+    local count = 0
+    for _ in pairs(T) do count = count + 1 end
+    return count
+  end
+
+function BanPlayer(data)
+    local identifier = data[1]
+    local temp = nil
+    if data[2] == "true" then
+        temp = true
+    else
+        temp = false
+    end
+    local banlen = tablelength(BanList)
+    local newban = banlen + 1
+    BanList[newban] = {}
+    local ply = nil
+    local reason = data[4]
+    if data[3] then
+        ply = tonumber(data[3])
+    end
+    local plyIdentifiers
+    if ply then
+        plyIdentifiers = GetPlayerIdentifiers(ply)
+    end
+    if ply then
+        if temp then
+            DropPlayer(ply,"Banned by TS Admin Reason: "..reason)
+            for k,v in pairs(plyIdentifiers)do               
+                  if string.sub(v, 1, string.len("steam:")) == "steam:" then
+                    BanList[newban].steam = v
+                  elseif string.sub(v, 1, string.len("license:")) == "license:" then
+                    BanList[newban].license = v
+                  elseif string.sub(v, 1, string.len("xbl:")) == "xbl:" then
+                    BanList[newban].xbl = v
+                  elseif string.sub(v, 1, string.len("ip:")) == "ip:" then
+                    BanList[newban].ip = v
+                  elseif string.sub(v, 1, string.len("discord:")) == "discord:" then
+                    BanList[newban].discord = v
+                  elseif string.sub(v, 1, string.len("live:")) == "live:" then
+                    BanList[newban].live = v
+                  end
+                
+              end
+        else
+            DropPlayer(ply,"Banned by TS Admin Reason: "..reason)
+            local Data = LoadResourceFile(GetCurrentResourceName(), "bans.json")
+              Data = json.decode(Data)
+              local len = tablelength(Data)
+              local newlen = len + 1
+              if len >=1 then
+                Data[newlen] = {reason = reason}
+              else
+                Data[1] = {reason = reason}
+              end
+            for k,v in pairs(plyIdentifiers)do
+                  if string.sub(v, 1, string.len("steam:")) == "steam:" then
+                    BanList[newban].steam = v
+                    if len >=1 then
+                        Data[newlen].steam = v
+                      else
+                        Data[1].steam = v
+                      end
+                  elseif string.sub(v, 1, string.len("license:")) == "license:" then
+                    BanList[newban].license = v
+                    if len >=1 then
+                        Data[newlen].license = v
+                      else
+                        Data[1].license = v
+                      end
+                  elseif string.sub(v, 1, string.len("xbl:")) == "xbl:" then
+                    BanList[newban].xbl = v
+                    if len >=1 then
+                        Data[#newlen].xbl = v
+                      else
+                        Data[1].xbl = v
+                      end
+                  elseif string.sub(v, 1, string.len("ip:")) == "ip:" then
+                    BanList[newban].ip = v
+                    if len >=1 then
+                        Data[newlen].ip = v
+                      else
+                        Data[1].ip = v
+                      end
+                  elseif string.sub(v, 1, string.len("discord:")) == "discord:" then
+                    BanList[newban].discord = v
+                    if len >=1 then
+                        Data[newlen].discord = v
+                      else
+                        Data[1].discord = v
+                      end
+                  elseif string.sub(v, 1, string.len("live:")) == "live:" then
+                    BanList[newban].live = v
+                    if len >=1 then
+                        Data[newlen].live = v
+                      else
+                        Data[1].live = v
+                      end
+                  end
+                
+              end
+              local save = SaveResourceFile(GetCurrentResourceName(),"bans.json",json.encode(Data, {indent = true}),-1)
+              if not save then
+                print("Saving bans.json failed!")
+              else
+                print("Saved Bans.json")
+            end
+        end
+    elseif identifier then
+        if temp then
+            BanList[newban] = {}
+            BanList[newban].identifier = identifier
+        else
+            local Data = LoadResourceFile(GetCurrentResourceName(), "bans.json")
+              Data = json.decode(Data)
+              local len = tablelength(Data)              
+              local newlen = len + 1
+              if len >=1 then
+                Data[newlen] = {reason = reason}
+              else
+                Data[1] = {reason = reason}
+              end
+              if len >=1 then
+                Data[newlen].identifier = identifier
+              else
+                Data[1].identifier = identifier
+              end
+              local save = SaveResourceFile(GetCurrentResourceName(),"bans.json",json.encode(Data, {indent = true}),-1)
+              if not save then
+                print("Saving bans.json failed!")
+              else
+                print("Saved Bans.json")
+            end
+        end
+    end
+end
+
+RegisterCommand('tsban', function(source,args,raw)
+    BanPlayer(args)
+end)
+
+RegisterNetEvent('ts-adminmenu:server:BanPlayer', function(data)
+    local data = data
+    local allowed = CheckAllowed(source,'TSAdmin.MiscSettings.Ban')
+    if allowed then
+    BanPlayer(data)
+    end
+end)
 
 RegisterNetEvent('ts-adminmenu:server:removeCar', function(plate)
     local src = source
@@ -114,8 +345,34 @@ RegisterNetEvent('ts-adminmenu:server:removeCar', function(plate)
         MySQL.query('DELETE FROM owned_vehicles WHERE plate = @plate', {
             ['@plate'] = plate
         }, function()
-            TriggerClientEvent('esx:showNotification', src, "You recieved a car with Plate: " .. vehProps.plate)
+            TriggerClientEvent('esx:showNotification', src, "You recieved a car with Plate: " .. plate)
         end)
+    end
+end)
+
+RegisterNetEvent('ts-adminmenu:server:TPVeh', function(ply)
+    local src = source
+    local xPlayer = ESX.GetPlayerFromId(src)
+    local xPed = GetPlayerPed(src)
+    local yPed = GetPlayerPed(ply)
+    local veh = GetVehiclePedIsIn(yPed, false)
+    local allowed = CheckAllowed(src, 'TSAdmin.OnlinePlyOptions.TPCar')
+    local seat = -1
+    
+    if allowed then
+        if veh == 0 then xPlayer.showNotification('Player is not in a vehicle!') return end
+    for i = 0, 8, 1 do 
+        if GetPedInVehicleSeat(veh, i) == 0 then
+            seat = i break
+        end
+    end
+    if seat == -1 then 
+        xPlayer.showNotification('No free seats')
+        return 
+    end
+    
+    SetPedIntoVehicle(xPed, veh, seat)
+    xPlayer.showNotification('Successfully Teleported to Player Vehicle')
     end
 end)
 
@@ -156,6 +413,45 @@ RegisterNetEvent('ts-adminmenu:server:ShowInventory', function(ply)
     end
 
 end)
+
+RegisterNetEvent('ts-adminmenu:server:AddPerms', function(data)
+    local src= source
+    local ply = data[1]
+    local allowed = CheckAllowed(src,'TSAdmin.FullAccess')
+    if not ply or not allowed then return end
+    local identifier =  GetPlayerIdentifier(ply, 1)
+    local perms = {data[2],data[3],data[4],data[5],data[6]}
+    for k,v in ipairs(perms) do
+        if v and v ~= "none" then
+            ExecuteCommand("add_ace identifier."..identifier.." \""..v.."\" allow")
+        end
+    end
+end)
+
+RegisterNetEvent('ts-adminmenu:server:RemovePerms', function(data)
+    local src= source
+    local ply = data[1]
+    local allowed = CheckAllowed(src,'TSAdmin.FullAccess')
+    if not ply or not allowed then return end
+    local identifier = GetPlayerIdentifier(ply, 1)
+    local perms = {data[2],data[3],data[4],data[5],data[6]}
+    for k,v in ipairs(perms) do
+        if v and v ~= "none" then
+            ExecuteCommand("remove_ace identifier."..identifier.." \""..v.."\" allow")
+        end
+    end
+end)
+RegisterCommand('checkace', function(source,args,raw)
+    print(IsPlayerAceAllowed(args[1],args[2]))
+end)
+
+lib.callback.register('ts-adminmenu:server:GetSpectateData', function(source,pid)
+    local src = source
+    local target = pid
+    local pCoords = GetEntityCoords(GetPlayerPed(target))
+    return pCoords
+end)
+
 
 RegisterNetEvent('ts-adminmenu:server:playerDied', function(data)
     local info = data
@@ -272,7 +568,6 @@ RegisterNetEvent('ts-adminmenu:server:SetJob', function(pid, job, grade)
     end
 end)
 RegisterNetEvent('ts-adminmenu:server:GiveAccMoney', function(pid, acc, amount)
-    print("REACHSER")
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
     local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.GiveMoney')
@@ -816,7 +1111,6 @@ RegisterNetEvent('ts-adminmenu:server:SendStaff', function(txt)
 end)
 
 RegisterNetEvent('ts-adminmenu:server:PlayFartFromServer', function(data)
-    print(data)
     local src = source
     local xPlayer = ESX.GetPlayerFromId(src)
     local farttype = data.type
@@ -986,7 +1280,6 @@ RegisterNetEvent('ts-adminmenu:server:Announce', function(txt)
 end)
 
 RegisterNetEvent('ts-adminmenu:server:FakeCallply', function(data2)
-    print(data2.plyid, data2.type)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data2.plyid)
     local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.FakeSound')
@@ -1204,7 +1497,7 @@ RegisterNetEvent("ts-adminmenu:server:ToggleLicense", function(playerId, license
     end
 end)
 
-lib.callback.register('ts-adminmenu:server:GetOnlinePlayers', function(source)
+lib.callback.register('ts-adminmenu:server:GetOnlinePlayers', function()
     return TSGetPlayers()
 end)
 
