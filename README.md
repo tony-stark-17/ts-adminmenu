@@ -13,6 +13,7 @@ Configure Admins in the admin_list.cfg
 - chHyperSound - https://github.com/charleshacks/chHyperSound
 - ox_lib - https://github.com/overextended/ox_lib
 - menuv - https://github.com/ThymonA/menuv
+- Boost-Logs - https://github.com/boostless/Boost-Logs
 - oxmysql is needed
 
 ## Credits 
