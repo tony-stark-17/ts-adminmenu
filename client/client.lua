@@ -6631,26 +6631,6 @@ local LoadMiscSettings = function()
             end
         })
     end
-    ----------------------------------------------------------------------------
-    -- SET NUI FOCUS
-    if IsPlayerAllowed('TSAdmin.MiscSettings.NuiFocus') then
-        local misc_nui = miscsettings:AddCheckbox({
-            icon = '🖱️',
-            label = 'Set Nui Focus',
-            value = 'n'
-        })
-        misc_nui:On('check', function(item)
-            SetNuiFocus(true, true)
-        end)
-        misc_nui:On('uncheck', function(item)
-            SetNuiFocus(false, false)
-        end)
-    end
-    RegisterCommand('tsnui', function()
-        if IsNuiFocused() then
-            SetNuiFocus(false, false)
-        end
-    end)
 
     ----------------------------------------------------------------------------
     -- BAN PLAYER
