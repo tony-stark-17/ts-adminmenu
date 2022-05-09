@@ -13,9 +13,11 @@ Configure Admins in the admin_list.cfg
 - chHyperSound - https://github.com/charleshacks/chHyperSound
 - ox_lib - https://github.com/overextended/ox_lib
 - menuv - https://github.com/ThymonA/menuv
+- Boost-Logs - https://github.com/boostless/Boost-Logs
 - oxmysql is needed
 
 ## Credits 
+  - @CsokiHUN - Implemented spectate option from his repo  https://github.com/CsokiHUN/fl_spectate
   - @MiiMii1205 - Noclip feature https://github.com/MiiMii1205/noclipper
 
 ## SCREENSHOTS
@@ -24,8 +26,7 @@ Configure Admins in the admin_list.cfg
 ![image](https://user-images.githubusercontent.com/76168122/159921210-1c8c92fc-56ba-4131-862a-43d0662e2b08.png)
 
 ## TODO
+-<del> Use Ace Permissions</del>
 - Setup Config
 - Reduce Server Side Load on initialization
 - Make it standalone with config option for ESX
--<s> Use Ace Permissions</s>
--<s>Implement Bans </s>
