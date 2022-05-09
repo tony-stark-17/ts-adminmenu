@@ -3905,7 +3905,7 @@ local TSNotif = function(msg)
 end
 
 local IsPlayerAllowed = function(obj)
-    local allowed = lib.callback.await('ts-adminmenu:getAuthorization', 750, obj)
+    local allowed = lib.callback.await('ts-adminmenu:getAuthorization', false, obj)
     return allowed
 end
 
