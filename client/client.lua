@@ -3979,7 +3979,7 @@ local LoadOnlinePlayersEach = function()
     -----------------------------------------------------------------------------
     -- SEND MESSAGE
     ----------------------------------------------------------------------------
-    if IsPlayerAllowed('OnlinePlyOptions.SendMessage') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.SendMessage') then
 
         local onlineplayers_each_sendm = onlineplayers_each:AddButton({
             icon = '💬',
@@ -4004,7 +4004,7 @@ local LoadOnlinePlayersEach = function()
     -- CHANGE SKIN
     ----------------------------------------------------------------------------
 
-    if IsPlayerAllowed('OnlinePlyOptions.ChangeSkin') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.ChangeSkin') then
 
         local onlineplayers_each_sendm = onlineplayers_each:AddButton({
             icon = '💬',
@@ -4021,7 +4021,7 @@ local LoadOnlinePlayersEach = function()
 
     -------------------------------------------------------------------------
     -- SHOW INVENTORY
-    if IsPlayerAllowed('OnlinePlyOptions.OpenInventory') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.OpenInventory') then
 
         local onlineplayers_each_openinv = onlineplayers_each:AddButton({
             icon = '📂',
@@ -4039,7 +4039,7 @@ local LoadOnlinePlayersEach = function()
 
     -------------------------------------------------------------------------
     -- SET JOB
-    if IsPlayerAllowed('OnlinePlyOptions.SetJob') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.SetJob') then
 
         local onlineplayers_each_setjob = onlineplayers_each:AddButton({
             icon = '📗',
@@ -4097,7 +4097,7 @@ local LoadOnlinePlayersEach = function()
 
     -------------------------------------------------------------------------
     -- ADD INVENTORY ITEM
-    if IsPlayerAllowed('OnlinePlyOptions.GiveItem') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.GiveItem') then
 
         local SelectItems = function()
             local Items = exports.ox_inventory:Items()
@@ -4135,7 +4135,7 @@ local LoadOnlinePlayersEach = function()
     end
 
     -- NAME
-    if IsPlayerAllowed('OnlinePlyOptions.GiveItemName') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.GiveItemName') then
 
         local SelectItems = function()
             local input = lib.inputDialog('TS Admin Menu', { "Item Code" })
@@ -4182,7 +4182,7 @@ local LoadOnlinePlayersEach = function()
 
     -------------------------------------------------------------------------
     -- REMOVE INVENTORY ITEM
-    if IsPlayerAllowed('OnlinePlyOptions.RemoveInventoryItem') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.RemoveInventoryItem') then
 
         local onlineplayers_each_removeitem = onlineplayers_each:AddButton({
             icon = '🗑',
@@ -4197,7 +4197,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- GIVE ACCOUNT MONEY
-    if IsPlayerAllowed('OnlinePlyOptions.GiveMoney') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.GiveMoney') then
 
         local onlineplayers_each_givem = onlineplayers_each:AddButton({
             icon = '💵',
@@ -4221,7 +4221,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- REMOVE ACCOUNT MONEY
-    if IsPlayerAllowed('OnlinePlyOptions.RemoveMoney') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.RemoveMoney') then
 
         local onlineplayers_each_removem = onlineplayers_each:AddButton({
             icon = '💵',
@@ -4245,7 +4245,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- GIVE/REMOVE LICENSE
-    if IsPlayerAllowed('OnlinePlyOptions.License') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.License') then
 
         local onlineplayers_each_lic = onlineplayers_each:AddButton({
             icon = '✨',
@@ -4268,7 +4268,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- HEAL PLAYER
-    if IsPlayerAllowed('OnlinePlyOptions.Heal') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.Heal') then
 
         local onlineplayers_each_heal = onlineplayers_each:AddButton({
             icon = '✨',
@@ -4283,7 +4283,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- REVIVE
-    if IsPlayerAllowed('OnlinePlyOptions.Revive') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.Revive') then
 
         local onlineplayers_each_revive = onlineplayers_each:AddButton({
             icon = '❤️',
@@ -4307,7 +4307,7 @@ local LoadOnlinePlayersEach = function()
 
     -------------------------------------------------------------------------
     -- GOTO
-    if IsPlayerAllowed('OnlinePlyOptions.Goto') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.Goto') then
 
         local onlineplayers_each_goto = onlineplayers_each:AddButton({
             icon = '🛸',
@@ -4327,7 +4327,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- BRING
-    if IsPlayerAllowed('OnlinePlyOptions.Bring') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.Bring') then
 
         local onlineplayers_each_bring = onlineplayers_each:AddButton({
             icon = '🚀',
@@ -4347,7 +4347,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- SET WAYPOINT
-    if IsPlayerAllowed('OnlinePlyOptions.SetWaypoint') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.SetWaypoint') then
 
         local onlineplayers_each_waypoint = onlineplayers_each:AddButton({
             icon = '🔍',
@@ -4362,7 +4362,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- PRINT IDENTIFIERS
-    if IsPlayerAllowed('OnlinePlyOptions.PRINTID') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.PRINTID') then
 
         local onlineplayers_each_printid = onlineplayers_each:AddButton({
             icon = '💾',
@@ -4377,7 +4377,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- KILL PLAYER
-    if IsPlayerAllowed('OnlinePlyOptions.KillPlayer') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.KillPlayer') then
 
         local onlineplayers_each_killp = onlineplayers_each:AddButton({
             icon = '🔪',
@@ -4392,7 +4392,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- KICK PLAYER
-    if IsPlayerAllowed('OnlinePlyOptions.KickPlayer') then
+    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.KickPlayer') then
 
         local onlineplayers_each_kickp = onlineplayers_each:AddButton({
             icon = '🦶🏽',
@@ -4420,7 +4420,7 @@ local LoadVehicleOptions = function()
         end
     end
     -- DELETE VEHICLE RADIUS
-    if IsPlayerAllowed('VehicleRelatedOptions.DeleteVehicle') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.DeleteVehicle') then
 
         local vehicleoptions_vehicleop_deleter = vehicleoptions:AddButton({
             icon = '🚙',
@@ -4443,7 +4443,7 @@ local LoadVehicleOptions = function()
     end
 
     -- Unlock Closest Vehicle
-    if IsPlayerAllowed('VehicleRelatedOptions.UnlockVehicle') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.UnlockVehicle') then
 
         local vehicleoptions_vehicleop_lockpick = vehicleoptions:AddButton({
             icon = '🚙',
@@ -4466,7 +4466,7 @@ local LoadVehicleOptions = function()
     ----------------------------------------------------------------------------
     -- VEHICLE SPAWNER
 
-    if IsPlayerAllowed('VehicleRelatedOptions.Spawner') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.Spawner') then
 
         local cooldown = false
         CreateThread(function()
@@ -4552,7 +4552,7 @@ local LoadVehicleOptions = function()
     ----------------------------------------------------------------------------
     -- MOD MENU
 
-    if IsPlayerAllowed('VehicleRelatedOptions.Modmenu') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.Modmenu') then
 
         local vehicleoptions_vehicleop_mod_colortyr = vehicleoptions_vehicleop_mod_colormenu:AddButton({
             icon = '',
@@ -5071,7 +5071,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- VEHICLE FREEZE
-    if IsPlayerAllowed('VehicleRelatedOptions.Freeze') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.Freeze') then
 
         local vehicleoptions_vehicleop_freeze = vehicleoptions_vehicleop:AddCheckbox({
             icon = '🧊',
@@ -5115,7 +5115,7 @@ local LoadVehicleOptions = function()
     end)
     ----------------------------------------------------------------------------
     -- CHANGE NUMBERPLATE
-    if IsPlayerAllowed('VehicleRelatedOptions.NumberPlate') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.NumberPlate') then
 
         local vehicleoptions_vehicleop_setplate = vehicleoptions_vehicleop:AddButton({
             icon = '⌨️',
@@ -5142,7 +5142,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- DOOR MENU
-    if IsPlayerAllowed('VehicleRelatedOptions.DoorMenu') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.DoorMenu') then
 
         local tonydoor = {}
         local vehicleoptions_vehicleop_toggledoor = vehicleoptions_vehicleop:AddSlider({
@@ -5192,7 +5192,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- TORQUE AND ENGINE MULTIPLIER
-    if IsPlayerAllowed('VehicleRelatedOptions.MultiplierSpeed') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.MultiplierSpeed') then
 
         local engineenabled = false
         local torqueinterval = nil
@@ -5289,7 +5289,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- FLIP VEHICLE
-    if IsPlayerAllowed('VehicleRelatedOptions.FlipVehicle') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.FlipVehicle') then
 
         local vehicleoptions_vehicleop_flip = vehicleoptions_vehicleop:AddButton({
             icon = '🚗',
@@ -5305,7 +5305,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- DELETE VEHICLE
-    if IsPlayerAllowed('VehicleRelatedOptions.DeleteVehicle') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.DeleteVehicle') then
 
         local vehicleoptions_vehicleop_delete = vehicleoptions_vehicleop:AddButton({
             icon = '🚗',
@@ -5319,7 +5319,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- INFINITE FUEL
-    if IsPlayerAllowed('VehicleRelatedOptions.InfiniteFuel') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.InfiniteFuel') then
 
         local vehicleoptions_vehicleop_infinitefuel = vehicleoptions_vehicleop:AddCheckbox({
             icon = '⛽️',
@@ -5348,7 +5348,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- NO BIKE HELMET
-    if IsPlayerAllowed('VehicleRelatedOptions.NoBikeHelmet') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.NoBikeHelmet') then
 
         local vehicleoptions_vehicleop_nobikehelm = vehicleoptions_vehicleop:AddCheckbox({
             icon = '🏍',
@@ -5377,7 +5377,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- VEHICLE GODMODE
-    if IsPlayerAllowed('VehicleRelatedOptions.Godmode') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.Godmode') then
 
         local vehicleoptions_vehicleop_godmode = vehicleoptions_vehicleop:AddCheckbox({
             icon = '💪',
@@ -5428,7 +5428,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- REPAIR VEHICLE
-    if IsPlayerAllowed('VehicleRelatedOptions.Repair') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.Repair') then
 
         local vehicleoptions_vehicleop_repair = vehicleoptions_vehicleop:AddButton({
             icon = '🛠',
@@ -5447,7 +5447,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- WASH VEHICLE
-    if IsPlayerAllowed('VehicleRelatedOptions.Wash') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.Wash') then
 
         local vehicleoptions_vehicleop_wash = vehicleoptions_vehicleop:AddButton({
             icon = '🚿',
@@ -5465,7 +5465,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- KEEP VEHICLE CLEAN
-    if IsPlayerAllowed('VehicleRelatedOptions.KeepClean') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.KeepClean') then
 
         local vehicleoptions_vehicleop_keepclean = vehicleoptions_vehicleop:AddConfirm({
             icon = '🚿',
@@ -5489,7 +5489,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- SET DIRT
-    if IsPlayerAllowed('VehicleRelatedOptions.SetDirt') then
+    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.SetDirt') then
 
         local vehicleoptions_vehicleop_setdirt = vehicleoptions_vehicleop:AddRange({
             icon = '🦠',
@@ -5515,7 +5515,7 @@ local LoadPlayerOptions = function()
     playeroptions2:ClearItems()
     playeroptions_custom:ClearItems()
     playeroptions_custom_customize:ClearItems()
-    if IsPlayerAllowed('PlayerOptions.GiveCar') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.GiveCar') then
 
         local playeroptions_reviveid = playeroptions:AddButton({
             icon = '🚗',
@@ -5541,7 +5541,7 @@ local LoadPlayerOptions = function()
         })
     end
 
-    if IsPlayerAllowed('PlayerOptions.DeleteCar') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.DeleteCar') then
 
         local playeroptions_reviveid = playeroptions:AddButton({
             icon = '🚗',
@@ -5576,7 +5576,7 @@ local LoadPlayerOptions = function()
     })
     ----------------------------------------------------------------------------
     -- GODMODE
-    if IsPlayerAllowed('PlayerOptions.God') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.God') then
 
         local playeroptions_godmode = playeroptions2:AddCheckbox({
             icon = '💪',
@@ -5615,7 +5615,7 @@ local LoadPlayerOptions = function()
 
     ----------------------------------------------------------------------------
     -- INVISIBLE
-    if IsPlayerAllowed('PlayerOptions.Invisible') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.Invisible') then
 
         local playeroptions_invisible = playeroptions2:AddCheckbox({
             icon = '👀',
@@ -5638,7 +5638,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
 
     -- STAMINA
-    if IsPlayerAllowed('PlayerOptions.Stamina') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.Stamina') then
 
         local playeroptions_unlimstamina = playeroptions2:AddCheckbox({
             icon = '🏃🏻‍♀️',
@@ -5661,7 +5661,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
 
     -- FASTRUN
-    if IsPlayerAllowed('PlayerOptions.FastRun') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.FastRun') then
 
         local playeroptions_fastrun = playeroptions2:AddCheckbox({
             icon = '🏃🏻',
@@ -5680,7 +5680,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
 
     -- FASTSWIM
-    if IsPlayerAllowed('PlayerOptions.FastSwim') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.FastSwim') then
 
         local playeroptions_fastswin = playeroptions2:AddCheckbox({
             icon = '🏊🏻‍♂️',
@@ -5699,7 +5699,7 @@ local LoadPlayerOptions = function()
 
     ----------------------------------------------------------------------------
     -- SUPER JUMP
-    if IsPlayerAllowed('PlayerOptions.SuperJump') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.SuperJump') then
 
         local playeroptions_superjump = playeroptions2:AddCheckbox({
             icon = '🏃‍♀️',
@@ -5721,7 +5721,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
 
     -- NO RAGDOLL
-    if IsPlayerAllowed('PlayerOptions.NoRagdoll') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.NoRagdoll') then
 
         local playeroptions_noragdoll = playeroptions2:AddCheckbox({
             icon = '🏃‍♀️',
@@ -5746,7 +5746,7 @@ local LoadPlayerOptions = function()
 
     ----------------------------------------------------------------------------
     -- NEVER WANTED
-    if IsPlayerAllowed('PlayerOptions.NeverWanted') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.NeverWanted') then
 
         local playeroptions_neverwanted = playeroptions2:AddCheckbox({
             icon = '👮',
@@ -5769,7 +5769,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- STAY IN VEHICLE
-    if IsPlayerAllowed('PlayerOptions.StayInVeh') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.StayInVeh') then
 
         local playeroptions_stayinveh = playeroptions2:AddCheckbox({
             icon = '🚗',
@@ -5791,7 +5791,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- HEAL
-    if IsPlayerAllowed('PlayerOptions.Heal') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.Heal') then
 
         local playeroptions_heal = playeroptions2:AddButton({
             icon = '✨',
@@ -5806,7 +5806,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- REVIVE
-    if IsPlayerAllowed('PlayerOptions.Revive') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.Revive') then
 
         local playeroptions_revive = playeroptions2:AddButton({
             icon = '❤️',
@@ -5821,7 +5821,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- ARMOR
-    if IsPlayerAllowed('PlayerOptions.Armor') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.Armor') then
 
         local playeroptions_armor = playeroptions2:AddSlider({
             icon = '💙',
@@ -5856,7 +5856,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- CLEAN CLOTHES
-    if IsPlayerAllowed('PlayerOptions.CleanClothes') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.CleanClothes') then
 
         local playeroptions_cleanclothes = playeroptions2:AddButton({
             icon = '🚿',
@@ -5871,7 +5871,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- WET CLOTHES
-    if IsPlayerAllowed('PlayerOptions.WetClothes') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.WetClothes') then
 
         local playeroptions_wetclothes = playeroptions2:AddButton({
             icon = '🧺',
@@ -5886,7 +5886,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- DRY CLOTHES
-    if IsPlayerAllowed('PlayerOptions.DryClothes') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.DryClothes') then
 
         local playeroptions_dryclothes = playeroptions2:AddButton({
             icon = '🔅',
@@ -5901,7 +5901,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- COMMIT SUICIDE
-    if IsPlayerAllowed('PlayerOptions.Suicide') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.Suicide') then
 
         local playeroptions_suicide = playeroptions2:AddButton({
             icon = '💀',
@@ -5917,7 +5917,7 @@ local LoadPlayerOptions = function()
 
     ----------------------------------------------------------------------------
     -- FREEZE
-    if IsPlayerAllowed('PlayerOptions.Freeze') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.Freeze') then
 
         local playeroptions_freeze = playeroptions2:AddConfirm({
             icon = '🧊',
@@ -5935,7 +5935,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
 
     -- NOCLIP
-    if IsPlayerAllowed('PlayerOptions.Noclip') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.Noclip') then
 
         local playeroptions_noclip = playeroptions2:AddCheckbox({
             icon = '🪂',
@@ -5954,7 +5954,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
 
     -- CHANGE SKIN
-    if IsPlayerAllowed('PlayerOptions.ChangeSkin') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.ChangeSkin') then
 
         local playeroptions_custom_changeskin = playeroptions_custom:AddButton({
             icon = '👕',
@@ -5972,7 +5972,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
 
     -- CHANGE SKIN2
-    if IsPlayerAllowed('PlayerOptions.ChangeSkin') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.ChangeSkin') then
 
         local drawableName = { "Head", "Beard", "Hair", "Torso", "Legs", "Hands", "Foot", "Other", "Accessory 1",
             "Accessory 2", "Decals", "Torso Parts" }
@@ -6360,7 +6360,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
     -- CHANGE PED
 
-    if IsPlayerAllowed('PlayerOptions.ChangePed') then
+    if IsPlayerAllowed('TSAdmin.PlayerOptions.ChangePed') then
 
         local playeroptions_custom_changeped = playeroptions_custom:AddButton({
             icon = '👦🏻',
@@ -6381,7 +6381,7 @@ local LoadMiscSettings = function()
     miscsettings:ClearItems()
     ----------------------------------------------------------------------------
     -- TELEPORT OPTIONS
-    if IsPlayerAllowed('MiscSettings.Teleport') then
+    if IsPlayerAllowed('TSAdmin.MiscSettings.Teleport') then
 
         local misc_teleport = miscsettings:AddButton({
             icon = '🕹',
@@ -6440,7 +6440,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- SHOW COORDS
-    if IsPlayerAllowed('MiscSettings.ShowCoords') then
+    if IsPlayerAllowed('TSAdmin.MiscSettings.ShowCoords') then
 
         local DrawGenericText = function(text)
             SetTextColour(186, 186, 186, 255)
@@ -6488,7 +6488,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- CLEAR AREA
-    if IsPlayerAllowed('MiscSettings.ClearArea') then
+    if IsPlayerAllowed('TSAdmin.MiscSettings.ClearArea') then
 
         local misc_cleararea = miscsettings:AddButton({
             icon = '🕹',
@@ -6503,7 +6503,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- RELOG
-    if IsPlayerAllowed('MiscSettings.Relog') then
+    if IsPlayerAllowed('TSAdmin.MiscSettings.Relog') then
 
         local misc_cleararea = miscsettings:AddButton({
             icon = '🕹',
@@ -6519,7 +6519,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- PROP SPAWNER
-    if IsPlayerAllowed('MiscSettings.PropSpawn') then
+    if IsPlayerAllowed('TSAdmin.MiscSettings.PropSpawn') then
 
         local misc_cleararea = miscsettings:AddButton({
             icon = '👷',
@@ -6535,7 +6535,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- ANNOUNCEMENT
-    if IsPlayerAllowed('MiscSettings.Announce') then
+    if IsPlayerAllowed('TSAdmin.MiscSettings.Announce') then
 
         local misc_cleararea = miscsettings:AddButton({
             icon = '📣',
@@ -6568,7 +6568,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- STAFFCHAT
-    if IsPlayerAllowed('MiscSettings.StaffChat') then
+    if IsPlayerAllowed('TSAdmin.MiscSettings.StaffChat') then
 
         local misc_staffchat = miscsettings:AddButton({
             icon = '📣',
@@ -6590,7 +6590,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- THERMAL VISION
-    if IsPlayerAllowed('MiscSettings.ThermalVision') then
+    if IsPlayerAllowed('TSAdmin.MiscSettings.ThermalVision') then
 
         local misc_thermalvision = miscsettings:AddCheckbox({
             icon = '🔍',
@@ -6609,7 +6609,7 @@ local LoadMiscSettings = function()
     ----------------------------------------------------------------------------
     -- JOIN QUIT
     local shownotifjoin = false
-    if IsPlayerAllowed('MiscSettings.JoinQNotif') then
+    if IsPlayerAllowed('TSAdmin.MiscSettings.JoinQNotif') then
 
 
         local misc_joiunq = miscsettings:AddCheckbox({
@@ -6880,7 +6880,7 @@ local LoadMiscSettings = function()
 
     local shownotifkill = false
 
-    if IsPlayerAllowed('MiscSettings.Kill') then
+    if IsPlayerAllowed('TSAdmin.MiscSettings.Kill') then
 
         local misc_kill = miscsettings:AddCheckbox({
             icon = '🔍',
@@ -6902,7 +6902,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- NIGHT VISION
-    if IsPlayerAllowed('MiscSettings.NightVision') then
+    if IsPlayerAllowed('TSAdmin.MiscSettings.NightVision') then
 
         local misc_nightvision = miscsettings:AddCheckbox({
             icon = '🔍',
@@ -6920,7 +6920,7 @@ local LoadMiscSettings = function()
     ----------------------------------------------------------------------------
     -- PLAYER BLIPS
 
-    if IsPlayerAllowed('MiscSettings.PlayerBlips') then
+    if IsPlayerAllowed('TSAdmin.MiscSettings.PlayerBlips') then
 
         local plyblips = {}
         local plyblipson = false
@@ -6988,7 +6988,7 @@ local LoadMiscSettings = function()
     ----------------------------------------------------------------------------
     -- PLAYER NAMES
 
-    if IsPlayerAllowed('MiscSettings.PlayerNames') then
+    if IsPlayerAllowed('TSAdmin.MiscSettings.PlayerNames') then
 
         local plynameon = false
         local plynamet = {}
@@ -7036,7 +7036,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- TIMECYCLE
-    if IsPlayerAllowed('MiscSettings.Timecycle') then
+    if IsPlayerAllowed('TSAdmin.MiscSettings.Timecycle') then
 
         local misc_timecycles = miscsettings:AddSlider({
             icon = '🎥',
@@ -7064,7 +7064,7 @@ end
 local LoadTrollMenu = function()
     trollmenu:ClearItems()
     -- FART
-    if IsPlayerAllowed('TrollMenu.Fart') then
+    if IsPlayerAllowed('TSAdmin.TrollMenu.Fart') then
 
         local trollmenu_fart = trollmenu:AddSlider({
             icon = '🎥',
@@ -7094,7 +7094,7 @@ local LoadTrollMenu = function()
     end
 
     -- TRUCK PUNCHLINE
-    if IsPlayerAllowed('TrollMenu.Truck') then
+    if IsPlayerAllowed('TSAdmin.TrollMenu.Truck') then
 
         local trollmenu_truck = trollmenu:AddButton({
             icon = '🚚',
@@ -7109,7 +7109,7 @@ local LoadTrollMenu = function()
 
 
     -- CLOWN ATTACK
-    if IsPlayerAllowed('TrollMenu.Clown') then
+    if IsPlayerAllowed('TSAdmin.TrollMenu.Clown') then
 
         local trollmenu_clown = trollmenu:AddButton({
             icon = '🧛',
@@ -7124,7 +7124,7 @@ local LoadTrollMenu = function()
 
 
     -- MERRY ATTACK
-    if IsPlayerAllowed('TrollMenu.Merry') then
+    if IsPlayerAllowed('TSAdmin.TrollMenu.Merry') then
 
         local trollmenu_merry = trollmenu:AddButton({
             icon = '👨‍🎤',
@@ -7139,7 +7139,7 @@ local LoadTrollMenu = function()
 
 
     -- FLASHBANG
-    if IsPlayerAllowed('TrollMenu.Flash') then
+    if IsPlayerAllowed('TSAdmin.TrollMenu.Flash') then
 
         local trollmenu_flash = trollmenu:AddButton({
             icon = '👨‍🎤',
@@ -7154,7 +7154,7 @@ local LoadTrollMenu = function()
 
 
     -- FAKE SOUND
-    if IsPlayerAllowed('TrollMenu.FakeSound') then
+    if IsPlayerAllowed('TSAdmin.TrollMenu.FakeSound') then
 
         local trollmenu_fake = trollmenu:AddButton({
             icon = '🎙',
@@ -7187,7 +7187,7 @@ local LoadTrollMenu = function()
     end
 
     -- LAG GAME
-    if IsPlayerAllowed('TrollMenu.Lag') then
+    if IsPlayerAllowed('TSAdmin.TrollMenu.Lag') then
 
         local trollmenu_lag = trollmenu:AddButton({
             icon = '⚰️',
@@ -7201,7 +7201,7 @@ local LoadTrollMenu = function()
     end
 
     -- BLOW TYRES
-    if IsPlayerAllowed('TrollMenu.BlowTyre') then
+    if IsPlayerAllowed('TSAdmin.TrollMenu.BlowTyre') then
 
         local trollmenu_blow = trollmenu:AddButton({
             icon = '🕹',
@@ -7215,7 +7215,7 @@ local LoadTrollMenu = function()
     end
 
     -- EJECT FROM VEH
-    if IsPlayerAllowed('TrollMenu.Eject') then
+    if IsPlayerAllowed('TSAdmin.TrollMenu.Eject') then
 
         local trollmenu_eject = trollmenu:AddButton({
             icon = '🦵🏻',
@@ -7229,7 +7229,7 @@ local LoadTrollMenu = function()
     end
 
     -- CRASH GAME
-    if IsPlayerAllowed('TrollMenu.Crash') then
+    if IsPlayerAllowed('TSAdmin.TrollMenu.Crash') then
 
         local trollmenu_crash = trollmenu:AddButton({
             icon = '⚰️',
@@ -7241,7 +7241,7 @@ local LoadTrollMenu = function()
             end
         })
     end
-    if IsPlayerAllowed('RockstarEditor') then
+    if IsPlayerAllowed('TSAdmin.RockstarEditor') then
 
         local slider = rockstar:AddSlider({
             icon = '🎥',
@@ -7304,7 +7304,7 @@ local loadtimeout = false
 local LoadAdminMenu = function()
     if not loadtimeout then
         loadtimeout = true
-        if IsPlayerAllowed('PlayerOptions.Noclip') then
+        if IsPlayerAllowed('TSAdmin.PlayerOptions.Noclip') then
 
             RegisterCommand("toggleNoClip", function(source, rawCommand)
                 ToggleNoClipMode()
@@ -7391,7 +7391,7 @@ local LoadAdminMenu = function()
         })
         -------------------------------------------------------------------------
         -- SPECTATE PLAYER
-        if IsPlayerAllowed('OnlinePlyOptions.Spectate') then
+        if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.Spectate') then
 
             local onlineplayers_each_spectate = menu:AddButton({
                 icon = '🔬',
