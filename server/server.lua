@@ -140,7 +140,7 @@ lib.callback.register('ts-adminmenu:getAuthorization', function(source, obj)
     local allowed = false
     if xPlayer then
     local group = xPlayer.getGroup()
-    if IsPlayerAllowed(source,obj) and xPlayer and (group == 'admin' or group == 'superadmin') then
+    if IsPlayerAllowed(source,obj) or (group == 'admin' or group == 'superadmin') then 
         allowed = true
     end
 end
