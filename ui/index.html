@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spectate Menu</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+      integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+      crossorigin="anonymous"
+    />
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.1.1/js/all.js"
+      integrity="sha384-BtvRZcyfv4r0x/phJt9Y9HhnN5ur1Z+kZbKVgzVBAlQZX4jvAuImlIz+bG7TS00a"
+      crossorigin="anonymous"
+    ></script>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div v-if="visible">
+        <div class="main p-1 bg-dark text-light rounded">
+          <h6 class="header d-flex justify-content-between align-items-center">
+            <div>
+              Spectate Menu
+              <a @click="update()" href="#" class="text-primary">
+                <i class="fas fa-sync"></i>
+              </a>
+            </div>
+
+            <a @click="close" href="#" class="text-danger"> <i class="fas fa-times"></i> </a>
+          </h6>
+
+          <div class="player-list pe-1">
+            <div class="row text-center">
+              <div class="col col-1">ID</div>
+              <div class="col col-3">Name</div>
+              <div class="col col-1">Group</div>
+              <div class="col col-5">Job</div>
+              <div class="col col-2">{{ players.length }} <i class="fas fa-dot-circle text-success blinking"></i></div>
+            </div>
+
+            <h5 v-if="filteredPlayers.length <= 0" class="w-100 text-center mt-5">Search failed. 😢</h5>
+
+            <div v-for="player in filteredPlayers" class="row text-center align-items-center mt-1">
+              <div class="col col-1">{{ player.serverId ?? 'nincs' }}</div>
+              <div class="col col-3">{{ player.name }}</div>
+              <div class="col col-1">{{ player.group }}</div>
+              <div class="col col-5">{{ player.jobText }}</div>
+              <div class="col col-2 d-flex justify-content-end">
+                <button @click="spectate(player)" class="btn btn-sm btn-secondary me-1">
+                  <i class="fas fa-eye"></i>
+                  Spectate
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group input-group-sm mt-2">
+            <span class="input-group-text">
+              <i class="fas fa-search"></i>
+            </span>
+            <input v-model="search" type="text" class="form-control" aria-label="Search" placeholder="Search" />
+          </div>
+          <button v-if="currentPlayer" @click="off" class="btn btn-sm btn-danger mt-1 w-100">Spectate Off</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="playerinfo">
+      <ul id="data"></ul>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap.native@3.0.15/dist/bootstrap-native.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.31/vue.global.prod.min.js"></script>
+  <script src="ui.js"></script>
+</html>

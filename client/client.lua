@@ -3905,7 +3905,7 @@ local TSNotif = function(msg)
 end
 
 local IsPlayerAllowed = function(obj)
-    local allowed = lib.callback.await('ts-adminmenu:getAuthorization', 750, obj)
+    local allowed = lib.callback.await('ts-adminmenu:getAuthorization', false, obj)
     return allowed
 end
 
@@ -3979,7 +3979,7 @@ local LoadOnlinePlayersEach = function()
     -----------------------------------------------------------------------------
     -- SEND MESSAGE
     ----------------------------------------------------------------------------
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.SendMessage') then
+    if IsPlayerAllowed('OnlinePlyOptions.SendMessage') then
 
         local onlineplayers_each_sendm = onlineplayers_each:AddButton({
             icon = '💬',
@@ -4004,7 +4004,7 @@ local LoadOnlinePlayersEach = function()
     -- CHANGE SKIN
     ----------------------------------------------------------------------------
 
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.ChangeSkin') then
+    if IsPlayerAllowed('OnlinePlyOptions.ChangeSkin') then
 
         local onlineplayers_each_sendm = onlineplayers_each:AddButton({
             icon = '💬',
@@ -4021,7 +4021,7 @@ local LoadOnlinePlayersEach = function()
 
     -------------------------------------------------------------------------
     -- SHOW INVENTORY
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.OpenInventory') then
+    if IsPlayerAllowed('OnlinePlyOptions.OpenInventory') then
 
         local onlineplayers_each_openinv = onlineplayers_each:AddButton({
             icon = '📂',
@@ -4039,7 +4039,7 @@ local LoadOnlinePlayersEach = function()
 
     -------------------------------------------------------------------------
     -- SET JOB
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.SetJob') then
+    if IsPlayerAllowed('OnlinePlyOptions.SetJob') then
 
         local onlineplayers_each_setjob = onlineplayers_each:AddButton({
             icon = '📗',
@@ -4055,8 +4055,8 @@ local LoadOnlinePlayersEach = function()
                         for i, j in pairs(v.grades) do
                             grade = grade + 1
                         end
-                        myMenu[v.label .. ' - ' .. v.name] = {
-                            description = 'Grades = ' .. grade - 1,
+                        myMenu[v.label..' - '..v.name] = {
+                            description = 'Grades = '.. grade -1,
                             arrow = true,
                             event = 'ts-adminmenu:client:setgrade',
                             args = {
@@ -4070,7 +4070,7 @@ local LoadOnlinePlayersEach = function()
                         title = 'TS Job List',
                         options = myMenu
                     })
-
+                    
                     lib.showContext('jobs_menu')
                 end)
             end
@@ -4097,7 +4097,7 @@ local LoadOnlinePlayersEach = function()
 
     -------------------------------------------------------------------------
     -- ADD INVENTORY ITEM
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.GiveItem') then
+    if IsPlayerAllowed('OnlinePlyOptions.GiveItem') then
 
         local SelectItems = function()
             local Items = exports.ox_inventory:Items()
@@ -4135,7 +4135,7 @@ local LoadOnlinePlayersEach = function()
     end
 
     -- NAME
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.GiveItemName') then
+    if IsPlayerAllowed('OnlinePlyOptions.GiveItemName') then
 
         local SelectItems = function()
             local input = lib.inputDialog('TS Admin Menu', { "Item Code" })
@@ -4182,7 +4182,7 @@ local LoadOnlinePlayersEach = function()
 
     -------------------------------------------------------------------------
     -- REMOVE INVENTORY ITEM
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.RemoveInventoryItem') then
+    if IsPlayerAllowed('OnlinePlyOptions.RemoveInventoryItem') then
 
         local onlineplayers_each_removeitem = onlineplayers_each:AddButton({
             icon = '🗑',
@@ -4195,23 +4195,9 @@ local LoadOnlinePlayersEach = function()
             end
         })
     end
-
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.TPCar') then
-
-        local onlineplayers_each_removeitem = onlineplayers_each:AddButton({
-            icon = '🚗',
-            label = "Teleport To Vehicle",
-            description = "Teleport to player vehicle",
-            value = "tpveh",
-            false,
-            select = function(i)
-                TriggerServerEvent('ts-adminmenu:server:TPVeh', selectedPlayer)
-            end
-        })
-    end
     -------------------------------------------------------------------------
     -- GIVE ACCOUNT MONEY
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.GiveMoney') then
+    if IsPlayerAllowed('OnlinePlyOptions.GiveMoney') then
 
         local onlineplayers_each_givem = onlineplayers_each:AddButton({
             icon = '💵',
@@ -4235,7 +4221,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- REMOVE ACCOUNT MONEY
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.RemoveMoney') then
+    if IsPlayerAllowed('OnlinePlyOptions.RemoveMoney') then
 
         local onlineplayers_each_removem = onlineplayers_each:AddButton({
             icon = '💵',
@@ -4259,7 +4245,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- GIVE/REMOVE LICENSE
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.License') then
+    if IsPlayerAllowed('OnlinePlyOptions.License') then
 
         local onlineplayers_each_lic = onlineplayers_each:AddButton({
             icon = '✨',
@@ -4282,7 +4268,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- HEAL PLAYER
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.Heal') then
+    if IsPlayerAllowed('OnlinePlyOptions.Heal') then
 
         local onlineplayers_each_heal = onlineplayers_each:AddButton({
             icon = '✨',
@@ -4297,7 +4283,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- REVIVE
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.Revive') then
+    if IsPlayerAllowed('OnlinePlyOptions.Revive') then
 
         local onlineplayers_each_revive = onlineplayers_each:AddButton({
             icon = '❤️',
@@ -4321,7 +4307,7 @@ local LoadOnlinePlayersEach = function()
 
     -------------------------------------------------------------------------
     -- GOTO
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.Goto') then
+    if IsPlayerAllowed('OnlinePlyOptions.Goto') then
 
         local onlineplayers_each_goto = onlineplayers_each:AddButton({
             icon = '🛸',
@@ -4341,7 +4327,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- BRING
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.Bring') then
+    if IsPlayerAllowed('OnlinePlyOptions.Bring') then
 
         local onlineplayers_each_bring = onlineplayers_each:AddButton({
             icon = '🚀',
@@ -4361,7 +4347,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- SET WAYPOINT
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.SetWaypoint') then
+    if IsPlayerAllowed('OnlinePlyOptions.SetWaypoint') then
 
         local onlineplayers_each_waypoint = onlineplayers_each:AddButton({
             icon = '🔍',
@@ -4376,7 +4362,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- PRINT IDENTIFIERS
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.PRINTID') then
+    if IsPlayerAllowed('OnlinePlyOptions.PRINTID') then
 
         local onlineplayers_each_printid = onlineplayers_each:AddButton({
             icon = '💾',
@@ -4391,7 +4377,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- KILL PLAYER
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.KillPlayer') then
+    if IsPlayerAllowed('OnlinePlyOptions.KillPlayer') then
 
         local onlineplayers_each_killp = onlineplayers_each:AddButton({
             icon = '🔪',
@@ -4406,7 +4392,7 @@ local LoadOnlinePlayersEach = function()
     end
     -------------------------------------------------------------------------
     -- KICK PLAYER
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.KickPlayer') then
+    if IsPlayerAllowed('OnlinePlyOptions.KickPlayer') then
 
         local onlineplayers_each_kickp = onlineplayers_each:AddButton({
             icon = '🦶🏽',
@@ -4418,97 +4404,6 @@ local LoadOnlinePlayersEach = function()
                 TriggerServerEvent('ts-adminmenu:server:KickPlayer', selectedPlayer)
             end
         })
-    end
-    
-    -------------------------------------------------------------------------
-    -- SPECTATE PLAYER
-    if IsPlayerAllowed('TSAdmin.OnlinePlyOptions.Spectate') then
-        local lastPos = nil
-        local spectating = false
-        local onlineplayers_each_spectate = onlineplayers_each:AddButton({
-            icon = '🔬',
-            label = "Spectate Player",
-            description = "Spectate Player",
-            value = "specp",
-            false,
-            select = function(i)
-                lib.callback('ts-adminmenu:server:GetSpectateData', false, function(data)
-                    local ped = PlayerPedId()
-                    local specinterval = nil
-                    local controlInterval = nil
-                    local targetPly = nil
-                    local targetPed = nil
-
-                    if not spectating then
-                        lastPos = GetEntityCoords(ped)
-                        spectating = true
-                        DoScreenFadeOut(500)
-                        Wait(500)
-                        RequestCollisionAtCoord(data)
-                        SetEntityVisible(ped, false)
-                        SetEntityCoords(ped, data + vector3(0, 0, 10))
-                        FreezeEntityPosition(ped, true)
-                        Wait(1500)
-                        SetEntityCoords(ped, data - vector3(0, 0, 10))
-                        targetPly = GetPlayerFromServerId(selectedPlayer)
-                        targetPed = GetPlayerPed(targetPly)
-                        DoScreenFadeIn(500)
-                        NetworkSetInSpectatorMode(true, targetPed)
-                        specinterval = SetInterval(function()
-                            local god = tostring(GetPlayerInvincible(targetPly))
-                            local ragdoll = tostring(not CanPedRagdoll(targetPed))
-                            local health = tostring(GetEntityHealth(targetPed))
-                            local armor = tostring(GetPedArmour(targetPed))
-                            if god == "1" then
-                                god = "true"
-                            end
-                            local msg = 'Godmode: ' .. god .. '  \nAntiRagdoll: ' .. ragdoll .. '  \nHealth: ' .. health .. '  \nArmor: ' .. armor
-                            if spectating then
-                            showPlyInfo(tostring(msg))
-                            end
-                        end, 2000)
-                        controlInterval = SetInterval(function()
-                            DisableControlAction(0, 38, true)
-                            if IsDisabledControlJustPressed(0, 38) and spectating then
-                                spectating = false
-                                ClearInterval(specinterval)
-                                ClearInterval(controlInterval)
-                                controlInterval = nil
-                                specinterval = nil
-                                targetPly = nil
-                                targetPed = nil
-                                RequestCollisionAtCoord(lastPos)
-                                NetworkSetInSpectatorMode(false, ped)
-                                SetEntityCoords(ped, lastPos)
-                                SetEntityVisible(ped, true)
-                                FreezeEntityPosition(ped, false)
-                                lib.hideTextUI()
-                            end
-                        end, 0)
-                    else
-                        spectating = false
-                                ClearInterval(specinterval)
-                                ClearInterval(controlInterval)
-                                controlInterval = nil
-                                specinterval = nil
-                                targetPly = nil
-                                targetPed = nil
-                                RequestCollisionAtCoord(lastPos)
-                                FreezeEntityPosition(ped, false)
-                                SetEntityCoords(ped, lastPos)
-                                SetEntityVisible(ped, true)
-                                FreezeEntityPosition(ped, false)
-                                lib.hideTextUI()
-                    end
-                end, selectedPlayer)
-
-            end
-        })
-        showPlyInfo = function(data)
-            lib.showTextUI(data, {
-                position = "right-center",
-            })
-        end
     end
 
     ----------------------------------------------------------------------------
@@ -4525,7 +4420,7 @@ local LoadVehicleOptions = function()
         end
     end
     -- DELETE VEHICLE RADIUS
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.DeleteVehicle') then
+    if IsPlayerAllowed('VehicleRelatedOptions.DeleteVehicle') then
 
         local vehicleoptions_vehicleop_deleter = vehicleoptions:AddButton({
             icon = '🚙',
@@ -4548,7 +4443,7 @@ local LoadVehicleOptions = function()
     end
 
     -- Unlock Closest Vehicle
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.UnlockVehicle') then
+    if IsPlayerAllowed('VehicleRelatedOptions.UnlockVehicle') then
 
         local vehicleoptions_vehicleop_lockpick = vehicleoptions:AddButton({
             icon = '🚙',
@@ -4571,7 +4466,7 @@ local LoadVehicleOptions = function()
     ----------------------------------------------------------------------------
     -- VEHICLE SPAWNER
 
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.Spawner') then
+    if IsPlayerAllowed('VehicleRelatedOptions.Spawner') then
 
         local cooldown = false
         CreateThread(function()
@@ -4657,7 +4552,7 @@ local LoadVehicleOptions = function()
     ----------------------------------------------------------------------------
     -- MOD MENU
 
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.Modmenu') then
+    if IsPlayerAllowed('VehicleRelatedOptions.Modmenu') then
 
         local vehicleoptions_vehicleop_mod_colortyr = vehicleoptions_vehicleop_mod_colormenu:AddButton({
             icon = '',
@@ -5176,7 +5071,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- VEHICLE FREEZE
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.Freeze') then
+    if IsPlayerAllowed('VehicleRelatedOptions.Freeze') then
 
         local vehicleoptions_vehicleop_freeze = vehicleoptions_vehicleop:AddCheckbox({
             icon = '🧊',
@@ -5220,7 +5115,7 @@ local LoadVehicleOptions = function()
     end)
     ----------------------------------------------------------------------------
     -- CHANGE NUMBERPLATE
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.NumberPlate') then
+    if IsPlayerAllowed('VehicleRelatedOptions.NumberPlate') then
 
         local vehicleoptions_vehicleop_setplate = vehicleoptions_vehicleop:AddButton({
             icon = '⌨️',
@@ -5247,7 +5142,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- DOOR MENU
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.DoorMenu') then
+    if IsPlayerAllowed('VehicleRelatedOptions.DoorMenu') then
 
         local tonydoor = {}
         local vehicleoptions_vehicleop_toggledoor = vehicleoptions_vehicleop:AddSlider({
@@ -5297,7 +5192,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- TORQUE AND ENGINE MULTIPLIER
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.MultiplierSpeed') then
+    if IsPlayerAllowed('VehicleRelatedOptions.MultiplierSpeed') then
 
         local engineenabled = false
         local torqueinterval = nil
@@ -5394,7 +5289,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- FLIP VEHICLE
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.FlipVehicle') then
+    if IsPlayerAllowed('VehicleRelatedOptions.FlipVehicle') then
 
         local vehicleoptions_vehicleop_flip = vehicleoptions_vehicleop:AddButton({
             icon = '🚗',
@@ -5410,7 +5305,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- DELETE VEHICLE
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.DeleteVehicle') then
+    if IsPlayerAllowed('VehicleRelatedOptions.DeleteVehicle') then
 
         local vehicleoptions_vehicleop_delete = vehicleoptions_vehicleop:AddButton({
             icon = '🚗',
@@ -5424,7 +5319,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- INFINITE FUEL
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.InfiniteFuel') then
+    if IsPlayerAllowed('VehicleRelatedOptions.InfiniteFuel') then
 
         local vehicleoptions_vehicleop_infinitefuel = vehicleoptions_vehicleop:AddCheckbox({
             icon = '⛽️',
@@ -5453,7 +5348,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- NO BIKE HELMET
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.NoBikeHelmet') then
+    if IsPlayerAllowed('VehicleRelatedOptions.NoBikeHelmet') then
 
         local vehicleoptions_vehicleop_nobikehelm = vehicleoptions_vehicleop:AddCheckbox({
             icon = '🏍',
@@ -5482,7 +5377,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- VEHICLE GODMODE
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.Godmode') then
+    if IsPlayerAllowed('VehicleRelatedOptions.Godmode') then
 
         local vehicleoptions_vehicleop_godmode = vehicleoptions_vehicleop:AddCheckbox({
             icon = '💪',
@@ -5533,7 +5428,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- REPAIR VEHICLE
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.Repair') then
+    if IsPlayerAllowed('VehicleRelatedOptions.Repair') then
 
         local vehicleoptions_vehicleop_repair = vehicleoptions_vehicleop:AddButton({
             icon = '🛠',
@@ -5552,7 +5447,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- WASH VEHICLE
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.Wash') then
+    if IsPlayerAllowed('VehicleRelatedOptions.Wash') then
 
         local vehicleoptions_vehicleop_wash = vehicleoptions_vehicleop:AddButton({
             icon = '🚿',
@@ -5570,7 +5465,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- KEEP VEHICLE CLEAN
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.KeepClean') then
+    if IsPlayerAllowed('VehicleRelatedOptions.KeepClean') then
 
         local vehicleoptions_vehicleop_keepclean = vehicleoptions_vehicleop:AddConfirm({
             icon = '🚿',
@@ -5594,7 +5489,7 @@ local LoadVehicleOptions = function()
     end
     ----------------------------------------------------------------------------
     -- SET DIRT
-    if IsPlayerAllowed('TSAdmin.VehicleRelatedOptions.SetDirt') then
+    if IsPlayerAllowed('VehicleRelatedOptions.SetDirt') then
 
         local vehicleoptions_vehicleop_setdirt = vehicleoptions_vehicleop:AddRange({
             icon = '🦠',
@@ -5620,7 +5515,7 @@ local LoadPlayerOptions = function()
     playeroptions2:ClearItems()
     playeroptions_custom:ClearItems()
     playeroptions_custom_customize:ClearItems()
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.GiveCar') then
+    if IsPlayerAllowed('PlayerOptions.GiveCar') then
 
         local playeroptions_reviveid = playeroptions:AddButton({
             icon = '🚗',
@@ -5646,7 +5541,7 @@ local LoadPlayerOptions = function()
         })
     end
 
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.DeleteCar') then
+    if IsPlayerAllowed('PlayerOptions.DeleteCar') then
 
         local playeroptions_reviveid = playeroptions:AddButton({
             icon = '🚗',
@@ -5681,7 +5576,7 @@ local LoadPlayerOptions = function()
     })
     ----------------------------------------------------------------------------
     -- GODMODE
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.God') then
+    if IsPlayerAllowed('PlayerOptions.God') then
 
         local playeroptions_godmode = playeroptions2:AddCheckbox({
             icon = '💪',
@@ -5720,7 +5615,7 @@ local LoadPlayerOptions = function()
 
     ----------------------------------------------------------------------------
     -- INVISIBLE
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.Invisible') then
+    if IsPlayerAllowed('PlayerOptions.Invisible') then
 
         local playeroptions_invisible = playeroptions2:AddCheckbox({
             icon = '👀',
@@ -5743,7 +5638,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
 
     -- STAMINA
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.Stamina') then
+    if IsPlayerAllowed('PlayerOptions.Stamina') then
 
         local playeroptions_unlimstamina = playeroptions2:AddCheckbox({
             icon = '🏃🏻‍♀️',
@@ -5766,7 +5661,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
 
     -- FASTRUN
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.FastRun') then
+    if IsPlayerAllowed('PlayerOptions.FastRun') then
 
         local playeroptions_fastrun = playeroptions2:AddCheckbox({
             icon = '🏃🏻',
@@ -5785,7 +5680,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
 
     -- FASTSWIM
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.FastSwim') then
+    if IsPlayerAllowed('PlayerOptions.FastSwim') then
 
         local playeroptions_fastswin = playeroptions2:AddCheckbox({
             icon = '🏊🏻‍♂️',
@@ -5804,7 +5699,7 @@ local LoadPlayerOptions = function()
 
     ----------------------------------------------------------------------------
     -- SUPER JUMP
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.SuperJump') then
+    if IsPlayerAllowed('PlayerOptions.SuperJump') then
 
         local playeroptions_superjump = playeroptions2:AddCheckbox({
             icon = '🏃‍♀️',
@@ -5826,7 +5721,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
 
     -- NO RAGDOLL
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.NoRagdoll') then
+    if IsPlayerAllowed('PlayerOptions.NoRagdoll') then
 
         local playeroptions_noragdoll = playeroptions2:AddCheckbox({
             icon = '🏃‍♀️',
@@ -5851,7 +5746,7 @@ local LoadPlayerOptions = function()
 
     ----------------------------------------------------------------------------
     -- NEVER WANTED
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.NeverWanted') then
+    if IsPlayerAllowed('PlayerOptions.NeverWanted') then
 
         local playeroptions_neverwanted = playeroptions2:AddCheckbox({
             icon = '👮',
@@ -5874,7 +5769,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- STAY IN VEHICLE
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.StayInVeh') then
+    if IsPlayerAllowed('PlayerOptions.StayInVeh') then
 
         local playeroptions_stayinveh = playeroptions2:AddCheckbox({
             icon = '🚗',
@@ -5896,7 +5791,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- HEAL
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.Heal') then
+    if IsPlayerAllowed('PlayerOptions.Heal') then
 
         local playeroptions_heal = playeroptions2:AddButton({
             icon = '✨',
@@ -5911,7 +5806,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- REVIVE
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.Revive') then
+    if IsPlayerAllowed('PlayerOptions.Revive') then
 
         local playeroptions_revive = playeroptions2:AddButton({
             icon = '❤️',
@@ -5926,7 +5821,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- ARMOR
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.Armor') then
+    if IsPlayerAllowed('PlayerOptions.Armor') then
 
         local playeroptions_armor = playeroptions2:AddSlider({
             icon = '💙',
@@ -5961,7 +5856,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- CLEAN CLOTHES
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.CleanClothes') then
+    if IsPlayerAllowed('PlayerOptions.CleanClothes') then
 
         local playeroptions_cleanclothes = playeroptions2:AddButton({
             icon = '🚿',
@@ -5976,7 +5871,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- WET CLOTHES
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.WetClothes') then
+    if IsPlayerAllowed('PlayerOptions.WetClothes') then
 
         local playeroptions_wetclothes = playeroptions2:AddButton({
             icon = '🧺',
@@ -5991,7 +5886,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- DRY CLOTHES
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.DryClothes') then
+    if IsPlayerAllowed('PlayerOptions.DryClothes') then
 
         local playeroptions_dryclothes = playeroptions2:AddButton({
             icon = '🔅',
@@ -6006,7 +5901,7 @@ local LoadPlayerOptions = function()
     end
     ----------------------------------------------------------------------------
     -- COMMIT SUICIDE
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.Suicide') then
+    if IsPlayerAllowed('PlayerOptions.Suicide') then
 
         local playeroptions_suicide = playeroptions2:AddButton({
             icon = '💀',
@@ -6022,7 +5917,7 @@ local LoadPlayerOptions = function()
 
     ----------------------------------------------------------------------------
     -- FREEZE
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.Freeze') then
+    if IsPlayerAllowed('PlayerOptions.Freeze') then
 
         local playeroptions_freeze = playeroptions2:AddConfirm({
             icon = '🧊',
@@ -6040,7 +5935,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
 
     -- NOCLIP
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.Noclip') then
+    if IsPlayerAllowed('PlayerOptions.Noclip') then
 
         local playeroptions_noclip = playeroptions2:AddCheckbox({
             icon = '🪂',
@@ -6059,7 +5954,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
 
     -- CHANGE SKIN
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.ChangeSkin') then
+    if IsPlayerAllowed('PlayerOptions.ChangeSkin') then
 
         local playeroptions_custom_changeskin = playeroptions_custom:AddButton({
             icon = '👕',
@@ -6077,7 +5972,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
 
     -- CHANGE SKIN2
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.ChangeSkin') then
+    if IsPlayerAllowed('PlayerOptions.ChangeSkin') then
 
         local drawableName = { "Head", "Beard", "Hair", "Torso", "Legs", "Hands", "Foot", "Other", "Accessory 1",
             "Accessory 2", "Decals", "Torso Parts" }
@@ -6465,7 +6360,7 @@ local LoadPlayerOptions = function()
     ----------------------------------------------------------------------------
     -- CHANGE PED
 
-    if IsPlayerAllowed('TSAdmin.PlayerOptions.ChangePed') then
+    if IsPlayerAllowed('PlayerOptions.ChangePed') then
 
         local playeroptions_custom_changeped = playeroptions_custom:AddButton({
             icon = '👦🏻',
@@ -6486,7 +6381,7 @@ local LoadMiscSettings = function()
     miscsettings:ClearItems()
     ----------------------------------------------------------------------------
     -- TELEPORT OPTIONS
-    if IsPlayerAllowed('TSAdmin.MiscSettings.Teleport') then
+    if IsPlayerAllowed('MiscSettings.Teleport') then
 
         local misc_teleport = miscsettings:AddButton({
             icon = '🕹',
@@ -6545,7 +6440,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- SHOW COORDS
-    if IsPlayerAllowed('TSAdmin.MiscSettings.ShowCoords') then
+    if IsPlayerAllowed('MiscSettings.ShowCoords') then
 
         local DrawGenericText = function(text)
             SetTextColour(186, 186, 186, 255)
@@ -6591,103 +6486,9 @@ local LoadMiscSettings = function()
             end
         end)
     end
-
-    -- COPY COORDS VEC3
-    if IsPlayerAllowed('TSAdmin.MiscSettings.ShowCoords') then
-        local misc_showcoords1 = miscsettings:AddButton({
-            icon = '📲',
-            label = 'Copy Coords (vec3)',
-            description  = 'Copy Coords in Vector 3',
-            select = function(i) 
-                lib.setClipboard(tostring(GetEntityCoords(PlayerPedId())))
-            end
-        })
-    end
-
-    -- COPY COORDS VEC4
-    if IsPlayerAllowed('TSAdmin.MiscSettings.ShowCoords') then
-        local misc_showcoords2 = miscsettings:AddButton({
-            icon = '📲',
-            label = 'Copy Coords (vec4)',
-            description  = 'Copy Coords in Vector 4',
-            select = function(i) 
-                local coords = GetEntityCoords(PlayerPedId())
-            local heading = GetEntityHeading(PlayerPedId())
-            lib.setClipboard(tostring(vec4(coords.x, coords.y, coords.z, heading)))
-            end
-        })
-    end
-    ----------------------------------------------------------------------------
-    -- SET NUI FOCUS
-    if IsPlayerAllowed('TSAdmin.MiscSettings.NuiFocus') then
-        local misc_nui = miscsettings:AddCheckbox({
-            icon = '🖱️',
-            label = 'Set Nui Focus',
-            value = 'n'
-        })
-        misc_nui:On('check', function(item)
-            SetNuiFocus(true, true)
-        end)
-        misc_nui:On('uncheck', function(item)
-            SetNuiFocus(false, false)
-        end)
-    end
-    RegisterCommand('tsnui', function()
-        if IsNuiFocused() then
-            SetNuiFocus(false, false)
-        end
-    end)
-
-    ----------------------------------------------------------------------------
-    -- BAN PLAYER
-    if IsPlayerAllowed('TSAdmin.MiscSettings.Ban') then
-        local misc_showcoords2 = miscsettings:AddButton({
-            icon = '🚫',
-            label = 'Ban Player',
-            description  = 'Ban player from server',
-            select = function(i) 
-                local optionTable = {}
-                local plyList = lib.callback.await('ts-adminmenu:server:GetOnlinePlayers', false)
-                for k,v in pairs(plyList) do
-                    local ply = {value = v.source, label = v.name}
-                    table.insert(optionTable,ply)
-                end
-                local input = lib.inputDialog('TS Bans', {
-                    { type = "input", label = "Identifier" },
-                    { type = "checkbox", label = "Temporary" },
-                    { type = 'select', label = 'Players', options = optionTable},
-                    { type = "input", label = "Reason" },
-                })
-                TriggerServerEvent('ts-adminmenu:server:BanPlayer',input)
-            end
-        })
-    end
-    
-    ----------------------------------------------------------------------------
-    -- UNBAN PLAYER
-    if IsPlayerAllowed('TSAdmin.MiscSettings.Unban') then
-        local misc_showcoords2 = miscsettings:AddButton({
-            icon = '🚫',
-            label = 'Unban Player',
-            description  = 'Unban player from server',
-            select = function(i) 
-                local optionTable = {}
-                local plyList = lib.callback.await('ts-adminmenu:server:GetOnlinePlayers', false)
-                for k,v in pairs(plyList) do
-                    local ply = {value = v.source, label = v.name}
-                    table.insert(optionTable,ply)
-                end
-                local input = lib.inputDialog('TS Unbans', {
-                    { type = "input", label = "Ban ID" },
-                })
-                TriggerServerEvent('ts-adminmenu:server:UnbanPlayer',input)
-            end
-        })
-    end
-    
     ----------------------------------------------------------------------------
     -- CLEAR AREA
-    if IsPlayerAllowed('TSAdmin.MiscSettings.ClearArea') then
+    if IsPlayerAllowed('MiscSettings.ClearArea') then
 
         local misc_cleararea = miscsettings:AddButton({
             icon = '🕹',
@@ -6702,7 +6503,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- RELOG
-    if IsPlayerAllowed('TSAdmin.MiscSettings.Relog') then
+    if IsPlayerAllowed('MiscSettings.Relog') then
 
         local misc_cleararea = miscsettings:AddButton({
             icon = '🕹',
@@ -6718,7 +6519,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- PROP SPAWNER
-    if IsPlayerAllowed('TSAdmin.MiscSettings.PropSpawn') then
+    if IsPlayerAllowed('MiscSettings.PropSpawn') then
 
         local misc_cleararea = miscsettings:AddButton({
             icon = '👷',
@@ -6734,7 +6535,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- ANNOUNCEMENT
-    if IsPlayerAllowed('TSAdmin.MiscSettings.Announce') then
+    if IsPlayerAllowed('MiscSettings.Announce') then
 
         local misc_cleararea = miscsettings:AddButton({
             icon = '📣',
@@ -6767,7 +6568,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- STAFFCHAT
-    if IsPlayerAllowed('TSAdmin.MiscSettings.StaffChat') then
+    if IsPlayerAllowed('MiscSettings.StaffChat') then
 
         local misc_staffchat = miscsettings:AddButton({
             icon = '📣',
@@ -6789,7 +6590,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- THERMAL VISION
-    if IsPlayerAllowed('TSAdmin.MiscSettings.ThermalVision') then
+    if IsPlayerAllowed('MiscSettings.ThermalVision') then
 
         local misc_thermalvision = miscsettings:AddCheckbox({
             icon = '🔍',
@@ -6808,7 +6609,7 @@ local LoadMiscSettings = function()
     ----------------------------------------------------------------------------
     -- JOIN QUIT
     local shownotifjoin = false
-    if IsPlayerAllowed('TSAdmin.MiscSettings.JoinQNotif') then
+    if IsPlayerAllowed('MiscSettings.JoinQNotif') then
 
 
         local misc_joiunq = miscsettings:AddCheckbox({
@@ -7079,7 +6880,7 @@ local LoadMiscSettings = function()
 
     local shownotifkill = false
 
-    if IsPlayerAllowed('TSAdmin.MiscSettings.Kill') then
+    if IsPlayerAllowed('MiscSettings.Kill') then
 
         local misc_kill = miscsettings:AddCheckbox({
             icon = '🔍',
@@ -7101,7 +6902,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- NIGHT VISION
-    if IsPlayerAllowed('TSAdmin.MiscSettings.NightVision') then
+    if IsPlayerAllowed('MiscSettings.NightVision') then
 
         local misc_nightvision = miscsettings:AddCheckbox({
             icon = '🔍',
@@ -7119,7 +6920,7 @@ local LoadMiscSettings = function()
     ----------------------------------------------------------------------------
     -- PLAYER BLIPS
 
-    if IsPlayerAllowed('TSAdmin.MiscSettings.PlayerBlips') then
+    if IsPlayerAllowed('MiscSettings.PlayerBlips') then
 
         local plyblips = {}
         local plyblipson = false
@@ -7187,7 +6988,7 @@ local LoadMiscSettings = function()
     ----------------------------------------------------------------------------
     -- PLAYER NAMES
 
-    if IsPlayerAllowed('TSAdmin.MiscSettings.PlayerNames') then
+    if IsPlayerAllowed('MiscSettings.PlayerNames') then
 
         local plynameon = false
         local plynamet = {}
@@ -7235,7 +7036,7 @@ local LoadMiscSettings = function()
     end
     ----------------------------------------------------------------------------
     -- TIMECYCLE
-    if IsPlayerAllowed('TSAdmin.MiscSettings.Timecycle') then
+    if IsPlayerAllowed('MiscSettings.Timecycle') then
 
         local misc_timecycles = miscsettings:AddSlider({
             icon = '🎥',
@@ -7263,7 +7064,7 @@ end
 local LoadTrollMenu = function()
     trollmenu:ClearItems()
     -- FART
-    if IsPlayerAllowed('TSAdmin.TrollMenu.Fart') then
+    if IsPlayerAllowed('TrollMenu.Fart') then
 
         local trollmenu_fart = trollmenu:AddSlider({
             icon = '🎥',
@@ -7293,7 +7094,7 @@ local LoadTrollMenu = function()
     end
 
     -- TRUCK PUNCHLINE
-    if IsPlayerAllowed('TSAdmin.TrollMenu.Truck') then
+    if IsPlayerAllowed('TrollMenu.Truck') then
 
         local trollmenu_truck = trollmenu:AddButton({
             icon = '🚚',
@@ -7308,7 +7109,7 @@ local LoadTrollMenu = function()
 
 
     -- CLOWN ATTACK
-    if IsPlayerAllowed('TSAdmin.TrollMenu.Clown') then
+    if IsPlayerAllowed('TrollMenu.Clown') then
 
         local trollmenu_clown = trollmenu:AddButton({
             icon = '🧛',
@@ -7323,7 +7124,7 @@ local LoadTrollMenu = function()
 
 
     -- MERRY ATTACK
-    if IsPlayerAllowed('TSAdmin.TrollMenu.Merry') then
+    if IsPlayerAllowed('TrollMenu.Merry') then
 
         local trollmenu_merry = trollmenu:AddButton({
             icon = '👨‍🎤',
@@ -7338,7 +7139,7 @@ local LoadTrollMenu = function()
 
 
     -- FLASHBANG
-    if IsPlayerAllowed('TSAdmin.TrollMenu.Flash') then
+    if IsPlayerAllowed('TrollMenu.Flash') then
 
         local trollmenu_flash = trollmenu:AddButton({
             icon = '👨‍🎤',
@@ -7353,7 +7154,7 @@ local LoadTrollMenu = function()
 
 
     -- FAKE SOUND
-    if IsPlayerAllowed('TSAdmin.TrollMenu.FakeSound') then
+    if IsPlayerAllowed('TrollMenu.FakeSound') then
 
         local trollmenu_fake = trollmenu:AddButton({
             icon = '🎙',
@@ -7386,7 +7187,7 @@ local LoadTrollMenu = function()
     end
 
     -- LAG GAME
-    if IsPlayerAllowed('TSAdmin.TrollMenu.Lag') then
+    if IsPlayerAllowed('TrollMenu.Lag') then
 
         local trollmenu_lag = trollmenu:AddButton({
             icon = '⚰️',
@@ -7400,7 +7201,7 @@ local LoadTrollMenu = function()
     end
 
     -- BLOW TYRES
-    if IsPlayerAllowed('TSAdmin.TrollMenu.BlowTyre') then
+    if IsPlayerAllowed('TrollMenu.BlowTyre') then
 
         local trollmenu_blow = trollmenu:AddButton({
             icon = '🕹',
@@ -7414,7 +7215,7 @@ local LoadTrollMenu = function()
     end
 
     -- EJECT FROM VEH
-    if IsPlayerAllowed('TSAdmin.TrollMenu.Eject') then
+    if IsPlayerAllowed('TrollMenu.Eject') then
 
         local trollmenu_eject = trollmenu:AddButton({
             icon = '🦵🏻',
@@ -7428,7 +7229,7 @@ local LoadTrollMenu = function()
     end
 
     -- CRASH GAME
-    if IsPlayerAllowed('TSAdmin.TrollMenu.Crash') then
+    if IsPlayerAllowed('TrollMenu.Crash') then
 
         local trollmenu_crash = trollmenu:AddButton({
             icon = '⚰️',
@@ -7440,7 +7241,7 @@ local LoadTrollMenu = function()
             end
         })
     end
-    if IsPlayerAllowed('TSAdmin.RockstarEditor') then
+    if IsPlayerAllowed('RockstarEditor') then
 
         local slider = rockstar:AddSlider({
             icon = '🎥',
@@ -7503,7 +7304,7 @@ local loadtimeout = false
 local LoadAdminMenu = function()
     if not loadtimeout then
         loadtimeout = true
-        if IsPlayerAllowed('TSAdmin.PlayerOptions.Noclip') then
+        if IsPlayerAllowed('PlayerOptions.Noclip') then
 
             RegisterCommand("toggleNoClip", function(source, rawCommand)
                 ToggleNoClipMode()
@@ -7588,6 +7389,21 @@ local LoadAdminMenu = function()
             value = rockstar,
             description = 'Rockstar Settings'
         })
+        -------------------------------------------------------------------------
+        -- SPECTATE PLAYER
+        if IsPlayerAllowed('OnlinePlyOptions.Spectate') then
+
+            local onlineplayers_each_spectate = menu:AddButton({
+                icon = '🔬',
+                label = "Spectate Player",
+                description = "Spectate Player",
+                value = "specp",
+                false,
+                select = function(i)
+                    TriggerServerEvent('fl_spectate:server:openSpectateMenu')
+                end
+            })
+        end
 
         Wait(5000)
         loadtimeout = false
@@ -8214,996 +8030,28 @@ RegisterNetEvent('ts-adminmenu:client:PlayFart', function(plyList, type)
     local fart = type
     local count = 2
     local myMenu = {}
-    for k, v in pairs(plyList) do
-        myMenu[v.name] = {
-            description = 'Player ID: ' .. v.source,
-            arrow = false,
-            event = 'ts-adminmenu:client:PlayFartFromServer',
-            args = {
-                ply = v.source,
-                type = fart
+        for k, v in pairs(plyList) do
+            myMenu[v.name] = {
+                description = 'Player ID: ' .. v.source,
+                arrow = false,
+                event = 'ts-adminmenu:client:PlayFartFromServer',
+                args = {
+                    ply = v.source,
+                    type = fart
+                }
             }
-        }
-    end
-    lib.registerContext({
-        id = 'fart',
-        title = 'Fart On Player',
-        options = myMenu
-    })
-    lib.showContext('fart')
+        end
+        lib.registerContext({
+            id = 'fart',
+            title = 'Fart On Player',
+            options = myMenu
+        })
+        lib.showContext('fart')
 end)
 
 RegisterNetEvent('ts-adminmenu:client:PlayFartFromServer', function(arg)
     TriggerServerEvent('ts-adminmenu:server:PlayFartFromServer', arg)
 
-end)
-
-RegisterCommand('addtsperms', function(source, args, raw)
-    if IsPlayerAllowed('TSAdmin.FullAccess') then
-        local input = lib.inputDialog('TS Permission Manager', {
-            { type = "input", label = "Player ID" },
-            { type = 'select', label = 'Permission', options = {
-                { value = "none", label = "None" },
-                { value = "TSAdmin.admin", label = "Admin" },
-                { value = "TSAdmin.FullAccess", label = "FullAccess" },
-                { value = "TSAdmin.OnlinePlyOptions", label = "Online Player Options" },
-                { value = "TSAdmin.OnlinePlyOptions.SendMessage", label = "Send Message" },
-                { value = "TSAdmin.OnlinePlyOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.OnlinePlyOptions.OpenInventory", label = "Open Inventory" },
-                { value = "TSAdmin.OnlinePlyOptions.SetJob", label = "Set Job" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItem", label = "GiveItem" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveInventoryItem", label = "Remove Inventory Item" },
-                { value = "TSAdmin.OnlinePlyOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveMoney", label = "Give Money" },
-                { value = "TSAdmin.OnlinePlyOptions.TPCar", label = "TP Into Vehicle" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveMoney", label = "Remove Money" },
-                { value = "TSAdmin.OnlinePlyOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.OnlinePlyOptions.Goto", label = "Goto" },
-                { value = "TSAdmin.OnlinePlyOptions.License", label = "License" },
-                { value = "TSAdmin.OnlinePlyOptions.Bring", label = "Bring" },
-                { value = "TSAdmin.OnlinePlyOptions.SetWaypoint", label = "Set Waypoint" },
-                { value = "TSAdmin.OnlinePlyOptions.PRINTID", label = "Print Identifiers" },
-                { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
-                { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
-                { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
-                { value = "TSAdmin.PlayerOptions", label = "Self Options" },
-                { value = "TSAdmin.PlayerOptions.God", label = "God" },
-                { value = "TSAdmin.PlayerOptions.Invisible", label = "Invisible" },
-                { value = "TSAdmin.PlayerOptions.Stamina", label = "Stamina" },
-                { value = "TSAdmin.PlayerOptions.FastRun", label = "Fast Run" },
-                { value = "TSAdmin.PlayerOptions.FastSwim", label = "Fast Swim" },
-                { value = "TSAdmin.PlayerOptions.SuperJump", label = "Super Jump" },
-                { value = "TSAdmin.PlayerOptions.NoRagdoll", label = "No Ragdoll" },
-                { value = "TSAdmin.PlayerOptions.NeverWanted", label = "Never Wanted" },
-                { value = "TSAdmin.PlayerOptions.StayInVeh", label = "Stay In Veh" },
-                { value = "TSAdmin.PlayerOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.PlayerOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.PlayerOptions.Armor", label = "Armor" },
-                { value = "TSAdmin.PlayerOptions.CleanClothes", label = "Clean Clothes" },
-                { value = "TSAdmin.PlayerOptions.WetClothes", label = "Wet Clothes" },
-                { value = "TSAdmin.PlayerOptions.DryClothes", label = "Dry Clothes" },
-                { value = "TSAdmin.PlayerOptions.Suicide", label = "Suicide" },
-                { value = "TSAdmin.PlayerOptions.Freeze", label = "Freeze Player" },
-                { value = "TSAdmin.PlayerOptions.Noclip", label = "Noclip" },
-                { value = "TSAdmin.PlayerOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.PlayerOptions.ChangePed", label = "Change Ped" },
-                { value = "TSAdmin.PlayerOptions.GiveCar", label = "Give Car" },
-                { value = "TSAdmin.PlayerOptions.DeleteCar", label = "Delete Car" },
-                { value = "TSAdmin.VehicleRelatedOptions", label = "Vehicle Related Options" },
-                { value = "TSAdmin.VehicleRelatedOptions.Spawner", label = "Vehicle Spawner" },
-                { value = "TSAdmin.VehicleRelatedOptions.Modmenu", label = "Modmenu" },
-                { value = "TSAdmin.VehicleRelatedOptions.Freeze", label = "Freeze Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.NumberPlate", label = "NumberPlate" },
-                { value = "TSAdmin.VehicleRelatedOptions.DoorMenu", label = "Door Menu" },
-                { value = "TSAdmin.VehicleRelatedOptions.MultiplierSpeed", label = "Multiplier Speed" },
-                { value = "TSAdmin.VehicleRelatedOptions.FlipVehicle", label = "Flip Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.DeleteVehicle", label = "Delete Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.InfiniteFuel", label = "Infinite Fuel" },
-                { value = "TSAdmin.VehicleRelatedOptions.NoBikeHelmet", label = "No Bike Helmet" },
-                { value = "TSAdmin.VehicleRelatedOptions.Godmode", label = "Vehicle Godmode" },
-                { value = "TSAdmin.VehicleRelatedOptions.Repair", label = "Repair Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.Wash", label = "Wash Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.KeepClean", label = "Keep Vehicle Clean" },
-                { value = "TSAdmin.VehicleRelatedOptions.SetDirt", label = "Set Dirt" },
-                { value = "TSAdmin.VehicleRelatedOptions.UnlockVehicle", label = "Unlock Vehicle" },
-                { value = "TSAdmin.MiscSettings", label = "Misc Settings" },
-                { value = "TSAdmin.MiscSettings.Teleport", label = "Teleport" },
-                { value = "TSAdmin.MiscSettings.ShowCoords", label = "Show Coords" },
-                { value = "TSAdmin.MiscSettings.ClearArea", label = "Clear Area" },
-                { value = "TSAdmin.MiscSettings.ThermalVision", label = "Thermal Vision" },
-                { value = "TSAdmin.MiscSettings.NightVision", label = "Night Vision" },
-                { value = "TSAdmin.MiscSettings.PlayerBlips", label = "Player Blips" },
-                { value = "TSAdmin.MiscSettings.PlayerNames", label = "Player Names" },
-                { value = "TSAdmin.MiscSettings.Timecycle", label = "Timecycle" },
-                { value = "TSAdmin.MiscSettings.JoinQNotif", label = "Join-Quit Notification" },
-                { value = "TSAdmin.MiscSettings.Kill", label = "Death Notification" },
-                { value = "TSAdmin.MiscSettings.Announce", label = "Announce" },
-                { value = "TSAdmin.MiscSettings.PropSpawn", label = "Prop Spawner (soon)" },
-                { value = "TSAdmin.MiscSettings.StaffChat", label = "Staff Chat" },
-                { value = "TSAdmin.MiscSettings.Relog", label = "Relog" },
-                { value = "TSAdmin.MiscSettings.Ban", label = "Ban Player" },
-                { value = "TSAdmin.MiscSettings.Unban", label = "Unban Player" },
-                { value = "TSAdmin.TrollMenu", label = "Troll Menu" },
-                { value = "TSAdmin.TrollMenu.Fart", label = "Fart" },
-                { value = "TSAdmin.TrollMenu.Truck", label = "Truck" },
-                { value = "TSAdmin.TrollMenu.Clown", label = "Clown" },
-                { value = "TSAdmin.TrollMenu.Merry", label = "Merry" },
-                { value = "TSAdmin.TrollMenu.Flash", label = "Flash" },
-                { value = "TSAdmin.TrollMenu.FakeSound", label = "Fake Sound" },
-                { value = "TSAdmin.TrollMenu.Lag", label = "Lag" },
-                { value = "TSAdmin.TrollMenu.BlowTyre", label = "Blow Tyre" },
-                { value = "TSAdmin.TrollMenu.Eject", label = "Eject" },
-                { value = "TSAdmin.TrollMenu.Crash", label = "Crash" },
-                { value = "TSAdmin.RockstarEditor", label = "Rockstar Editor" },
-            } },
-            { type = 'select', label = 'Permission', options = {
-                { value = "none", label = "None" },
-                { value = "TSAdmin.admin", label = "Admin" },
-                { value = "TSAdmin.FullAccess", label = "FullAccess" },
-                { value = "TSAdmin.OnlinePlyOptions", label = "Online Player Options" },
-                { value = "TSAdmin.OnlinePlyOptions.SendMessage", label = "Send Message" },
-                { value = "TSAdmin.OnlinePlyOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.OnlinePlyOptions.OpenInventory", label = "Open Inventory" },
-                { value = "TSAdmin.OnlinePlyOptions.SetJob", label = "Set Job" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItem", label = "GiveItem" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveInventoryItem", label = "Remove Inventory Item" },
-                { value = "TSAdmin.OnlinePlyOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveMoney", label = "Give Money" },
-                { value = "TSAdmin.OnlinePlyOptions.TPCar", label = "TP Into Vehicle" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveMoney", label = "Remove Money" },
-                { value = "TSAdmin.OnlinePlyOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.OnlinePlyOptions.Goto", label = "Goto" },
-                { value = "TSAdmin.OnlinePlyOptions.License", label = "License" },
-                { value = "TSAdmin.OnlinePlyOptions.Bring", label = "Bring" },
-                { value = "TSAdmin.OnlinePlyOptions.SetWaypoint", label = "Set Waypoint" },
-                { value = "TSAdmin.OnlinePlyOptions.PRINTID", label = "Print Identifiers" },
-                { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
-                { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
-                { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
-                { value = "TSAdmin.PlayerOptions", label = "Self Options" },
-                { value = "TSAdmin.PlayerOptions.God", label = "God" },
-                { value = "TSAdmin.PlayerOptions.Invisible", label = "Invisible" },
-                { value = "TSAdmin.PlayerOptions.Stamina", label = "Stamina" },
-                { value = "TSAdmin.PlayerOptions.FastRun", label = "Fast Run" },
-                { value = "TSAdmin.PlayerOptions.FastSwim", label = "Fast Swim" },
-                { value = "TSAdmin.PlayerOptions.SuperJump", label = "Super Jump" },
-                { value = "TSAdmin.PlayerOptions.NoRagdoll", label = "No Ragdoll" },
-                { value = "TSAdmin.PlayerOptions.NeverWanted", label = "Never Wanted" },
-                { value = "TSAdmin.PlayerOptions.StayInVeh", label = "Stay In Veh" },
-                { value = "TSAdmin.PlayerOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.PlayerOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.PlayerOptions.Armor", label = "Armor" },
-                { value = "TSAdmin.PlayerOptions.CleanClothes", label = "Clean Clothes" },
-                { value = "TSAdmin.PlayerOptions.WetClothes", label = "Wet Clothes" },
-                { value = "TSAdmin.PlayerOptions.DryClothes", label = "Dry Clothes" },
-                { value = "TSAdmin.PlayerOptions.Suicide", label = "Suicide" },
-                { value = "TSAdmin.PlayerOptions.Freeze", label = "Freeze Player" },
-                { value = "TSAdmin.PlayerOptions.Noclip", label = "Noclip" },
-                { value = "TSAdmin.PlayerOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.PlayerOptions.ChangePed", label = "Change Ped" },
-                { value = "TSAdmin.PlayerOptions.GiveCar", label = "Give Car" },
-                { value = "TSAdmin.PlayerOptions.DeleteCar", label = "Delete Car" },
-                { value = "TSAdmin.VehicleRelatedOptions", label = "Vehicle Related Options" },
-                { value = "TSAdmin.VehicleRelatedOptions.Spawner", label = "Vehicle Spawner" },
-                { value = "TSAdmin.VehicleRelatedOptions.Modmenu", label = "Modmenu" },
-                { value = "TSAdmin.VehicleRelatedOptions.Freeze", label = "Freeze Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.NumberPlate", label = "NumberPlate" },
-                { value = "TSAdmin.VehicleRelatedOptions.DoorMenu", label = "Door Menu" },
-                { value = "TSAdmin.VehicleRelatedOptions.MultiplierSpeed", label = "Multiplier Speed" },
-                { value = "TSAdmin.VehicleRelatedOptions.FlipVehicle", label = "Flip Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.DeleteVehicle", label = "Delete Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.InfiniteFuel", label = "Infinite Fuel" },
-                { value = "TSAdmin.VehicleRelatedOptions.NoBikeHelmet", label = "No Bike Helmet" },
-                { value = "TSAdmin.VehicleRelatedOptions.Godmode", label = "Vehicle Godmode" },
-                { value = "TSAdmin.VehicleRelatedOptions.Repair", label = "Repair Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.Wash", label = "Wash Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.KeepClean", label = "Keep Vehicle Clean" },
-                { value = "TSAdmin.VehicleRelatedOptions.SetDirt", label = "Set Dirt" },
-                { value = "TSAdmin.VehicleRelatedOptions.UnlockVehicle", label = "Unlock Vehicle" },
-                { value = "TSAdmin.MiscSettings", label = "Misc Settings" },
-                { value = "TSAdmin.MiscSettings.Teleport", label = "Teleport" },
-                { value = "TSAdmin.MiscSettings.ShowCoords", label = "Show Coords" },
-                { value = "TSAdmin.MiscSettings.ClearArea", label = "Clear Area" },
-                { value = "TSAdmin.MiscSettings.ThermalVision", label = "Thermal Vision" },
-                { value = "TSAdmin.MiscSettings.NightVision", label = "Night Vision" },
-                { value = "TSAdmin.MiscSettings.PlayerBlips", label = "Player Blips" },
-                { value = "TSAdmin.MiscSettings.PlayerNames", label = "Player Names" },
-                { value = "TSAdmin.MiscSettings.Timecycle", label = "Timecycle" },
-                { value = "TSAdmin.MiscSettings.JoinQNotif", label = "Join-Quit Notification" },
-                { value = "TSAdmin.MiscSettings.Kill", label = "Death Notification" },
-                { value = "TSAdmin.MiscSettings.Announce", label = "Announce" },
-                { value = "TSAdmin.MiscSettings.PropSpawn", label = "Prop Spawner (soon)" },
-                { value = "TSAdmin.MiscSettings.StaffChat", label = "Staff Chat" },
-                { value = "TSAdmin.MiscSettings.Relog", label = "Relog" },
-                { value = "TSAdmin.MiscSettings.Ban", label = "Ban Player" },
-                { value = "TSAdmin.MiscSettings.Unban", label = "Unban Player" },
-                { value = "TSAdmin.TrollMenu", label = "Troll Menu" },
-                { value = "TSAdmin.TrollMenu.Fart", label = "Fart" },
-                { value = "TSAdmin.TrollMenu.Truck", label = "Truck" },
-                { value = "TSAdmin.TrollMenu.Clown", label = "Clown" },
-                { value = "TSAdmin.TrollMenu.Merry", label = "Merry" },
-                { value = "TSAdmin.TrollMenu.Flash", label = "Flash" },
-                { value = "TSAdmin.TrollMenu.FakeSound", label = "Fake Sound" },
-                { value = "TSAdmin.TrollMenu.Lag", label = "Lag" },
-                { value = "TSAdmin.TrollMenu.BlowTyre", label = "Blow Tyre" },
-                { value = "TSAdmin.TrollMenu.Eject", label = "Eject" },
-                { value = "TSAdmin.TrollMenu.Crash", label = "Crash" },
-                { value = "TSAdmin.RockstarEditor", label = "Rockstar Editor" },
-            } },
-            { type = 'select', label = 'Permission', options = {
-                { value = "none", label = "None" },
-                { value = "TSAdmin.admin", label = "Admin" },
-                { value = "TSAdmin.FullAccess", label = "FullAccess" },
-                { value = "TSAdmin.OnlinePlyOptions", label = "Online Player Options" },
-                { value = "TSAdmin.OnlinePlyOptions.SendMessage", label = "Send Message" },
-                { value = "TSAdmin.OnlinePlyOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.OnlinePlyOptions.OpenInventory", label = "Open Inventory" },
-                { value = "TSAdmin.OnlinePlyOptions.SetJob", label = "Set Job" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItem", label = "GiveItem" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveInventoryItem", label = "Remove Inventory Item" },
-                { value = "TSAdmin.OnlinePlyOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveMoney", label = "Give Money" },
-                { value = "TSAdmin.OnlinePlyOptions.TPCar", label = "TP Into Vehicle" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveMoney", label = "Remove Money" },
-                { value = "TSAdmin.OnlinePlyOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.OnlinePlyOptions.Goto", label = "Goto" },
-                { value = "TSAdmin.OnlinePlyOptions.License", label = "License" },
-                { value = "TSAdmin.OnlinePlyOptions.Bring", label = "Bring" },
-                { value = "TSAdmin.OnlinePlyOptions.SetWaypoint", label = "Set Waypoint" },
-                { value = "TSAdmin.OnlinePlyOptions.PRINTID", label = "Print Identifiers" },
-                { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
-                { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
-                { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
-                { value = "TSAdmin.PlayerOptions", label = "Self Options" },
-                { value = "TSAdmin.PlayerOptions.God", label = "God" },
-                { value = "TSAdmin.PlayerOptions.Invisible", label = "Invisible" },
-                { value = "TSAdmin.PlayerOptions.Stamina", label = "Stamina" },
-                { value = "TSAdmin.PlayerOptions.FastRun", label = "Fast Run" },
-                { value = "TSAdmin.PlayerOptions.FastSwim", label = "Fast Swim" },
-                { value = "TSAdmin.PlayerOptions.SuperJump", label = "Super Jump" },
-                { value = "TSAdmin.PlayerOptions.NoRagdoll", label = "No Ragdoll" },
-                { value = "TSAdmin.PlayerOptions.NeverWanted", label = "Never Wanted" },
-                { value = "TSAdmin.PlayerOptions.StayInVeh", label = "Stay In Veh" },
-                { value = "TSAdmin.PlayerOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.PlayerOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.PlayerOptions.Armor", label = "Armor" },
-                { value = "TSAdmin.PlayerOptions.CleanClothes", label = "Clean Clothes" },
-                { value = "TSAdmin.PlayerOptions.WetClothes", label = "Wet Clothes" },
-                { value = "TSAdmin.PlayerOptions.DryClothes", label = "Dry Clothes" },
-                { value = "TSAdmin.PlayerOptions.Suicide", label = "Suicide" },
-                { value = "TSAdmin.PlayerOptions.Freeze", label = "Freeze Player" },
-                { value = "TSAdmin.PlayerOptions.Noclip", label = "Noclip" },
-                { value = "TSAdmin.PlayerOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.PlayerOptions.ChangePed", label = "Change Ped" },
-                { value = "TSAdmin.PlayerOptions.GiveCar", label = "Give Car" },
-                { value = "TSAdmin.PlayerOptions.DeleteCar", label = "Delete Car" },
-                { value = "TSAdmin.VehicleRelatedOptions", label = "Vehicle Related Options" },
-                { value = "TSAdmin.VehicleRelatedOptions.Spawner", label = "Vehicle Spawner" },
-                { value = "TSAdmin.VehicleRelatedOptions.Modmenu", label = "Modmenu" },
-                { value = "TSAdmin.VehicleRelatedOptions.Freeze", label = "Freeze Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.NumberPlate", label = "NumberPlate" },
-                { value = "TSAdmin.VehicleRelatedOptions.DoorMenu", label = "Door Menu" },
-                { value = "TSAdmin.VehicleRelatedOptions.MultiplierSpeed", label = "Multiplier Speed" },
-                { value = "TSAdmin.VehicleRelatedOptions.FlipVehicle", label = "Flip Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.DeleteVehicle", label = "Delete Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.InfiniteFuel", label = "Infinite Fuel" },
-                { value = "TSAdmin.VehicleRelatedOptions.NoBikeHelmet", label = "No Bike Helmet" },
-                { value = "TSAdmin.VehicleRelatedOptions.Godmode", label = "Vehicle Godmode" },
-                { value = "TSAdmin.VehicleRelatedOptions.Repair", label = "Repair Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.Wash", label = "Wash Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.KeepClean", label = "Keep Vehicle Clean" },
-                { value = "TSAdmin.VehicleRelatedOptions.SetDirt", label = "Set Dirt" },
-                { value = "TSAdmin.VehicleRelatedOptions.UnlockVehicle", label = "Unlock Vehicle" },
-                { value = "TSAdmin.MiscSettings", label = "Misc Settings" },
-                { value = "TSAdmin.MiscSettings.Teleport", label = "Teleport" },
-                { value = "TSAdmin.MiscSettings.ShowCoords", label = "Show Coords" },
-                { value = "TSAdmin.MiscSettings.ClearArea", label = "Clear Area" },
-                { value = "TSAdmin.MiscSettings.ThermalVision", label = "Thermal Vision" },
-                { value = "TSAdmin.MiscSettings.NightVision", label = "Night Vision" },
-                { value = "TSAdmin.MiscSettings.PlayerBlips", label = "Player Blips" },
-                { value = "TSAdmin.MiscSettings.PlayerNames", label = "Player Names" },
-                { value = "TSAdmin.MiscSettings.Timecycle", label = "Timecycle" },
-                { value = "TSAdmin.MiscSettings.JoinQNotif", label = "Join-Quit Notification" },
-                { value = "TSAdmin.MiscSettings.Kill", label = "Death Notification" },
-                { value = "TSAdmin.MiscSettings.Announce", label = "Announce" },
-                { value = "TSAdmin.MiscSettings.PropSpawn", label = "Prop Spawner (soon)" },
-                { value = "TSAdmin.MiscSettings.StaffChat", label = "Staff Chat" },
-                { value = "TSAdmin.MiscSettings.Relog", label = "Relog" },
-                { value = "TSAdmin.MiscSettings.Ban", label = "Ban Player" },
-                { value = "TSAdmin.MiscSettings.Unban", label = "Unban Player" },
-                { value = "TSAdmin.TrollMenu", label = "Troll Menu" },
-                { value = "TSAdmin.TrollMenu.Fart", label = "Fart" },
-                { value = "TSAdmin.TrollMenu.Truck", label = "Truck" },
-                { value = "TSAdmin.TrollMenu.Clown", label = "Clown" },
-                { value = "TSAdmin.TrollMenu.Merry", label = "Merry" },
-                { value = "TSAdmin.TrollMenu.Flash", label = "Flash" },
-                { value = "TSAdmin.TrollMenu.FakeSound", label = "Fake Sound" },
-                { value = "TSAdmin.TrollMenu.Lag", label = "Lag" },
-                { value = "TSAdmin.TrollMenu.BlowTyre", label = "Blow Tyre" },
-                { value = "TSAdmin.TrollMenu.Eject", label = "Eject" },
-                { value = "TSAdmin.TrollMenu.Crash", label = "Crash" },
-                { value = "TSAdmin.RockstarEditor", label = "Rockstar Editor" },
-            } },
-            { type = 'select', label = 'Permission', options = {
-                { value = "none", label = "None" },
-                { value = "TSAdmin.admin", label = "Admin" },
-                { value = "TSAdmin.FullAccess", label = "FullAccess" },
-                { value = "TSAdmin.OnlinePlyOptions", label = "Online Player Options" },
-                { value = "TSAdmin.OnlinePlyOptions.SendMessage", label = "Send Message" },
-                { value = "TSAdmin.OnlinePlyOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.OnlinePlyOptions.OpenInventory", label = "Open Inventory" },
-                { value = "TSAdmin.OnlinePlyOptions.SetJob", label = "Set Job" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItem", label = "GiveItem" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveInventoryItem", label = "Remove Inventory Item" },
-                { value = "TSAdmin.OnlinePlyOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveMoney", label = "Give Money" },
-                { value = "TSAdmin.OnlinePlyOptions.TPCar", label = "TP Into Vehicle" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveMoney", label = "Remove Money" },
-                { value = "TSAdmin.OnlinePlyOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.OnlinePlyOptions.Goto", label = "Goto" },
-                { value = "TSAdmin.OnlinePlyOptions.License", label = "License" },
-                { value = "TSAdmin.OnlinePlyOptions.Bring", label = "Bring" },
-                { value = "TSAdmin.OnlinePlyOptions.SetWaypoint", label = "Set Waypoint" },
-                { value = "TSAdmin.OnlinePlyOptions.PRINTID", label = "Print Identifiers" },
-                { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
-                { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
-                { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
-                { value = "TSAdmin.PlayerOptions", label = "Self Options" },
-                { value = "TSAdmin.PlayerOptions.God", label = "God" },
-                { value = "TSAdmin.PlayerOptions.Invisible", label = "Invisible" },
-                { value = "TSAdmin.PlayerOptions.Stamina", label = "Stamina" },
-                { value = "TSAdmin.PlayerOptions.FastRun", label = "Fast Run" },
-                { value = "TSAdmin.PlayerOptions.FastSwim", label = "Fast Swim" },
-                { value = "TSAdmin.PlayerOptions.SuperJump", label = "Super Jump" },
-                { value = "TSAdmin.PlayerOptions.NoRagdoll", label = "No Ragdoll" },
-                { value = "TSAdmin.PlayerOptions.NeverWanted", label = "Never Wanted" },
-                { value = "TSAdmin.PlayerOptions.StayInVeh", label = "Stay In Veh" },
-                { value = "TSAdmin.PlayerOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.PlayerOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.PlayerOptions.Armor", label = "Armor" },
-                { value = "TSAdmin.PlayerOptions.CleanClothes", label = "Clean Clothes" },
-                { value = "TSAdmin.PlayerOptions.WetClothes", label = "Wet Clothes" },
-                { value = "TSAdmin.PlayerOptions.DryClothes", label = "Dry Clothes" },
-                { value = "TSAdmin.PlayerOptions.Suicide", label = "Suicide" },
-                { value = "TSAdmin.PlayerOptions.Freeze", label = "Freeze Player" },
-                { value = "TSAdmin.PlayerOptions.Noclip", label = "Noclip" },
-                { value = "TSAdmin.PlayerOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.PlayerOptions.ChangePed", label = "Change Ped" },
-                { value = "TSAdmin.PlayerOptions.GiveCar", label = "Give Car" },
-                { value = "TSAdmin.PlayerOptions.DeleteCar", label = "Delete Car" },
-                { value = "TSAdmin.VehicleRelatedOptions", label = "Vehicle Related Options" },
-                { value = "TSAdmin.VehicleRelatedOptions.Spawner", label = "Vehicle Spawner" },
-                { value = "TSAdmin.VehicleRelatedOptions.Modmenu", label = "Modmenu" },
-                { value = "TSAdmin.VehicleRelatedOptions.Freeze", label = "Freeze Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.NumberPlate", label = "NumberPlate" },
-                { value = "TSAdmin.VehicleRelatedOptions.DoorMenu", label = "Door Menu" },
-                { value = "TSAdmin.VehicleRelatedOptions.MultiplierSpeed", label = "Multiplier Speed" },
-                { value = "TSAdmin.VehicleRelatedOptions.FlipVehicle", label = "Flip Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.DeleteVehicle", label = "Delete Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.InfiniteFuel", label = "Infinite Fuel" },
-                { value = "TSAdmin.VehicleRelatedOptions.NoBikeHelmet", label = "No Bike Helmet" },
-                { value = "TSAdmin.VehicleRelatedOptions.Godmode", label = "Vehicle Godmode" },
-                { value = "TSAdmin.VehicleRelatedOptions.Repair", label = "Repair Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.Wash", label = "Wash Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.KeepClean", label = "Keep Vehicle Clean" },
-                { value = "TSAdmin.VehicleRelatedOptions.SetDirt", label = "Set Dirt" },
-                { value = "TSAdmin.VehicleRelatedOptions.UnlockVehicle", label = "Unlock Vehicle" },
-                { value = "TSAdmin.MiscSettings", label = "Misc Settings" },
-                { value = "TSAdmin.MiscSettings.Teleport", label = "Teleport" },
-                { value = "TSAdmin.MiscSettings.ShowCoords", label = "Show Coords" },
-                { value = "TSAdmin.MiscSettings.ClearArea", label = "Clear Area" },
-                { value = "TSAdmin.MiscSettings.ThermalVision", label = "Thermal Vision" },
-                { value = "TSAdmin.MiscSettings.NightVision", label = "Night Vision" },
-                { value = "TSAdmin.MiscSettings.PlayerBlips", label = "Player Blips" },
-                { value = "TSAdmin.MiscSettings.PlayerNames", label = "Player Names" },
-                { value = "TSAdmin.MiscSettings.Timecycle", label = "Timecycle" },
-                { value = "TSAdmin.MiscSettings.JoinQNotif", label = "Join-Quit Notification" },
-                { value = "TSAdmin.MiscSettings.Kill", label = "Death Notification" },
-                { value = "TSAdmin.MiscSettings.Announce", label = "Announce" },
-                { value = "TSAdmin.MiscSettings.PropSpawn", label = "Prop Spawner (soon)" },
-                { value = "TSAdmin.MiscSettings.StaffChat", label = "Staff Chat" },
-                { value = "TSAdmin.MiscSettings.Relog", label = "Relog" },
-                { value = "TSAdmin.MiscSettings.Ban", label = "Ban Player" },
-                { value = "TSAdmin.MiscSettings.Unban", label = "Unban Player" },
-                { value = "TSAdmin.TrollMenu", label = "Troll Menu" },
-                { value = "TSAdmin.TrollMenu.Fart", label = "Fart" },
-                { value = "TSAdmin.TrollMenu.Truck", label = "Truck" },
-                { value = "TSAdmin.TrollMenu.Clown", label = "Clown" },
-                { value = "TSAdmin.TrollMenu.Merry", label = "Merry" },
-                { value = "TSAdmin.TrollMenu.Flash", label = "Flash" },
-                { value = "TSAdmin.TrollMenu.FakeSound", label = "Fake Sound" },
-                { value = "TSAdmin.TrollMenu.Lag", label = "Lag" },
-                { value = "TSAdmin.TrollMenu.BlowTyre", label = "Blow Tyre" },
-                { value = "TSAdmin.TrollMenu.Eject", label = "Eject" },
-                { value = "TSAdmin.TrollMenu.Crash", label = "Crash" },
-                { value = "TSAdmin.RockstarEditor", label = "Rockstar Editor" },
-            } },
-            { type = 'select', label = 'Permission', options = {
-                { value = "none", label = "None" },
-                { value = "TSAdmin.admin", label = "Admin" },
-                { value = "TSAdmin.FullAccess", label = "FullAccess" },
-                { value = "TSAdmin.OnlinePlyOptions", label = "Online Player Options" },
-                { value = "TSAdmin.OnlinePlyOptions.SendMessage", label = "Send Message" },
-                { value = "TSAdmin.OnlinePlyOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.OnlinePlyOptions.OpenInventory", label = "Open Inventory" },
-                { value = "TSAdmin.OnlinePlyOptions.SetJob", label = "Set Job" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItem", label = "GiveItem" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveInventoryItem", label = "Remove Inventory Item" },
-                { value = "TSAdmin.OnlinePlyOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveMoney", label = "Give Money" },
-                { value = "TSAdmin.OnlinePlyOptions.TPCar", label = "TP Into Vehicle" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveMoney", label = "Remove Money" },
-                { value = "TSAdmin.OnlinePlyOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.OnlinePlyOptions.Goto", label = "Goto" },
-                { value = "TSAdmin.OnlinePlyOptions.License", label = "License" },
-                { value = "TSAdmin.OnlinePlyOptions.Bring", label = "Bring" },
-                { value = "TSAdmin.OnlinePlyOptions.SetWaypoint", label = "Set Waypoint" },
-                { value = "TSAdmin.OnlinePlyOptions.PRINTID", label = "Print Identifiers" },
-                { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
-                { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
-                { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
-                { value = "TSAdmin.PlayerOptions", label = "Self Options" },
-                { value = "TSAdmin.PlayerOptions.God", label = "God" },
-                { value = "TSAdmin.PlayerOptions.Invisible", label = "Invisible" },
-                { value = "TSAdmin.PlayerOptions.Stamina", label = "Stamina" },
-                { value = "TSAdmin.PlayerOptions.FastRun", label = "Fast Run" },
-                { value = "TSAdmin.PlayerOptions.FastSwim", label = "Fast Swim" },
-                { value = "TSAdmin.PlayerOptions.SuperJump", label = "Super Jump" },
-                { value = "TSAdmin.PlayerOptions.NoRagdoll", label = "No Ragdoll" },
-                { value = "TSAdmin.PlayerOptions.NeverWanted", label = "Never Wanted" },
-                { value = "TSAdmin.PlayerOptions.StayInVeh", label = "Stay In Veh" },
-                { value = "TSAdmin.PlayerOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.PlayerOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.PlayerOptions.Armor", label = "Armor" },
-                { value = "TSAdmin.PlayerOptions.CleanClothes", label = "Clean Clothes" },
-                { value = "TSAdmin.PlayerOptions.WetClothes", label = "Wet Clothes" },
-                { value = "TSAdmin.PlayerOptions.DryClothes", label = "Dry Clothes" },
-                { value = "TSAdmin.PlayerOptions.Suicide", label = "Suicide" },
-                { value = "TSAdmin.PlayerOptions.Freeze", label = "Freeze Player" },
-                { value = "TSAdmin.PlayerOptions.Noclip", label = "Noclip" },
-                { value = "TSAdmin.PlayerOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.PlayerOptions.ChangePed", label = "Change Ped" },
-                { value = "TSAdmin.PlayerOptions.GiveCar", label = "Give Car" },
-                { value = "TSAdmin.PlayerOptions.DeleteCar", label = "Delete Car" },
-                { value = "TSAdmin.VehicleRelatedOptions", label = "Vehicle Related Options" },
-                { value = "TSAdmin.VehicleRelatedOptions.Spawner", label = "Vehicle Spawner" },
-                { value = "TSAdmin.VehicleRelatedOptions.Modmenu", label = "Modmenu" },
-                { value = "TSAdmin.VehicleRelatedOptions.Freeze", label = "Freeze Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.NumberPlate", label = "NumberPlate" },
-                { value = "TSAdmin.VehicleRelatedOptions.DoorMenu", label = "Door Menu" },
-                { value = "TSAdmin.VehicleRelatedOptions.MultiplierSpeed", label = "Multiplier Speed" },
-                { value = "TSAdmin.VehicleRelatedOptions.FlipVehicle", label = "Flip Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.DeleteVehicle", label = "Delete Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.InfiniteFuel", label = "Infinite Fuel" },
-                { value = "TSAdmin.VehicleRelatedOptions.NoBikeHelmet", label = "No Bike Helmet" },
-                { value = "TSAdmin.VehicleRelatedOptions.Godmode", label = "Vehicle Godmode" },
-                { value = "TSAdmin.VehicleRelatedOptions.Repair", label = "Repair Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.Wash", label = "Wash Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.KeepClean", label = "Keep Vehicle Clean" },
-                { value = "TSAdmin.VehicleRelatedOptions.SetDirt", label = "Set Dirt" },
-                { value = "TSAdmin.VehicleRelatedOptions.UnlockVehicle", label = "Unlock Vehicle" },
-                { value = "TSAdmin.MiscSettings", label = "Misc Settings" },
-                { value = "TSAdmin.MiscSettings.Teleport", label = "Teleport" },
-                { value = "TSAdmin.MiscSettings.ShowCoords", label = "Show Coords" },
-                { value = "TSAdmin.MiscSettings.ClearArea", label = "Clear Area" },
-                { value = "TSAdmin.MiscSettings.ThermalVision", label = "Thermal Vision" },
-                { value = "TSAdmin.MiscSettings.NightVision", label = "Night Vision" },
-                { value = "TSAdmin.MiscSettings.PlayerBlips", label = "Player Blips" },
-                { value = "TSAdmin.MiscSettings.PlayerNames", label = "Player Names" },
-                { value = "TSAdmin.MiscSettings.Timecycle", label = "Timecycle" },
-                { value = "TSAdmin.MiscSettings.JoinQNotif", label = "Join-Quit Notification" },
-                { value = "TSAdmin.MiscSettings.Kill", label = "Death Notification" },
-                { value = "TSAdmin.MiscSettings.Announce", label = "Announce" },
-                { value = "TSAdmin.MiscSettings.PropSpawn", label = "Prop Spawner (soon)" },
-                { value = "TSAdmin.MiscSettings.StaffChat", label = "Staff Chat" },
-                { value = "TSAdmin.MiscSettings.Relog", label = "Relog" },
-                { value = "TSAdmin.MiscSettings.Ban", label = "Ban Player" },
-                { value = "TSAdmin.MiscSettings.Unban", label = "Unban Player" },
-                { value = "TSAdmin.TrollMenu", label = "Troll Menu" },
-                { value = "TSAdmin.TrollMenu.Fart", label = "Fart" },
-                { value = "TSAdmin.TrollMenu.Truck", label = "Truck" },
-                { value = "TSAdmin.TrollMenu.Clown", label = "Clown" },
-                { value = "TSAdmin.TrollMenu.Merry", label = "Merry" },
-                { value = "TSAdmin.TrollMenu.Flash", label = "Flash" },
-                { value = "TSAdmin.TrollMenu.FakeSound", label = "Fake Sound" },
-                { value = "TSAdmin.TrollMenu.Lag", label = "Lag" },
-                { value = "TSAdmin.TrollMenu.BlowTyre", label = "Blow Tyre" },
-                { value = "TSAdmin.TrollMenu.Eject", label = "Eject" },
-                { value = "TSAdmin.TrollMenu.Crash", label = "Crash" },
-                { value = "TSAdmin.RockstarEditor", label = "Rockstar Editor" },
-            } },
-        })
-        TriggerServerEvent('ts-adminmenu:server:AddPerms', input)
-    end
-end)
-
-RegisterCommand('removetsperms', function(source, args, raw)
-    if IsPlayerAllowed('TSAdmin.FullAccess') then
-        local input = lib.inputDialog('TS Permission Manager', {
-            { type = "input", label = "Player ID" },
-            { type = 'select', label = 'Permission', options = {
-                { value = "none", label = "None" },
-                { value = "TSAdmin.admin", label = "Admin" },
-                { value = "TSAdmin.FullAccess", label = "FullAccess" },
-                { value = "TSAdmin.OnlinePlyOptions", label = "Online Player Options" },
-                { value = "TSAdmin.OnlinePlyOptions.SendMessage", label = "Send Message" },
-                { value = "TSAdmin.OnlinePlyOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.OnlinePlyOptions.OpenInventory", label = "Open Inventory" },
-                { value = "TSAdmin.OnlinePlyOptions.SetJob", label = "Set Job" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItem", label = "GiveItem" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveInventoryItem", label = "Remove Inventory Item" },
-                { value = "TSAdmin.OnlinePlyOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveMoney", label = "Give Money" },
-                { value = "TSAdmin.OnlinePlyOptions.TPCar", label = "TP Into Vehicle" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveMoney", label = "Remove Money" },
-                { value = "TSAdmin.OnlinePlyOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.OnlinePlyOptions.Goto", label = "Goto" },
-                { value = "TSAdmin.OnlinePlyOptions.License", label = "License" },
-                { value = "TSAdmin.OnlinePlyOptions.Bring", label = "Bring" },
-                { value = "TSAdmin.OnlinePlyOptions.SetWaypoint", label = "Set Waypoint" },
-                { value = "TSAdmin.OnlinePlyOptions.PRINTID", label = "Print Identifiers" },
-                { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
-                { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
-                { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
-                { value = "TSAdmin.PlayerOptions", label = "Self Options" },
-                { value = "TSAdmin.PlayerOptions.God", label = "God" },
-                { value = "TSAdmin.PlayerOptions.Invisible", label = "Invisible" },
-                { value = "TSAdmin.PlayerOptions.Stamina", label = "Stamina" },
-                { value = "TSAdmin.PlayerOptions.FastRun", label = "Fast Run" },
-                { value = "TSAdmin.PlayerOptions.FastSwim", label = "Fast Swim" },
-                { value = "TSAdmin.PlayerOptions.SuperJump", label = "Super Jump" },
-                { value = "TSAdmin.PlayerOptions.NoRagdoll", label = "No Ragdoll" },
-                { value = "TSAdmin.PlayerOptions.NeverWanted", label = "Never Wanted" },
-                { value = "TSAdmin.PlayerOptions.StayInVeh", label = "Stay In Veh" },
-                { value = "TSAdmin.PlayerOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.PlayerOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.PlayerOptions.Armor", label = "Armor" },
-                { value = "TSAdmin.PlayerOptions.CleanClothes", label = "Clean Clothes" },
-                { value = "TSAdmin.PlayerOptions.WetClothes", label = "Wet Clothes" },
-                { value = "TSAdmin.PlayerOptions.DryClothes", label = "Dry Clothes" },
-                { value = "TSAdmin.PlayerOptions.Suicide", label = "Suicide" },
-                { value = "TSAdmin.PlayerOptions.Freeze", label = "Freeze Player" },
-                { value = "TSAdmin.PlayerOptions.Noclip", label = "Noclip" },
-                { value = "TSAdmin.PlayerOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.PlayerOptions.ChangePed", label = "Change Ped" },
-                { value = "TSAdmin.PlayerOptions.GiveCar", label = "Give Car" },
-                { value = "TSAdmin.PlayerOptions.DeleteCar", label = "Delete Car" },
-                { value = "TSAdmin.VehicleRelatedOptions", label = "Vehicle Related Options" },
-                { value = "TSAdmin.VehicleRelatedOptions.Spawner", label = "Vehicle Spawner" },
-                { value = "TSAdmin.VehicleRelatedOptions.Modmenu", label = "Modmenu" },
-                { value = "TSAdmin.VehicleRelatedOptions.Freeze", label = "Freeze Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.NumberPlate", label = "NumberPlate" },
-                { value = "TSAdmin.VehicleRelatedOptions.DoorMenu", label = "Door Menu" },
-                { value = "TSAdmin.VehicleRelatedOptions.MultiplierSpeed", label = "Multiplier Speed" },
-                { value = "TSAdmin.VehicleRelatedOptions.FlipVehicle", label = "Flip Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.DeleteVehicle", label = "Delete Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.InfiniteFuel", label = "Infinite Fuel" },
-                { value = "TSAdmin.VehicleRelatedOptions.NoBikeHelmet", label = "No Bike Helmet" },
-                { value = "TSAdmin.VehicleRelatedOptions.Godmode", label = "Vehicle Godmode" },
-                { value = "TSAdmin.VehicleRelatedOptions.Repair", label = "Repair Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.Wash", label = "Wash Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.KeepClean", label = "Keep Vehicle Clean" },
-                { value = "TSAdmin.VehicleRelatedOptions.SetDirt", label = "Set Dirt" },
-                { value = "TSAdmin.VehicleRelatedOptions.UnlockVehicle", label = "Unlock Vehicle" },
-                { value = "TSAdmin.MiscSettings", label = "Misc Settings" },
-                { value = "TSAdmin.MiscSettings.Teleport", label = "Teleport" },
-                { value = "TSAdmin.MiscSettings.ShowCoords", label = "Show Coords" },
-                { value = "TSAdmin.MiscSettings.ClearArea", label = "Clear Area" },
-                { value = "TSAdmin.MiscSettings.ThermalVision", label = "Thermal Vision" },
-                { value = "TSAdmin.MiscSettings.NightVision", label = "Night Vision" },
-                { value = "TSAdmin.MiscSettings.PlayerBlips", label = "Player Blips" },
-                { value = "TSAdmin.MiscSettings.PlayerNames", label = "Player Names" },
-                { value = "TSAdmin.MiscSettings.Timecycle", label = "Timecycle" },
-                { value = "TSAdmin.MiscSettings.JoinQNotif", label = "Join-Quit Notification" },
-                { value = "TSAdmin.MiscSettings.Kill", label = "Death Notification" },
-                { value = "TSAdmin.MiscSettings.Announce", label = "Announce" },
-                { value = "TSAdmin.MiscSettings.PropSpawn", label = "Prop Spawner (soon)" },
-                { value = "TSAdmin.MiscSettings.StaffChat", label = "Staff Chat" },
-                { value = "TSAdmin.MiscSettings.Relog", label = "Relog" },
-                { value = "TSAdmin.MiscSettings.Ban", label = "Ban Player" },
-                { value = "TSAdmin.MiscSettings.Unban", label = "Unban Player" },
-                { value = "TSAdmin.TrollMenu", label = "Troll Menu" },
-                { value = "TSAdmin.TrollMenu.Fart", label = "Fart" },
-                { value = "TSAdmin.TrollMenu.Truck", label = "Truck" },
-                { value = "TSAdmin.TrollMenu.Clown", label = "Clown" },
-                { value = "TSAdmin.TrollMenu.Merry", label = "Merry" },
-                { value = "TSAdmin.TrollMenu.Flash", label = "Flash" },
-                { value = "TSAdmin.TrollMenu.FakeSound", label = "Fake Sound" },
-                { value = "TSAdmin.TrollMenu.Lag", label = "Lag" },
-                { value = "TSAdmin.TrollMenu.BlowTyre", label = "Blow Tyre" },
-                { value = "TSAdmin.TrollMenu.Eject", label = "Eject" },
-                { value = "TSAdmin.TrollMenu.Crash", label = "Crash" },
-                { value = "TSAdmin.RockstarEditor", label = "Rockstar Editor" },
-            } },
-            { type = 'select', label = 'Permission', options = {
-                { value = "none", label = "None" },
-                { value = "TSAdmin.admin", label = "Admin" },
-                { value = "TSAdmin.FullAccess", label = "FullAccess" },
-                { value = "TSAdmin.OnlinePlyOptions", label = "Online Player Options" },
-                { value = "TSAdmin.OnlinePlyOptions.SendMessage", label = "Send Message" },
-                { value = "TSAdmin.OnlinePlyOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.OnlinePlyOptions.OpenInventory", label = "Open Inventory" },
-                { value = "TSAdmin.OnlinePlyOptions.SetJob", label = "Set Job" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItem", label = "GiveItem" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveInventoryItem", label = "Remove Inventory Item" },
-                { value = "TSAdmin.OnlinePlyOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveMoney", label = "Give Money" },
-                { value = "TSAdmin.OnlinePlyOptions.TPCar", label = "TP Into Vehicle" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveMoney", label = "Remove Money" },
-                { value = "TSAdmin.OnlinePlyOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.OnlinePlyOptions.Goto", label = "Goto" },
-                { value = "TSAdmin.OnlinePlyOptions.License", label = "License" },
-                { value = "TSAdmin.OnlinePlyOptions.Bring", label = "Bring" },
-                { value = "TSAdmin.OnlinePlyOptions.SetWaypoint", label = "Set Waypoint" },
-                { value = "TSAdmin.OnlinePlyOptions.PRINTID", label = "Print Identifiers" },
-                { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
-                { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
-                { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
-                { value = "TSAdmin.PlayerOptions", label = "Self Options" },
-                { value = "TSAdmin.PlayerOptions.God", label = "God" },
-                { value = "TSAdmin.PlayerOptions.Invisible", label = "Invisible" },
-                { value = "TSAdmin.PlayerOptions.Stamina", label = "Stamina" },
-                { value = "TSAdmin.PlayerOptions.FastRun", label = "Fast Run" },
-                { value = "TSAdmin.PlayerOptions.FastSwim", label = "Fast Swim" },
-                { value = "TSAdmin.PlayerOptions.SuperJump", label = "Super Jump" },
-                { value = "TSAdmin.PlayerOptions.NoRagdoll", label = "No Ragdoll" },
-                { value = "TSAdmin.PlayerOptions.NeverWanted", label = "Never Wanted" },
-                { value = "TSAdmin.PlayerOptions.StayInVeh", label = "Stay In Veh" },
-                { value = "TSAdmin.PlayerOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.PlayerOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.PlayerOptions.Armor", label = "Armor" },
-                { value = "TSAdmin.PlayerOptions.CleanClothes", label = "Clean Clothes" },
-                { value = "TSAdmin.PlayerOptions.WetClothes", label = "Wet Clothes" },
-                { value = "TSAdmin.PlayerOptions.DryClothes", label = "Dry Clothes" },
-                { value = "TSAdmin.PlayerOptions.Suicide", label = "Suicide" },
-                { value = "TSAdmin.PlayerOptions.Freeze", label = "Freeze Player" },
-                { value = "TSAdmin.PlayerOptions.Noclip", label = "Noclip" },
-                { value = "TSAdmin.PlayerOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.PlayerOptions.ChangePed", label = "Change Ped" },
-                { value = "TSAdmin.PlayerOptions.GiveCar", label = "Give Car" },
-                { value = "TSAdmin.PlayerOptions.DeleteCar", label = "Delete Car" },
-                { value = "TSAdmin.VehicleRelatedOptions", label = "Vehicle Related Options" },
-                { value = "TSAdmin.VehicleRelatedOptions.Spawner", label = "Vehicle Spawner" },
-                { value = "TSAdmin.VehicleRelatedOptions.Modmenu", label = "Modmenu" },
-                { value = "TSAdmin.VehicleRelatedOptions.Freeze", label = "Freeze Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.NumberPlate", label = "NumberPlate" },
-                { value = "TSAdmin.VehicleRelatedOptions.DoorMenu", label = "Door Menu" },
-                { value = "TSAdmin.VehicleRelatedOptions.MultiplierSpeed", label = "Multiplier Speed" },
-                { value = "TSAdmin.VehicleRelatedOptions.FlipVehicle", label = "Flip Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.DeleteVehicle", label = "Delete Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.InfiniteFuel", label = "Infinite Fuel" },
-                { value = "TSAdmin.VehicleRelatedOptions.NoBikeHelmet", label = "No Bike Helmet" },
-                { value = "TSAdmin.VehicleRelatedOptions.Godmode", label = "Vehicle Godmode" },
-                { value = "TSAdmin.VehicleRelatedOptions.Repair", label = "Repair Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.Wash", label = "Wash Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.KeepClean", label = "Keep Vehicle Clean" },
-                { value = "TSAdmin.VehicleRelatedOptions.SetDirt", label = "Set Dirt" },
-                { value = "TSAdmin.VehicleRelatedOptions.UnlockVehicle", label = "Unlock Vehicle" },
-                { value = "TSAdmin.MiscSettings", label = "Misc Settings" },
-                { value = "TSAdmin.MiscSettings.Teleport", label = "Teleport" },
-                { value = "TSAdmin.MiscSettings.ShowCoords", label = "Show Coords" },
-                { value = "TSAdmin.MiscSettings.ClearArea", label = "Clear Area" },
-                { value = "TSAdmin.MiscSettings.ThermalVision", label = "Thermal Vision" },
-                { value = "TSAdmin.MiscSettings.NightVision", label = "Night Vision" },
-                { value = "TSAdmin.MiscSettings.PlayerBlips", label = "Player Blips" },
-                { value = "TSAdmin.MiscSettings.PlayerNames", label = "Player Names" },
-                { value = "TSAdmin.MiscSettings.Timecycle", label = "Timecycle" },
-                { value = "TSAdmin.MiscSettings.JoinQNotif", label = "Join-Quit Notification" },
-                { value = "TSAdmin.MiscSettings.Kill", label = "Death Notification" },
-                { value = "TSAdmin.MiscSettings.Announce", label = "Announce" },
-                { value = "TSAdmin.MiscSettings.PropSpawn", label = "Prop Spawner (soon)" },
-                { value = "TSAdmin.MiscSettings.StaffChat", label = "Staff Chat" },
-                { value = "TSAdmin.MiscSettings.Relog", label = "Relog" },
-                { value = "TSAdmin.MiscSettings.Ban", label = "Ban Player" },
-                { value = "TSAdmin.MiscSettings.Unban", label = "Unban Player" },
-                { value = "TSAdmin.TrollMenu", label = "Troll Menu" },
-                { value = "TSAdmin.TrollMenu.Fart", label = "Fart" },
-                { value = "TSAdmin.TrollMenu.Truck", label = "Truck" },
-                { value = "TSAdmin.TrollMenu.Clown", label = "Clown" },
-                { value = "TSAdmin.TrollMenu.Merry", label = "Merry" },
-                { value = "TSAdmin.TrollMenu.Flash", label = "Flash" },
-                { value = "TSAdmin.TrollMenu.FakeSound", label = "Fake Sound" },
-                { value = "TSAdmin.TrollMenu.Lag", label = "Lag" },
-                { value = "TSAdmin.TrollMenu.BlowTyre", label = "Blow Tyre" },
-                { value = "TSAdmin.TrollMenu.Eject", label = "Eject" },
-                { value = "TSAdmin.TrollMenu.Crash", label = "Crash" },
-                { value = "TSAdmin.RockstarEditor", label = "Rockstar Editor" },
-            } },
-            { type = 'select', label = 'Permission', options = {
-                { value = "none", label = "None" },
-                { value = "TSAdmin.admin", label = "Admin" },
-                { value = "TSAdmin.FullAccess", label = "FullAccess" },
-                { value = "TSAdmin.OnlinePlyOptions", label = "Online Player Options" },
-                { value = "TSAdmin.OnlinePlyOptions.SendMessage", label = "Send Message" },
-                { value = "TSAdmin.OnlinePlyOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.OnlinePlyOptions.OpenInventory", label = "Open Inventory" },
-                { value = "TSAdmin.OnlinePlyOptions.SetJob", label = "Set Job" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItem", label = "GiveItem" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveInventoryItem", label = "Remove Inventory Item" },
-                { value = "TSAdmin.OnlinePlyOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveMoney", label = "Give Money" },
-                { value = "TSAdmin.OnlinePlyOptions.TPCar", label = "TP Into Vehicle" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveMoney", label = "Remove Money" },
-                { value = "TSAdmin.OnlinePlyOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.OnlinePlyOptions.Goto", label = "Goto" },
-                { value = "TSAdmin.OnlinePlyOptions.License", label = "License" },
-                { value = "TSAdmin.OnlinePlyOptions.Bring", label = "Bring" },
-                { value = "TSAdmin.OnlinePlyOptions.SetWaypoint", label = "Set Waypoint" },
-                { value = "TSAdmin.OnlinePlyOptions.PRINTID", label = "Print Identifiers" },
-                { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
-                { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
-                { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
-                { value = "TSAdmin.PlayerOptions", label = "Self Options" },
-                { value = "TSAdmin.PlayerOptions.God", label = "God" },
-                { value = "TSAdmin.PlayerOptions.Invisible", label = "Invisible" },
-                { value = "TSAdmin.PlayerOptions.Stamina", label = "Stamina" },
-                { value = "TSAdmin.PlayerOptions.FastRun", label = "Fast Run" },
-                { value = "TSAdmin.PlayerOptions.FastSwim", label = "Fast Swim" },
-                { value = "TSAdmin.PlayerOptions.SuperJump", label = "Super Jump" },
-                { value = "TSAdmin.PlayerOptions.NoRagdoll", label = "No Ragdoll" },
-                { value = "TSAdmin.PlayerOptions.NeverWanted", label = "Never Wanted" },
-                { value = "TSAdmin.PlayerOptions.StayInVeh", label = "Stay In Veh" },
-                { value = "TSAdmin.PlayerOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.PlayerOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.PlayerOptions.Armor", label = "Armor" },
-                { value = "TSAdmin.PlayerOptions.CleanClothes", label = "Clean Clothes" },
-                { value = "TSAdmin.PlayerOptions.WetClothes", label = "Wet Clothes" },
-                { value = "TSAdmin.PlayerOptions.DryClothes", label = "Dry Clothes" },
-                { value = "TSAdmin.PlayerOptions.Suicide", label = "Suicide" },
-                { value = "TSAdmin.PlayerOptions.Freeze", label = "Freeze Player" },
-                { value = "TSAdmin.PlayerOptions.Noclip", label = "Noclip" },
-                { value = "TSAdmin.PlayerOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.PlayerOptions.ChangePed", label = "Change Ped" },
-                { value = "TSAdmin.PlayerOptions.GiveCar", label = "Give Car" },
-                { value = "TSAdmin.PlayerOptions.DeleteCar", label = "Delete Car" },
-                { value = "TSAdmin.VehicleRelatedOptions", label = "Vehicle Related Options" },
-                { value = "TSAdmin.VehicleRelatedOptions.Spawner", label = "Vehicle Spawner" },
-                { value = "TSAdmin.VehicleRelatedOptions.Modmenu", label = "Modmenu" },
-                { value = "TSAdmin.VehicleRelatedOptions.Freeze", label = "Freeze Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.NumberPlate", label = "NumberPlate" },
-                { value = "TSAdmin.VehicleRelatedOptions.DoorMenu", label = "Door Menu" },
-                { value = "TSAdmin.VehicleRelatedOptions.MultiplierSpeed", label = "Multiplier Speed" },
-                { value = "TSAdmin.VehicleRelatedOptions.FlipVehicle", label = "Flip Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.DeleteVehicle", label = "Delete Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.InfiniteFuel", label = "Infinite Fuel" },
-                { value = "TSAdmin.VehicleRelatedOptions.NoBikeHelmet", label = "No Bike Helmet" },
-                { value = "TSAdmin.VehicleRelatedOptions.Godmode", label = "Vehicle Godmode" },
-                { value = "TSAdmin.VehicleRelatedOptions.Repair", label = "Repair Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.Wash", label = "Wash Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.KeepClean", label = "Keep Vehicle Clean" },
-                { value = "TSAdmin.VehicleRelatedOptions.SetDirt", label = "Set Dirt" },
-                { value = "TSAdmin.VehicleRelatedOptions.UnlockVehicle", label = "Unlock Vehicle" },
-                { value = "TSAdmin.MiscSettings", label = "Misc Settings" },
-                { value = "TSAdmin.MiscSettings.Teleport", label = "Teleport" },
-                { value = "TSAdmin.MiscSettings.ShowCoords", label = "Show Coords" },
-                { value = "TSAdmin.MiscSettings.ClearArea", label = "Clear Area" },
-                { value = "TSAdmin.MiscSettings.ThermalVision", label = "Thermal Vision" },
-                { value = "TSAdmin.MiscSettings.NightVision", label = "Night Vision" },
-                { value = "TSAdmin.MiscSettings.PlayerBlips", label = "Player Blips" },
-                { value = "TSAdmin.MiscSettings.PlayerNames", label = "Player Names" },
-                { value = "TSAdmin.MiscSettings.Timecycle", label = "Timecycle" },
-                { value = "TSAdmin.MiscSettings.JoinQNotif", label = "Join-Quit Notification" },
-                { value = "TSAdmin.MiscSettings.Kill", label = "Death Notification" },
-                { value = "TSAdmin.MiscSettings.Announce", label = "Announce" },
-                { value = "TSAdmin.MiscSettings.PropSpawn", label = "Prop Spawner (soon)" },
-                { value = "TSAdmin.MiscSettings.StaffChat", label = "Staff Chat" },
-                { value = "TSAdmin.MiscSettings.Relog", label = "Relog" },
-                { value = "TSAdmin.MiscSettings.Ban", label = "Ban Player" },
-                { value = "TSAdmin.MiscSettings.Unban", label = "Unban Player" },
-                { value = "TSAdmin.TrollMenu", label = "Troll Menu" },
-                { value = "TSAdmin.TrollMenu.Fart", label = "Fart" },
-                { value = "TSAdmin.TrollMenu.Truck", label = "Truck" },
-                { value = "TSAdmin.TrollMenu.Clown", label = "Clown" },
-                { value = "TSAdmin.TrollMenu.Merry", label = "Merry" },
-                { value = "TSAdmin.TrollMenu.Flash", label = "Flash" },
-                { value = "TSAdmin.TrollMenu.FakeSound", label = "Fake Sound" },
-                { value = "TSAdmin.TrollMenu.Lag", label = "Lag" },
-                { value = "TSAdmin.TrollMenu.BlowTyre", label = "Blow Tyre" },
-                { value = "TSAdmin.TrollMenu.Eject", label = "Eject" },
-                { value = "TSAdmin.TrollMenu.Crash", label = "Crash" },
-                { value = "TSAdmin.RockstarEditor", label = "Rockstar Editor" },
-            } },
-            { type = 'select', label = 'Permission', options = {
-                { value = "none", label = "None" },
-                { value = "TSAdmin.admin", label = "Admin" },
-                { value = "TSAdmin.FullAccess", label = "FullAccess" },
-                { value = "TSAdmin.OnlinePlyOptions", label = "Online Player Options" },
-                { value = "TSAdmin.OnlinePlyOptions.SendMessage", label = "Send Message" },
-                { value = "TSAdmin.OnlinePlyOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.OnlinePlyOptions.OpenInventory", label = "Open Inventory" },
-                { value = "TSAdmin.OnlinePlyOptions.SetJob", label = "Set Job" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItem", label = "GiveItem" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveInventoryItem", label = "Remove Inventory Item" },
-                { value = "TSAdmin.OnlinePlyOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveMoney", label = "Give Money" },
-                { value = "TSAdmin.OnlinePlyOptions.TPCar", label = "TP Into Vehicle" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveMoney", label = "Remove Money" },
-                { value = "TSAdmin.OnlinePlyOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.OnlinePlyOptions.Goto", label = "Goto" },
-                { value = "TSAdmin.OnlinePlyOptions.License", label = "License" },
-                { value = "TSAdmin.OnlinePlyOptions.Bring", label = "Bring" },
-                { value = "TSAdmin.OnlinePlyOptions.SetWaypoint", label = "Set Waypoint" },
-                { value = "TSAdmin.OnlinePlyOptions.PRINTID", label = "Print Identifiers" },
-                { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
-                { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
-                { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
-                { value = "TSAdmin.PlayerOptions", label = "Self Options" },
-                { value = "TSAdmin.PlayerOptions.God", label = "God" },
-                { value = "TSAdmin.PlayerOptions.Invisible", label = "Invisible" },
-                { value = "TSAdmin.PlayerOptions.Stamina", label = "Stamina" },
-                { value = "TSAdmin.PlayerOptions.FastRun", label = "Fast Run" },
-                { value = "TSAdmin.PlayerOptions.FastSwim", label = "Fast Swim" },
-                { value = "TSAdmin.PlayerOptions.SuperJump", label = "Super Jump" },
-                { value = "TSAdmin.PlayerOptions.NoRagdoll", label = "No Ragdoll" },
-                { value = "TSAdmin.PlayerOptions.NeverWanted", label = "Never Wanted" },
-                { value = "TSAdmin.PlayerOptions.StayInVeh", label = "Stay In Veh" },
-                { value = "TSAdmin.PlayerOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.PlayerOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.PlayerOptions.Armor", label = "Armor" },
-                { value = "TSAdmin.PlayerOptions.CleanClothes", label = "Clean Clothes" },
-                { value = "TSAdmin.PlayerOptions.WetClothes", label = "Wet Clothes" },
-                { value = "TSAdmin.PlayerOptions.DryClothes", label = "Dry Clothes" },
-                { value = "TSAdmin.PlayerOptions.Suicide", label = "Suicide" },
-                { value = "TSAdmin.PlayerOptions.Freeze", label = "Freeze Player" },
-                { value = "TSAdmin.PlayerOptions.Noclip", label = "Noclip" },
-                { value = "TSAdmin.PlayerOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.PlayerOptions.ChangePed", label = "Change Ped" },
-                { value = "TSAdmin.PlayerOptions.GiveCar", label = "Give Car" },
-                { value = "TSAdmin.PlayerOptions.DeleteCar", label = "Delete Car" },
-                { value = "TSAdmin.VehicleRelatedOptions", label = "Vehicle Related Options" },
-                { value = "TSAdmin.VehicleRelatedOptions.Spawner", label = "Vehicle Spawner" },
-                { value = "TSAdmin.VehicleRelatedOptions.Modmenu", label = "Modmenu" },
-                { value = "TSAdmin.VehicleRelatedOptions.Freeze", label = "Freeze Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.NumberPlate", label = "NumberPlate" },
-                { value = "TSAdmin.VehicleRelatedOptions.DoorMenu", label = "Door Menu" },
-                { value = "TSAdmin.VehicleRelatedOptions.MultiplierSpeed", label = "Multiplier Speed" },
-                { value = "TSAdmin.VehicleRelatedOptions.FlipVehicle", label = "Flip Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.DeleteVehicle", label = "Delete Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.InfiniteFuel", label = "Infinite Fuel" },
-                { value = "TSAdmin.VehicleRelatedOptions.NoBikeHelmet", label = "No Bike Helmet" },
-                { value = "TSAdmin.VehicleRelatedOptions.Godmode", label = "Vehicle Godmode" },
-                { value = "TSAdmin.VehicleRelatedOptions.Repair", label = "Repair Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.Wash", label = "Wash Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.KeepClean", label = "Keep Vehicle Clean" },
-                { value = "TSAdmin.VehicleRelatedOptions.SetDirt", label = "Set Dirt" },
-                { value = "TSAdmin.VehicleRelatedOptions.UnlockVehicle", label = "Unlock Vehicle" },
-                { value = "TSAdmin.MiscSettings", label = "Misc Settings" },
-                { value = "TSAdmin.MiscSettings.Teleport", label = "Teleport" },
-                { value = "TSAdmin.MiscSettings.ShowCoords", label = "Show Coords" },
-                { value = "TSAdmin.MiscSettings.ClearArea", label = "Clear Area" },
-                { value = "TSAdmin.MiscSettings.ThermalVision", label = "Thermal Vision" },
-                { value = "TSAdmin.MiscSettings.NightVision", label = "Night Vision" },
-                { value = "TSAdmin.MiscSettings.PlayerBlips", label = "Player Blips" },
-                { value = "TSAdmin.MiscSettings.PlayerNames", label = "Player Names" },
-                { value = "TSAdmin.MiscSettings.Timecycle", label = "Timecycle" },
-                { value = "TSAdmin.MiscSettings.JoinQNotif", label = "Join-Quit Notification" },
-                { value = "TSAdmin.MiscSettings.Kill", label = "Death Notification" },
-                { value = "TSAdmin.MiscSettings.Announce", label = "Announce" },
-                { value = "TSAdmin.MiscSettings.PropSpawn", label = "Prop Spawner (soon)" },
-                { value = "TSAdmin.MiscSettings.StaffChat", label = "Staff Chat" },
-                { value = "TSAdmin.MiscSettings.Relog", label = "Relog" },
-                { value = "TSAdmin.MiscSettings.Ban", label = "Ban Player" },
-                { value = "TSAdmin.MiscSettings.Unban", label = "Unban Player" },
-                { value = "TSAdmin.TrollMenu", label = "Troll Menu" },
-                { value = "TSAdmin.TrollMenu.Fart", label = "Fart" },
-                { value = "TSAdmin.TrollMenu.Truck", label = "Truck" },
-                { value = "TSAdmin.TrollMenu.Clown", label = "Clown" },
-                { value = "TSAdmin.TrollMenu.Merry", label = "Merry" },
-                { value = "TSAdmin.TrollMenu.Flash", label = "Flash" },
-                { value = "TSAdmin.TrollMenu.FakeSound", label = "Fake Sound" },
-                { value = "TSAdmin.TrollMenu.Lag", label = "Lag" },
-                { value = "TSAdmin.TrollMenu.BlowTyre", label = "Blow Tyre" },
-                { value = "TSAdmin.TrollMenu.Eject", label = "Eject" },
-                { value = "TSAdmin.TrollMenu.Crash", label = "Crash" },
-                { value = "TSAdmin.RockstarEditor", label = "Rockstar Editor" },
-            } },
-            { type = 'select', label = 'Permission', options = {
-                { value = "none", label = "None" },
-                { value = "TSAdmin.admin", label = "Admin" },
-                { value = "TSAdmin.FullAccess", label = "FullAccess" },
-                { value = "TSAdmin.OnlinePlyOptions", label = "Online Player Options" },
-                { value = "TSAdmin.OnlinePlyOptions.SendMessage", label = "Send Message" },
-                { value = "TSAdmin.OnlinePlyOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.OnlinePlyOptions.OpenInventory", label = "Open Inventory" },
-                { value = "TSAdmin.OnlinePlyOptions.SetJob", label = "Set Job" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItem", label = "GiveItem" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveInventoryItem", label = "Remove Inventory Item" },
-                { value = "TSAdmin.OnlinePlyOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveMoney", label = "Give Money" },
-                { value = "TSAdmin.OnlinePlyOptions.TPCar", label = "TP Into Vehicle" },
-                { value = "TSAdmin.OnlinePlyOptions.RemoveMoney", label = "Remove Money" },
-                { value = "TSAdmin.OnlinePlyOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.OnlinePlyOptions.Goto", label = "Goto" },
-                { value = "TSAdmin.OnlinePlyOptions.License", label = "License" },
-                { value = "TSAdmin.OnlinePlyOptions.Bring", label = "Bring" },
-                { value = "TSAdmin.OnlinePlyOptions.SetWaypoint", label = "Set Waypoint" },
-                { value = "TSAdmin.OnlinePlyOptions.PRINTID", label = "Print Identifiers" },
-                { value = "TSAdmin.OnlinePlyOptions.KillPlayer", label = "Kill Player" },
-                { value = "TSAdmin.OnlinePlyOptions.KickPlayer", label = "Kick Player" },
-                { value = "TSAdmin.OnlinePlyOptions.Spectate", label = "Spectate" },
-                { value = "TSAdmin.OnlinePlyOptions.GiveItemName", label = "Give Item (code)" },
-                { value = "TSAdmin.PlayerOptions", label = "Self Options" },
-                { value = "TSAdmin.PlayerOptions.God", label = "God" },
-                { value = "TSAdmin.PlayerOptions.Invisible", label = "Invisible" },
-                { value = "TSAdmin.PlayerOptions.Stamina", label = "Stamina" },
-                { value = "TSAdmin.PlayerOptions.FastRun", label = "Fast Run" },
-                { value = "TSAdmin.PlayerOptions.FastSwim", label = "Fast Swim" },
-                { value = "TSAdmin.PlayerOptions.SuperJump", label = "Super Jump" },
-                { value = "TSAdmin.PlayerOptions.NoRagdoll", label = "No Ragdoll" },
-                { value = "TSAdmin.PlayerOptions.NeverWanted", label = "Never Wanted" },
-                { value = "TSAdmin.PlayerOptions.StayInVeh", label = "Stay In Veh" },
-                { value = "TSAdmin.PlayerOptions.Heal", label = "Heal" },
-                { value = "TSAdmin.PlayerOptions.Revive", label = "Revive" },
-                { value = "TSAdmin.PlayerOptions.Armor", label = "Armor" },
-                { value = "TSAdmin.PlayerOptions.CleanClothes", label = "Clean Clothes" },
-                { value = "TSAdmin.PlayerOptions.WetClothes", label = "Wet Clothes" },
-                { value = "TSAdmin.PlayerOptions.DryClothes", label = "Dry Clothes" },
-                { value = "TSAdmin.PlayerOptions.Suicide", label = "Suicide" },
-                { value = "TSAdmin.PlayerOptions.Freeze", label = "Freeze Player" },
-                { value = "TSAdmin.PlayerOptions.Noclip", label = "Noclip" },
-                { value = "TSAdmin.PlayerOptions.ChangeSkin", label = "Change Skin" },
-                { value = "TSAdmin.PlayerOptions.ChangePed", label = "Change Ped" },
-                { value = "TSAdmin.PlayerOptions.GiveCar", label = "Give Car" },
-                { value = "TSAdmin.PlayerOptions.DeleteCar", label = "Delete Car" },
-                { value = "TSAdmin.VehicleRelatedOptions", label = "Vehicle Related Options" },
-                { value = "TSAdmin.VehicleRelatedOptions.Spawner", label = "Vehicle Spawner" },
-                { value = "TSAdmin.VehicleRelatedOptions.Modmenu", label = "Modmenu" },
-                { value = "TSAdmin.VehicleRelatedOptions.Freeze", label = "Freeze Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.NumberPlate", label = "NumberPlate" },
-                { value = "TSAdmin.VehicleRelatedOptions.DoorMenu", label = "Door Menu" },
-                { value = "TSAdmin.VehicleRelatedOptions.MultiplierSpeed", label = "Multiplier Speed" },
-                { value = "TSAdmin.VehicleRelatedOptions.FlipVehicle", label = "Flip Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.DeleteVehicle", label = "Delete Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.InfiniteFuel", label = "Infinite Fuel" },
-                { value = "TSAdmin.VehicleRelatedOptions.NoBikeHelmet", label = "No Bike Helmet" },
-                { value = "TSAdmin.VehicleRelatedOptions.Godmode", label = "Vehicle Godmode" },
-                { value = "TSAdmin.VehicleRelatedOptions.Repair", label = "Repair Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.Wash", label = "Wash Vehicle" },
-                { value = "TSAdmin.VehicleRelatedOptions.KeepClean", label = "Keep Vehicle Clean" },
-                { value = "TSAdmin.VehicleRelatedOptions.SetDirt", label = "Set Dirt" },
-                { value = "TSAdmin.VehicleRelatedOptions.UnlockVehicle", label = "Unlock Vehicle" },
-                { value = "TSAdmin.MiscSettings", label = "Misc Settings" },
-                { value = "TSAdmin.MiscSettings.Teleport", label = "Teleport" },
-                { value = "TSAdmin.MiscSettings.ShowCoords", label = "Show Coords" },
-                { value = "TSAdmin.MiscSettings.ClearArea", label = "Clear Area" },
-                { value = "TSAdmin.MiscSettings.ThermalVision", label = "Thermal Vision" },
-                { value = "TSAdmin.MiscSettings.NightVision", label = "Night Vision" },
-                { value = "TSAdmin.MiscSettings.PlayerBlips", label = "Player Blips" },
-                { value = "TSAdmin.MiscSettings.PlayerNames", label = "Player Names" },
-                { value = "TSAdmin.MiscSettings.Timecycle", label = "Timecycle" },
-                { value = "TSAdmin.MiscSettings.JoinQNotif", label = "Join-Quit Notification" },
-                { value = "TSAdmin.MiscSettings.Kill", label = "Death Notification" },
-                { value = "TSAdmin.MiscSettings.Announce", label = "Announce" },
-                { value = "TSAdmin.MiscSettings.PropSpawn", label = "Prop Spawner (soon)" },
-                { value = "TSAdmin.MiscSettings.StaffChat", label = "Staff Chat" },
-                { value = "TSAdmin.MiscSettings.Relog", label = "Relog" },
-                { value = "TSAdmin.MiscSettings.Ban", label = "Ban Player" },
-                { value = "TSAdmin.MiscSettings.Unban", label = "Unban Player" },
-                { value = "TSAdmin.TrollMenu", label = "Troll Menu" },
-                { value = "TSAdmin.TrollMenu.Fart", label = "Fart" },
-                { value = "TSAdmin.TrollMenu.Truck", label = "Truck" },
-                { value = "TSAdmin.TrollMenu.Clown", label = "Clown" },
-                { value = "TSAdmin.TrollMenu.Merry", label = "Merry" },
-                { value = "TSAdmin.TrollMenu.Flash", label = "Flash" },
-                { value = "TSAdmin.TrollMenu.FakeSound", label = "Fake Sound" },
-                { value = "TSAdmin.TrollMenu.Lag", label = "Lag" },
-                { value = "TSAdmin.TrollMenu.BlowTyre", label = "Blow Tyre" },
-                { value = "TSAdmin.TrollMenu.Eject", label = "Eject" },
-                { value = "TSAdmin.TrollMenu.Crash", label = "Crash" },
-                { value = "TSAdmin.RockstarEditor", label = "Rockstar Editor" },
-            } },
-        })
-        TriggerServerEvent('ts-adminmenu:server:RemovePerms', input)
-    end
 end)
 
 RegisterCommand('loadadminmenu', function()
@@ -9267,7 +8115,7 @@ RegisterNetEvent('ts-adminmenu:client:GiveItem', function(data)
     local player = data.plyid
     local item = data.item
     Wait(500)
-    local input = lib.inputDialog('TS Admin Menu - Give Item', { "Count" })
+    local input = lib.inputDialog('TS Admin Menu - Give Item', {"Count"})
 
     if input then
         local count = tonumber(input[1])
@@ -9283,7 +8131,7 @@ RegisterNetEvent('ts-adminmenu:client:RemoveItemCount', function(data)
     local pid = data.plyid
     local item = data.item
     Wait(500)
-    local input = lib.inputDialog('TS Admin Menu - Remove Item', { "Count" })
+    local input = lib.inputDialog('TS Admin Menu - Remove Item', { "Count"})
 
     if input then
         local count = tonumber(input[1])
@@ -9301,7 +8149,7 @@ RegisterNetEvent('ts-adminmenu:client:RemoveItem', function(ply, list)
     for k, v in pairs(items) do
         if v then
             myMenu[v.label] = {
-                description = 'Remove ' .. v.name,
+                description = 'Remove '..v.name,
                 event = 'ts-adminmenu:client:RemoveItemCount',
                 arrow = true,
                 args = {
