@@ -46,19 +46,18 @@ local IsPlayerAllowed = function(ply,obj)
     
     local hasPermission = false
     if IsPlayerAceAllowed(ply,'TSAdmin.admin') then
-        print('allowed')
-    if IsPlayerAceAllowed(ply,obj) or IsPlayerAceAllowed(ply,'TSAdmin.FullAccess') then
-        hasPermission = true
+    	if IsPlayerAceAllowed(ply,obj) or IsPlayerAceAllowed(ply,'TSAdmin.FullAccess') then
+        	hasPermission = true
+    	end
     end
-end
     return hasPermission
 end
 
 lib.callback.register('ts-adminmenu:getAuthorization', function(source, obj)
     local xPlayer = ESX.GetPlayerFromId(source)
-    local group = xPlayer.getGroup()
+    local group = xPlayer?.getGroup()
     local allowed = false
-    if IsPlayerAllowed(source,obj) and xPlayer and (group == 'admin' or group == 'superadmin') then
+    if IsPlayerAllowed(source,obj) or xPlayer and (group == 'admin' or group == 'superadmin') then
         allowed = true
     end
     return allowed
