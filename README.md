@@ -30,3 +30,4 @@ Configure Admins in the admin_list.cfg
 - Setup Config
 - Reduce Server Side Load on initialization
 - Make it standalone with config option for ESX
+- Use Inbuilt Logs
