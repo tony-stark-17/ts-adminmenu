@@ -42,11 +42,11 @@ local TSSpawnVehicle = function(model, coords, heading, cb)
 end
 
 
-local IsPlayerAllowed = function(ply,obj)
+local IsPlayerAllowed = function(id,obj)
     
     local hasPermission = false
-    if IsPlayerAceAllowed(ply,'TSAdmin.admin') then
-    	if IsPlayerAceAllowed(ply,obj) or IsPlayerAceAllowed(ply,'TSAdmin.FullAccess') then
+    if IsPrincipalAceAllowed(id,'TSAdmin.admin') then
+    	if IsPrincipalAceAllowed(id,obj) or IsPrincipalAceAllowed(id,'TSAdmin.FullAccess') then
         	hasPermission = true
     	end
     end
@@ -80,11 +80,12 @@ CheckAllowed = function(source, type)
     local xPlayer = ESX.GetPlayerFromId(src)
     local group = xPlayer.getGroup()
     local tonyaction = type
+    local identifier = xPlayer.getIdentifier()
     local allowed = false
     if group == 'admin' or group == 'superadmin' then
         allowed = true
     else
-        if IsPlayerAllowed(xPlayer.source,tonyaction) then
+        if IsPlayerAllowed(identifier,tonyaction) then
             allowed = true
         end
     end
