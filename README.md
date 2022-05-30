@@ -17,7 +17,6 @@ Configure Admins in the admin_list.cfg
 - oxmysql is needed
 
 ## Credits 
-  - @CsokiHUN - Implemented spectate option from his repo  https://github.com/CsokiHUN/fl_spectate
   - @MiiMii1205 - Noclip feature https://github.com/MiiMii1205/noclipper
 
 ## SCREENSHOTS
