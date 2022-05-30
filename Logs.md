@@ -1,4 +1,4 @@
-				['adminmenu-viewinv'] = '',-- Webhok link
+	['adminmenu-viewinv'] = '',-- Webhok link
         ['adminmenu-godmode'] = '',
         ['adminmenu-invisible'] ='',
         ['adminmenu-stamina'] = '',
