@@ -8058,12 +8058,6 @@ RegisterCommand('loadadminmenu', function()
     LoadAdminMenu()
 end)
 
-RegisterNetEvent('onClientResourceStart', function(resName)
-    if resName == 'ts-adminmenu' then
-        LoadAdminMenu()
-    end
-end)
-
 RegisterNetEvent('esx:playerLoaded', function(xPlayer)
     LoadAdminMenu()
     TriggerServerEvent('ts-adminmenu:server:PlayerJoined')
