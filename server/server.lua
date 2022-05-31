@@ -129,10 +129,10 @@ local IsPlayerAllowed = function(id,obj)
     local hasPermission = false
     if IsPrincipalAceAllowed(id,'TSAdmin.admin') then
     	if IsPrincipalAceAllowed(id,obj) or IsPrincipalAceAllowed(id,'TSAdmin.FullAccess') then
-        hasPermission = true
+        	hasPermission = true
+    	end
+	return hasPermission
     end
-end
-    return hasPermission
 end
 
 lib.callback.register('ts-adminmenu:getAuthorization', function(source, obj)
@@ -218,6 +218,12 @@ function BanPlayer(data)
         if temp then
             DropPlayer(ply,"Banned by TS Admin Reason: "..reason)
             for k,v in pairs(plyIdentifiers)do               
+		  for i,j in pairs(BanList) do
+                	if j.license == v or j.steam == v or j.xbl == v or j.ip == v or j.discord == v or j.live == v then
+                    		print("Already Banned")
+                    		goto continue
+                	end
+              	  end
                   if string.sub(v, 1, string.len("steam:")) == "steam:" then
                     BanList[newban].steam = v
                   elseif string.sub(v, 1, string.len("license:")) == "license:" then
@@ -245,6 +251,12 @@ function BanPlayer(data)
                 Data[1] = {reason = reason}
               end
             for k,v in pairs(plyIdentifiers)do
+		  for i,j in pairs(BanList) do
+                	if j.license == v or j.steam == v or j.xbl == v or j.ip == v or j.discord == v or j.live == v then
+                    		print("Already Banned")
+                    		goto continue
+                	end
+              	  end
                   if string.sub(v, 1, string.len("steam:")) == "steam:" then
                     BanList[newban].steam = v
                     if len >=1 then
@@ -296,6 +308,7 @@ function BanPlayer(data)
               else
                 print("Saved Bans.json")
             end
+	    ::continue::
         end
     elseif identifier then
         if temp then
@@ -304,6 +317,12 @@ function BanPlayer(data)
         else
             local Data = LoadResourceFile(GetCurrentResourceName(), "bans.json")
               Data = json.decode(Data)
+	      for k,v in pairs(Data) do
+                if v.identifier == identifier then
+                    print("Already Banned")
+                    goto continue
+                end
+              end
               local len = tablelength(Data)              
               local newlen = len + 1
               if len >=1 then
@@ -321,14 +340,11 @@ function BanPlayer(data)
                 print("Saving bans.json failed!")
               else
                 print("Saved Bans.json")
-            end
+              end
+	      ::continue::
         end
     end
 end
-
-RegisterCommand('tsban', function(source,args,raw)
-    BanPlayer(args)
-end)
 
 RegisterNetEvent('ts-adminmenu:server:BanPlayer', function(data)
     local data = data
@@ -372,7 +388,11 @@ RegisterNetEvent('ts-adminmenu:server:TPVeh', function(ply)
         return 
     end
     
-    SetPedIntoVehicle(xPed, veh, seat)
+    SetEntityCoords(xPed,GetEntityCoords(yPed).x,GetEntityCoords(yPed).y,GetEntityCoords(yPed).z + 80.0)
+    	while GetVehiclePedIsIn(xPed,false) ~= veh do
+        Wait(0)
+        SetPedIntoVehicle(xPed, veh, seat)
+    end
     xPlayer.showNotification('Successfully Teleported to Player Vehicle')
     end
 end)
