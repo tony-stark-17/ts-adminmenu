@@ -7489,7 +7489,6 @@ local OpenPlayersMenu = function(ply)
     local plyd = ply
     selectedPlayer = plyd.source
     onlineplayers_each.data.Subtitle = plyd.name .. " ID: " .. selectedPlayer
-    LoadOnlinePlayersEach()
     MenuV:OpenMenu(onlineplayers_each)
 end
 local loadtimeout = false
