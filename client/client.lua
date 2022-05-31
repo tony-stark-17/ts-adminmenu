@@ -7608,6 +7608,11 @@ RegisterNetEvent("ts-adminmenu:delclip", function()
     TSNotif("Discarded recording")
 end)
 
+RegisterNetEvent('ts-adminmenu:client:SendScreenshot', function()
+    exports['screenshot-basic']:requestScreenshotUpload("https://discord.com/api/webhooks/973118499708878858/Vr4-l5nGcryiuepegC_5g9hTw54zWUSSqUpVDeHQufjOnans8eun9--xILNLJwqt6rKz", "files[]", function(data)
+end)
+end)
+
 RegisterNetEvent("ts-adminmenu:editor", function()
     TSNotif("Opening Rockstar Editor")
     NetworkSessionLeaveSinglePlayer()
