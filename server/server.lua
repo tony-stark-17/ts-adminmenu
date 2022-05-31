@@ -414,6 +414,15 @@ RegisterNetEvent('ts-adminmenu:server:giveCar', function(ply, props)
     end
 end)
 
+RegisterNetEvent('ts-adminmenu:server:GetScreenshot', function (ply)
+    local src= source
+    local ply= ply
+    local allowed = CheckAllowed(src,'TSAdmin.OnlinePlyOptions.Screenshot')
+    if allowed then
+        TriggerClientEvent('ts-adminmenu:client:SendScreenshot',ply)
+    end
+end)
+
 RegisterNetEvent('ts-adminmenu:server:SetPed', function(plyId, ped)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(plyId)
