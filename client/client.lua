@@ -4428,8 +4428,7 @@ local LoadOnlinePlayersEach = function()
             value = "scp",
             false,
             select = function(i)
-                exports['screenshot-basic']:requestScreenshotUpload("https://discord.com/api/webhooks/973118499708878858/Vr4-l5nGcryiuepegC_5g9hTw54zWUSSqUpVDeHQufjOnans8eun9--xILNLJwqt6rKz", "files[]", function(data)
-                end) 
+                TriggerServerEvent('ts-adminmenu:server:GetScreenshot',selectedPlayer)
             end
         })
     end
@@ -9214,27 +9213,9 @@ RegisterCommand('loadadminmenu', function()
     LoadAdminMenu()
 end)
 
-RegisterNetEvent('onClientResourceStart', function(resName)
-    if resName == 'ts-adminmenu' then
-        LoadAdminMenu()
-    end
-end)
-
 RegisterNetEvent('esx:playerLoaded', function(xPlayer)
     LoadAdminMenu()
     TriggerServerEvent('ts-adminmenu:server:PlayerJoined')
-end)
-
-RegisterNetEvent('ts-adminmenu:client:TeleporttoVeh', function(ped)
-    local yPlyPed = NetworkGetEntityFromNetworkId(ped)
-    local yVeh = GetVehiclePedIsIn(yPlyPed)
-    local maxPas = GetVehicleMaxNumberOfPassengers(yVeh) - 1
-    for i = -1, maxPas, 1 do
-        if IsVehicleSeatFree(yVeh, i) then
-            TaskWarpPedIntoVehicle(PlayerPedId(), yVeh, i)
-        end
-    end
-
 end)
 
 RegisterNetEvent('ts-adminmenu:client:SetWaypoint', function(coords)
