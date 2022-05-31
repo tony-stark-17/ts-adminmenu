@@ -124,11 +124,11 @@ local TSSpawnVehicle = function(model, coords, heading, cb)
 end
 
 
-local IsPlayerAllowed = function(ply,obj)
+local IsPlayerAllowed = function(id,obj)
     
     local hasPermission = false
-    if IsPlayerAceAllowed(ply,'TSAdmin.admin') then
-    if IsPlayerAceAllowed(ply,obj) or IsPlayerAceAllowed(ply,'TSAdmin.FullAccess') then
+    if IsPrincipalAceAllowed(id,'TSAdmin.admin') then
+    	if IsPrincipalAceAllowed(id,obj) or IsPrincipalAceAllowed(id,'TSAdmin.FullAccess') then
         hasPermission = true
     end
 end
@@ -139,8 +139,9 @@ lib.callback.register('ts-adminmenu:getAuthorization', function(source, obj)
     local xPlayer = ESX.GetPlayerFromId(source)
     local allowed = false
     if xPlayer then
+    local identifier = xPlayer.getIdentifier()
     local group = xPlayer.getGroup()
-    if IsPlayerAllowed(source,obj) or (group == 'admin' or group == 'superadmin') then 
+    if IsPlayerAllowed(identifier,obj) or (group == 'admin' or group == 'superadmin') then 
         allowed = true
     end
 end
