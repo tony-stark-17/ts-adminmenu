@@ -3904,6 +3904,17 @@ local TSNotif = function(msg)
     })
 end
 
+function GetFuel(vehicle)
+	return DecorGetFloat(vehicle, "_FUEL_LEVEL")
+end
+
+function SetFuel(vehicle, fuel)
+	if type(fuel) == 'number' and fuel >= 0 and fuel <= 100 then
+		SetVehicleFuelLevel(vehicle, fuel + 0.0)
+		DecorSetFloat(vehicle, "_FUEL_LEVEL", GetVehicleFuelLevel(vehicle))
+	end
+end
+
 local IsPlayerAllowed = function(obj)
     local allowed = lib.callback.await('ts-adminmenu:getAuthorization', false, obj)
     return allowed
@@ -5335,8 +5346,8 @@ local LoadVehicleOptions = function()
 
                 local veh = GetVehiclePedIsIn(ped, false)
                 if veh ~= 0 then
-                    if exports["LegacyFuel"]:GetFuel(veh) < 100 then
-                        exports["LegacyFuel"]:SetFuel(veh, 100)
+                    if GetFuel(veh) < 100 then
+                        SetFuel(veh, 100)
                     end
                 end
             end, 5000)
