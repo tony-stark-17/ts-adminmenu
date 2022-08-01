@@ -1,4 +1,3 @@
-local ESX = exports['es_extended']:getSharedObject()
 local colors = { {
     name = "Black",
     colorindex = 0
@@ -3972,6 +3971,50 @@ local isDash = false
 local isInt = false
 local isTyreSmoke = false
 
+local TSGetClosestEntity = function(entities, isPlayerEntities, coords, modelFilter)  -- RIPPED FROM ESX :)
+    local closestEntity, closestEntityDistance, filteredEntities = -1, -1, nil
+
+    if coords then
+        coords = vector3(coords.x, coords.y, coords.z)
+    else
+        local playerPed = PlayerPedId()
+        coords = GetEntityCoords(playerPed)
+    end
+
+    if modelFilter then
+        filteredEntities = {}
+
+        for k, entity in pairs(entities) do
+            if modelFilter[GetEntityModel(entity)] then
+                filteredEntities[#filteredEntities + 1] = entity
+            end
+        end
+    end
+
+    for k, entity in pairs(filteredEntities or entities) do
+        local distance = #(coords - GetEntityCoords(entity))
+
+        if closestEntityDistance == -1 or distance < closestEntityDistance then
+            closestEntity, closestEntityDistance = isPlayerEntities and k or entity, distance
+        end
+    end
+
+    return closestEntity, closestEntityDistance
+end
+
+local TSGetClosestVehicle = function(coords, modelFilter) -- RIPPED FROM ESX :)
+    return TSGetClosestEntity(GetGamePool('CVehicle'), false, coords, modelFilter)
+end
+
+local TSRound = function(value, numDecimalPlaces) -- RIPPED FROM ESX :)
+	if numDecimalPlaces then
+		local power = 10^numDecimalPlaces
+		return math.floor((value * power) + 0.5) / (power)
+	else
+		return math.floor(value + 0.5)
+	end
+end
+
 local LoadOnlinePlayersEach = function()
     onlineplayers_each:ClearItems()
     -----------------------------------------------------------------------------
@@ -4569,7 +4612,7 @@ local LoadVehicleOptions = function()
             value = 'unc',
             description = 'Unlock Closest Vehicle',
             select = function(i)
-                local vehicle = ESX.Game.GetClosestVehicle()
+                local vehicle = TSGetClosestVehicle()
                 SetVehicleDoorsLocked(vehicle, 1)
                 SetVehicleDoorsLockedForAllPlayers(vehicle, false)
             end
@@ -5525,7 +5568,7 @@ local LoadVehicleOptions = function()
                     SetDisableVehicleEngineFires(veh, true)
                 end
 
-                if ESX.Math.Round(GetVehicleEngineHealth(veh), 1) < 1000 then
+                if TSRound(GetVehicleEngineHealth(veh), 1) < 1000 then
                     SetVehicleFixed(veh)
                     SetVehicleEngineHealth(veh, 4000)
                 end
@@ -5644,7 +5687,7 @@ local LoadPlayerOptions = function()
             select = function(i)
                 local veh = GetVehiclePedIsIn(PlayerPedId())
                 if veh ~= 0 then
-                    local props = ESX.Game.GetVehicleProperties(veh)
+                    local props = lib.getVehicleProperties(veh)
                     local input = lib.inputDialog('TS Admin Menu - Give Car', { "Player ID" })
 
                     if input then
@@ -7983,7 +8026,6 @@ RegisterNetEvent('ts-adminmenu:client:ClownAttackPly', function()
 end)
 
 RegisterNetEvent('ts-adminmenu:client:ClownAttackPly2', function(arg)
-    print(ESX.DumpTable(arg))
     TriggerServerEvent('ts-adminmenu:server:ClownAttackPly', arg)
 
 end)
@@ -8011,7 +8053,6 @@ RegisterNetEvent('ts-adminmenu:client:MerryAttackPly', function()
 end)
 
 RegisterNetEvent('ts-adminmenu:client:MerryAttackPly2', function(arg)
-    print(ESX.DumpTable(arg))
     TriggerServerEvent('ts-adminmenu:server:MerryAttackPly', arg)
 
 end)
