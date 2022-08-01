@@ -4,8 +4,6 @@
 --]]
 
 -- Constants --
-
-local ESX = exports['es_extended']:getSharedObject()
 local MOVE_UP_KEY = 20
 local MOVE_DOWN_KEY = 44
 local CHANGE_SPEED_KEY = 21
