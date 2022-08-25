@@ -1,5 +1,5 @@
 # ts-adminmenu
-Admin Menu Inspired from vMenu
+Admin Menu Inspired from vMenu (FiveM)
 
 ## Installation Guide
 Add this to server.cfg
