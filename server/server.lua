@@ -55,9 +55,10 @@ end
 
 lib.callback.register('ts-adminmenu:getAuthorization', function(source, obj)
     local xPlayer = ESX.GetPlayerFromId(source)
+    local identifier = xPlayer?.identifier
     local group = xPlayer?.getGroup()
     local allowed = false
-    if IsPlayerAllowed(source,obj) or xPlayer and (group == 'admin' or group == 'superadmin') then
+    if IsPlayerAllowed(identifier,obj) or xPlayer and (group == 'admin' or group == 'superadmin') then
         allowed = true
     end
     return allowed
