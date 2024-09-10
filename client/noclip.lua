@@ -4,6 +4,8 @@
 --]]
 
 -- Constants --
+
+local ESX = exports['es_extended']:getSharedObject()
 local MOVE_UP_KEY = 20
 local MOVE_DOWN_KEY = 44
 local CHANGE_SPEED_KEY = 21
@@ -254,7 +256,7 @@ AddEventHandler('playerSpawned', function()
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)
-    if resourceName == RESSOURCE_NAME then
+    if resourceName == resourceName then
         SetNoClip(false);
         FreezeEntityPosition(noClippingEntity, false);
         SetEntityCollision(noClippingEntity, true, true);

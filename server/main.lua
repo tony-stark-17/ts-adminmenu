@@ -1,6 +1,9 @@
 local ESX = exports['es_extended']:getSharedObject()
 local BanList = {}
-
+local Admins = {}
+CreateThread(function ()
+    Admins = json.decode(LoadResourceFile(GetCurrentResourceName(), "server/admin_list.json")) and json.decode(LoadResourceFile(GetCurrentResourceName(), "server/admin_list.json"))[1]
+end)
 local TSGetNearbyEntities = function(entities, coords, modelFilter, maxDistance, isPed)
 	local nearbyEntities = {}
 	coords = type(coords) == 'number' and GetEntityCoords(GetPlayerPed(coords)) or vector3(coords.x, coords.y, coords.z)
@@ -32,7 +35,6 @@ local function OnPlayerConnecting(name, setKickReason, deferrals)
                     banid = i
                     banned = true
                 end
-                
             end
             if banned then break end
         end
@@ -52,7 +54,7 @@ local unban = function(bid)
     local bid = tonumber(bid)
     local content = json.decode(Data)
     local oldData = content[bid]
-    table.remove(content, bid)
+    content[bid] = nil
     local saved = SaveResourceFile(GetCurrentResourceName(), "bans.json", json.encode(content, {indent = true}), -1)
     if saved then
         print("Saved Bans.json")
@@ -61,7 +63,7 @@ local unban = function(bid)
         for t,s in pairs(v) do
             for i,j in pairs(oldData) do
                 if tostring(j) == tostring(s) then
-                    table.remove(BanList, k)
+                    BanList[k] = nil
                     break
                 end
             end
@@ -72,14 +74,14 @@ end
 
 RegisterCommand('tsunban', function(source,args,raw)
     if source == 0 then unban(args[1]) return end
-    local allowed = CheckAllowed(source,'TSAdmin.MiscSettings.Unban')
+    local allowed = CheckAllowed(source,'UnbanPlayer','MiscSettings')
     if allowed then
         unban(args[1])
     end
 end, true)
 
 RegisterNetEvent('ts-adminmenu:server:UnbanPlayer', function(data)
-    local allowed = CheckAllowed(source,'TSAdmin.MiscSettings.Unban')
+    local allowed = CheckAllowed(source,'UnbanPlayer','MiscSettings')
     if allowed then
         unban(data[1])
     end
@@ -100,12 +102,13 @@ end)
   
 
 local TSGetPlayers = function()
-    local players = ESX.GetPlayers()
+    local players = ESX.GetExtendedPlayers()
     local plylist = {}
-    for i=1, #players, 1 do
-  	local plytable = {source = players[i], name = GetPlayerName(players[i])}
-        table.insert(plylist,plytable)
+    for k,v in pairs(players) do
+        local plytable = {source = v.source, name = GetPlayerName(v.source) or v.getName(), ign = v.getName(), gender = v.get('sex')}
+        plylist[#plylist+1] = plytable
     end
+    players = nil
     table.sort(plylist, function(a, b) return a.name:upper() < b.name:upper() end)
     return plylist
 end
@@ -124,51 +127,32 @@ local TSSpawnVehicle = function(model, coords, heading, cb)
 end
 
 
-local IsPlayerAllowed = function(id,obj)
-    
+local IsPlayerAllowed = function(ply,obj,class)
     local hasPermission = false
-    if IsPrincipalAceAllowed(id,'TSAdmin.admin') then
-    	if IsPrincipalAceAllowed(id,obj) or IsPrincipalAceAllowed(id,'TSAdmin.FullAccess') then
-        	hasPermission = true
-    	end
-	return hasPermission
-    end
-end
-
-lib.callback.register('ts-adminmenu:getAuthorization', function(source, obj)
-    local xPlayer = ESX.GetPlayerFromId(source)
-    local allowed = false
-    if xPlayer then
-    local identifier = xPlayer.getIdentifier()
-    local group = xPlayer.getGroup()
-    if IsPlayerAllowed(identifier,obj) or (group == 'admin' or group == 'superadmin') then 
-        allowed = true
-    end
-end
-    return allowed
-end)
-
-RegisterCommand('tsadminlist', function(source, args, raw)
-    local src = source
-    local xPlayer = ESX.GetPlayerFromId(source)
-    if xPlayer then
-        local group = xPlayer.getGroup()
-        if group == 'admin' or group == 'superadmin' then
-            TriggerClientEvent('table', src, PlyList)
+    if Admins[ply] then
+        if Admins[class] then
+            if Admins[class].FullAccess or Admins[class][obj] or Admins.FullAccess then
+                hasPermission = true
+            end
+        else
+            if Admins[obj] then
+                hasPermission = true
+            end
         end
     end
-end)
+    return hasPermission
+end
 
-CheckAllowed = function(source, type)
+CheckAllowed = function(source, obj,class)
     local src = source
     local xPlayer = ESX.GetPlayerFromId(src)
     local group = xPlayer.getGroup()
-    local tonyaction = type
     local allowed = false
+    if not xPlayer then return false end
     if group == 'admin' or group == 'superadmin' then
         allowed = true
     else
-        if IsPlayerAllowed(xPlayer.source,tonyaction) then
+        if IsPlayerAllowed(xPlayer.identifier,obj,class) then
             allowed = true
         end
     end
@@ -177,17 +161,20 @@ end
 
 RegisterNetEvent('ts-adminmenu:server:PlayerJoined', function()
     local src = source
-    local xPlayer  = ESX.GetPlayerFromId(src)
     local Players = ESX.GetExtendedPlayers()
     for k, v in pairs(Players) do
-        if CheckAllowed(v.source, 'TSAdmin.MiscSettings.JoinQNotif') then
-            TriggerClientEvent('ts-adminmenu:client:JoinQ', v.source,
-                '~o~' .. GetPlayerName(src) .. '~s~ Joined The Server')
+        if CheckAllowed(v.source, 'JoinQuitNotif','MiscSettings') then
+            TriggerClientEvent('ts-adminmenu:client:JoinQ', v.source,'~o~' .. GetPlayerName(src) .. '~s~ Joined The Server')
         end
     end
-    TriggerClientEvent('ts-adminmenu:client:PlayerJoined', -1,xPlayer)
 end)
-
+RegisterNetEvent('ts-adminmenu:server:ScreenshotPlayer',function (ply)
+    local src = source
+    local yPlayer = ESX.GetPlayerFromId(ply)
+    if CheckAllowed(src, 'Screenshot','OnlinePlayerOptions') then
+        TriggerClientEvent('ts-adminmenu:client:GetScreenshot',yPlayer.source)
+    end
+end)
 function tablelength(T)
     local count = 0
     for _ in pairs(T) do count = count + 1 end
@@ -218,12 +205,6 @@ function BanPlayer(data)
         if temp then
             DropPlayer(ply,"Banned by TS Admin Reason: "..reason)
             for k,v in pairs(plyIdentifiers)do               
-		  for i,j in pairs(BanList) do
-                	if j.license == v or j.steam == v or j.xbl == v or j.ip == v or j.discord == v or j.live == v then
-                    		print("Already Banned")
-                    		goto continue
-                	end
-              	  end
                   if string.sub(v, 1, string.len("steam:")) == "steam:" then
                     BanList[newban].steam = v
                   elseif string.sub(v, 1, string.len("license:")) == "license:" then
@@ -251,12 +232,6 @@ function BanPlayer(data)
                 Data[1] = {reason = reason}
               end
             for k,v in pairs(plyIdentifiers)do
-		  for i,j in pairs(BanList) do
-                	if j.license == v or j.steam == v or j.xbl == v or j.ip == v or j.discord == v or j.live == v then
-                    		print("Already Banned")
-                    		goto continue
-                	end
-              	  end
                   if string.sub(v, 1, string.len("steam:")) == "steam:" then
                     BanList[newban].steam = v
                     if len >=1 then
@@ -308,7 +283,6 @@ function BanPlayer(data)
               else
                 print("Saved Bans.json")
             end
-	    ::continue::
         end
     elseif identifier then
         if temp then
@@ -317,12 +291,6 @@ function BanPlayer(data)
         else
             local Data = LoadResourceFile(GetCurrentResourceName(), "bans.json")
               Data = json.decode(Data)
-	      for k,v in pairs(Data) do
-                if v.identifier == identifier then
-                    print("Already Banned")
-                    goto continue
-                end
-              end
               local len = tablelength(Data)              
               local newlen = len + 1
               if len >=1 then
@@ -340,15 +308,18 @@ function BanPlayer(data)
                 print("Saving bans.json failed!")
               else
                 print("Saved Bans.json")
-              end
-	      ::continue::
+            end
         end
     end
 end
 
+RegisterCommand('tsban', function(source,args,raw)
+    BanPlayer(args)
+end)
+
 RegisterNetEvent('ts-adminmenu:server:BanPlayer', function(data)
     local data = data
-    local allowed = CheckAllowed(source,'TSAdmin.MiscSettings.Ban')
+    local allowed = CheckAllowed(source,'BanPlayer','MiscSettings')
     if allowed then
     BanPlayer(data)
     end
@@ -357,7 +328,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:removeCar', function(plate)
     local src = source
     local plate = plate
-    local allowed = CheckAllowed(src, 'TSAdmin.PlayerOptions.DeleteCar')
+    local allowed = CheckAllowed(src, 'DeletePlate','VehicleOptions')
     if allowed then
         MySQL.query('DELETE FROM owned_vehicles WHERE plate = @plate', {
             ['@plate'] = plate
@@ -373,7 +344,7 @@ RegisterNetEvent('ts-adminmenu:server:TPVeh', function(ply)
     local xPed = GetPlayerPed(src)
     local yPed = GetPlayerPed(ply)
     local veh = GetVehiclePedIsIn(yPed, false)
-    local allowed = CheckAllowed(src, 'TSAdmin.OnlinePlyOptions.TPCar')
+    local allowed = CheckAllowed(src, 'TPVeh','OnlinePlayerOptions')
     local seat = -1
     
     if allowed then
@@ -388,12 +359,24 @@ RegisterNetEvent('ts-adminmenu:server:TPVeh', function(ply)
         return 
     end
     
-    SetEntityCoords(xPed,GetEntityCoords(yPed).x,GetEntityCoords(yPed).y,GetEntityCoords(yPed).z + 80.0)
-    	while GetVehiclePedIsIn(xPed,false) ~= veh do
-        Wait(0)
-        SetPedIntoVehicle(xPed, veh, seat)
-    end
+    SetPedIntoVehicle(xPed, veh, seat)
     xPlayer.showNotification('Successfully Teleported to Player Vehicle')
+    end
+end)
+
+RegisterNetEvent('ts-adminmenu:server:giveCarForce', function(ply, props)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local yPlayer = ESX.GetPlayerFromId(tonumber(ply))
+    local vehProps = props
+    local allowed = CheckAllowed(xPlayer.source, 'GiveCar','OnlinePlayerOptions')
+    if allowed then
+        MySQL.update('UPDATE owned_vehicles SET owner = ? WHERE plate = ?', {yPlayer.identifier, vehProps.plate}, function(affectedRows)
+            if affectedRows then
+                TriggerClientEvent('esx:showNotification', yPlayer.source,
+                "You recieved a car with Plate: " .. vehProps.plate)
+                print(affectedRows)
+            end
+        end)
     end
 end)
 
@@ -401,8 +384,12 @@ RegisterNetEvent('ts-adminmenu:server:giveCar', function(ply, props)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(tonumber(ply))
     local vehProps = props
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.PlayerOptions.GiveCar')
+    local allowed = CheckAllowed(xPlayer.source, 'GiveCar','OnlinePlayerOptions')
     if allowed then
+        local plateExist = MySQL.single.await('SELECT * FROM owned_vehicles WHERE plate = ?', {vehProps.plate})
+        if plateExist then
+            return TriggerClientEvent('ts-adminmenu:client:VehicleExists', xPlayer.source,vehProps.plate)
+        end
         MySQL.query('INSERT INTO owned_vehicles (owner, plate, vehicle) VALUES (@owner, @plate, @vehicle)', {
             ['@owner'] = yPlayer.identifier,
             ['@plate'] = vehProps.plate,
@@ -414,20 +401,11 @@ RegisterNetEvent('ts-adminmenu:server:giveCar', function(ply, props)
     end
 end)
 
-RegisterNetEvent('ts-adminmenu:server:GetScreenshot', function (ply)
-    local src= source
-    local ply= ply
-    local allowed = CheckAllowed(src,'TSAdmin.OnlinePlyOptions.Screenshot')
-    if allowed then
-        TriggerClientEvent('ts-adminmenu:client:SendScreenshot',ply)
-    end
-end)
-
 RegisterNetEvent('ts-adminmenu:server:SetPed', function(plyId, ped)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(plyId)
     local ped2 = ped
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.PlayerOptions.ChangePed')
+    local allowed = CheckAllowed(xPlayer.source, 'ChangePed','PlayerOptions')
     if yPlayer and allowed then
         TriggerClientEvent('ts-adminmenu:client:SetPed', yPlayer.source, ped2)
     end
@@ -436,45 +414,1172 @@ end)
 RegisterNetEvent('ts-adminmenu:server:ShowInventory', function(ply)
     local src = source
     local Ply = ply
-    local allowed = CheckAllowed(src, 'TSAdmin.OnlinePlyOptions.OpenInventory')
+    local allowed = CheckAllowed(src, 'OpenInventory','OnlinePlayerOptions')
     if allowed then
         local inv = exports.ox_inventory:Inventory(tonumber(Ply))
         TriggerClientEvent('ox_inventory:viewInventory', src, inv)
     end
 
 end)
+RegisterNetEvent('ts-adminmenu:server:LoadPerms',function ()
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local group = xPlayer.getGroup()
+    if Admins[xPlayer.identifier] then
+        --if group == 'admin' or group == 'superadmin' then
+            for k,v in pairs(Admins[xPlayer.identifier]) do
+                if not v then
+                    v = true
+                end
+                if type(v) == 'table' then
+                    for i,j in pairs(v) do
+                        if not j then j = true end
+                    end
+                end
+            end
+        --end
+        Player(xPlayer.source).state.TSAdmin = Admins[xPlayer.identifier]
+    end
+end)
 
 RegisterNetEvent('ts-adminmenu:server:AddPerms', function(data)
     local src= source
-    local ply = data[1]
-    local allowed = CheckAllowed(src,'TSAdmin.FullAccess')
-    if not ply or not allowed then return end
-    local identifier =  GetPlayerIdentifier(ply, 1)
+    local xPlayer = ESX.GetPlayerFromId(data[1])
+    local allowed = CheckAllowed(src,'FullAccess')
+    if not xPlayer or not allowed then return end
     local perms = {data[2],data[3],data[4],data[5],data[6]}
     for k,v in ipairs(perms) do
         if v and v ~= "none" then
-            ExecuteCommand("add_ace identifier."..identifier.." \""..v.."\" allow")
+            if v == "admin" then
+                if not Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier] = {
+                     FullAccess = false,
+                     RockstarEditor = false,
+                     OnlinePlayerOptions = {
+                         FullAccess = false,
+                         SendMessage = false,
+                         ChangeSkin = false,
+                         ChangePed = false,
+                         OpenInventory = false,
+                         SetJob = false,
+                         GiveItemList = false,
+                         GiveItemCode = false,
+                         RemoveInventoryItem = false,
+                         GiveAccountMoney = false,
+                         RemoveAccountMoney = false,
+                         ToggleLicense = false,
+                         GiveCar = false,
+                         HealPlayer = false,
+                         RevivePlayer = false,
+                         KillPlayer = false,
+                         Goto = false,
+                         Bring = false,
+                         TPVeh = false,
+                         Waypoint = false,
+                         PrintID = false,
+                         Kick = false,
+                         Screenshot = false,
+                         Spectate = false
+                     },
+                     PlayerOptions = {
+                         FullAccess = false,
+                         ChangeSkin = false,
+                         ChangePed = false,
+                         Godmode = false,
+                         Invisible = false,
+                         UnlimitedStamina = false,
+                         FastRun = false,
+                         FastSwim = false,
+                         SuperJump = false,
+                         NoRagdoll = false,
+                         NeverWanted = false,
+                         StayInVeh = false,
+                         HealPlayer = false,
+                         RevivePlayer = false,
+                         SetArmor = false,
+                         CleanClothes = false,
+                         WetClothes = false,
+                         DryClothes = false,
+                         Suicide= false,
+                         FreezePlayer = false,
+                         Noclip = false
+                     },
+                     VehicleOptions = {
+                         FullAccess = false,
+                         Spawner = false,
+                         SpawnerCode = false,
+                         UnlockVehicle = false,
+                         Modmenu = false,
+                         FreezeVehicle = false,
+                         ToggleEngine = false,
+                         ChangePlate = false,
+                         ToggleDoors = false,
+                         TorqueMultiplier = false,
+                         EngineMultiplier = false,
+                         FlipVehicle = false,
+                         DeleteVehicle = false,
+                         RefuelVehicle = false,
+                         BikeHelmet = false,
+                         Godmode = false,
+                         RepairVehicle = false,
+                         WashVehicle = false,
+                         KeepClean = false,
+                         VehicleDirt = false,
+                         DeletePlate = false,
+                     },
+                     TrollMenu = {
+                         FullAccess = false,
+                         Fart = false,
+                         TruckPunchline = false,
+                         ClownAttack = false,
+                         MerryweatherAttack = false,
+                         Flashbang = false,
+                         FakeSound = false,
+                         LagGame = false,
+                         BlowTyres = false,
+                         Eject = false,
+                         CrashGame = false
+                     },
+                     MiscSettings = {
+                         FullAccess = false,
+                         TPM = false,
+                         TPC = false,
+                         ShowCoords = false,
+                         CopyCoords = false,
+                         BanPlayer = false,
+                         UnbanPlayer = false,
+                         ClearArea = false,
+                         Relog = false,
+                         PropSpawner = false,
+                         Announcement = false,
+                         StaffChat = false,
+                         ThermalVision = false,
+                         JoinQuitNotif = false,
+                         KillNotif = false,
+                         NightVision = false,
+                         PlayerBlips = false,
+                         PlayerNames = false,
+                         DeleteLaser = false,
+                         Timecycle = false,
+                     }
+                    }
+                end
+            end
+            if v == "FullAccess" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].FullAccess = true
+                end
+            end
+            if v == "OnlinePlayerOptions" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.FullAccess = true
+                end
+            end
+            if v == "OnlinePlayerOptions.SendMessage" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.SendMessage = true
+                end
+            end
+            if v == "OnlinePlayerOptions.ChangeSkin" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.ChangeSkin = true
+                end
+            end
+            if v == "OnlinePlayerOptions.ChangePed" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.ChangePed = true
+                end
+            end
+            if v == "OnlinePlayerOptions.OpenInventory" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.OpenInventory = true
+                end
+            end
+            if v == "OnlinePlayerOptions.SetJob" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.SetJob = true
+                end
+            end
+            if v == "OnlinePlayerOptions.GiveItemList" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.GiveItemList = true
+                end
+            end
+            if v == "OnlinePlayerOptions.GiveItemCode" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.GiveItemCode = true
+                end
+            end
+            if v == "OnlinePlayerOptions.GiveCar" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.GiveCar = true
+                end
+            end
+            if v == "OnlinePlayerOptions.RemoveInventoryItem" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.RemoveInventoryItem = true
+                end
+            end
+            if v == "OnlinePlayerOptions.HealPlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.HealPlayer = true
+                end
+            end
+            if v == "OnlinePlayerOptions.GiveAccountMoney" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.GiveAccountMoney = true
+                end
+            end
+            if v == "OnlinePlayerOptions.RemoveAccountMoney" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.RemoveAccountMoney = true
+                end
+            end
+            if v == "OnlinePlayerOptions.TPVeh" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.TPVeh = true
+                end
+            end
+            if v == "OnlinePlayerOptions.RevivePlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.RevivePlayer = true
+                end
+            end
+            if v == "OnlinePlayerOptions.Goto" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.Goto = true
+                end
+            end
+            if v == "OnlinePlayerOptions.ToggleLicense" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.ToggleLicense = true
+                end
+            end
+            if v == "OnlinePlayerOptions.Bring" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.Bring = true
+                end
+            end
+            if v == "OnlinePlayerOptions.Waypoint" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.Waypoint = true
+                end
+            end
+            if v == "OnlinePlayerOptions.PrintID" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.PrintID = true
+                end
+            end
+            if v == "OnlinePlayerOptions.KillPlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.KillPlayer = true
+                end
+            end
+            if v == "OnlinePlayerOptions.Kick" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.Kick = true
+                end
+            end
+            if v == "OnlinePlayerOptions.Spectate" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.Spectate = true
+                end
+            end
+            if v == "OnlinePlayerOptions.Screenshot" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.Screenshot = true
+                end
+            end
+            if v == "PlayerOptions" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.FullAccess = true
+                end
+            end
+            if v == "PlayerOptions.Godmode" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.Godmode = true
+                end
+            end
+            if v == "PlayerOptions.Invisible" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.Invisible = true
+                end
+            end
+            if v == "PlayerOptions.UnlimitedStamina" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.UnlimitedStamina = true
+                end
+            end
+            if v == "PlayerOptions.FastRun" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.FastRun = true
+                end
+            end
+            if v == "PlayerOptions.FastSwim" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.FastSwim = true
+                end
+            end
+            if v == "PlayerOptions.SuperJump" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.SuperJump = true
+                end
+            end
+            if v == "PlayerOptions.NoRagdoll" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.NoRagdoll = true
+                end
+            end
+            if v == "PlayerOptions.NeverWanted" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.NeverWanted = true
+                end
+            end
+            if v == "PlayerOptions.StayInVeh" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.StayInVeh = true
+                end
+            end
+            if v == "PlayerOptions.HealPlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.HealPlayer = true
+                end
+            end
+            if v == "PlayerOptions.RevivePlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.RevivePlayer = true
+                end
+            end
+            if v == "PlayerOptions.SetArmor" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.SetArmor = true
+                end
+            end
+            if v == "PlayerOptions.CleanClothes" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.CleanClothes = true
+                end
+            end
+            if v == "PlayerOptions.WetClothes" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.WetClothes = true
+                end
+            end
+            if v == "PlayerOptions.DryClothes" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.DryClothes = true
+                end
+            end
+            if v == "PlayerOptions.Suicide" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.Suicide = true
+                end
+            end
+            if v == "PlayerOptions.FreezePlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.FreezePlayer = true
+                end
+            end
+            if v == "PlayerOptions.Noclip" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.Noclip = true
+                end
+            end
+            if v == "PlayerOptions.ChangeSkin" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.ChangeSkin = true
+                end
+            end
+            if v == "PlayerOptions.ChangePed" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.ChangePed = true
+                end
+            end
+            if v == "VehicleOptions" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.FullAccess = true
+                end
+            end
+            if v == "VehicleOptions.Spawner" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.Spawner = true
+                end
+            end
+            if v == "VehicleOptions.SpawnerCode" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.SpawnerCode = true
+                end
+            end
+            if v == "VehicleOptions.Modmenu" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.Modmenu = true
+                end
+            end
+            if v == "VehicleOptions.FreezeVehicle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.FreezeVehicle = true
+                end
+            end
+            if v == "VehicleOptions.ChangePlate" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.ChangePlate = true
+                end
+            end
+            if v == "VehicleOptions.ToggleEngine" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.ToggleEngine = true
+                end
+            end
+            if v == "VehicleOptions.ToggleDoors" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.ToggleDoors = true
+                end
+            end
+            if v == "VehicleOptions.TorqueMultiplier" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.TorqueMultiplier = true
+                end
+            end
+            if v == "VehicleOptions.EngineMultiplier" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.EngineMultiplier = true
+                end
+            end
+            if v == "VehicleOptions.FlipVehicle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.FlipVehicle = true
+                end
+            end
+            if v == "VehicleOptions.DeleteVehicle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.DeleteVehicle = true
+                end
+            end
+            if v == "VehicleOptions.RefuelVehicle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.RefuelVehicle = true
+                end
+            end
+            if v == "VehicleOptions.BikeHelmet" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.BikeHelmet = true
+                end
+            end
+            if v == "VehicleOptions.Godmode" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.Godmode = true
+                end
+            end
+            if v == "VehicleOptions.RepairVehicle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.RepairVehicle = true
+                end
+            end
+            if v == "VehicleOptions.WashVehicle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.WashVehicle = true
+                end
+            end
+            if v == "VehicleOptions.KeepClean" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.KeepClean = true
+                end
+            end
+            if v == "VehicleOptions.VehicleDirt" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.VehicleDirt = true
+                end
+            end
+            if v == "VehicleOptions.UnlockVehicle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.UnlockVehicle = true
+                end
+            end
+            if v == "VehicleOptions.DeletePlate" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.DeletePlate = true
+                end
+            end
+            if v == "MiscSettings" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.FullAccess = true
+                end
+            end
+            if v == "MiscSettings.TPM" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.TPM = true
+                end
+            end
+            if v == "MiscSettings.TPC" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.TPC = true
+                end
+            end
+            if v == "MiscSettings.ShowCoords" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.TPC = true
+                end
+            end
+            if v == "MiscSettings.CopyCoords" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.CopyCoords = true
+                end
+            end
+            if v == "MiscSettings.PropSpawner" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.PropSpawner = true
+                end
+            end
+            if v == "MiscSettings.ClearArea" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.ClearArea = true
+                end
+            end
+            if v == "MiscSettings.ThermalVision" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.ThermalVision = true
+                end
+            end
+            if v == "MiscSettings.NightVision" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.NightVision = true
+                end
+            end
+            if v == "MiscSettings.PlayerBlips" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.PlayerBlips = true
+                end
+            end
+            if v == "MiscSettings.PlayerNames" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.PlayerNames = true
+                end
+            end
+            if v == "MiscSettings.Timecycle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.Timecycle = true
+                end
+            end
+            if v == "MiscSettings.JoinQuitNotif" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.JoinQuitNotif = true
+                end
+            end
+            if v == "MiscSettings.KillNotif" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.KillNotif = true
+                end
+            end
+            if v == "MiscSettings.Announcement" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.Announcement = true
+                end
+            end
+            if v == "MiscSettings.StaffChat" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.StaffChat = true
+                end
+            end
+            if v == "MiscSettings.Relog" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.Relog = true
+                end
+            end
+            if v == "MiscSettings.BanPlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.BanPlayer = true
+                end
+            end
+            if v == "MiscSettings.UnbanPlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.UnbanPlayer = true
+                end
+            end
+            if v == "MiscSettings.DeleteLaser" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.DeleteLaser = true
+                end
+            end
+            if v == "TrollMenu" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.FullAccess = true
+                end
+            end
+            if v == "TrollMenu.Fart" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.Fart = true
+                end
+            end
+            if v == "TrollMenu.TruckPunchline" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.TruckPunchline = true
+                end
+            end
+            if v == "TrollMenu.ClownAttack" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.ClownAttack = true
+                end
+            end
+            if v == "TrollMenu.MerryweatherAttack" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.MerryweatherAttack = true
+                end
+            end
+            if v == "TrollMenu.Flashbang" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.Flashbang = true
+                end
+            end
+            if v == "TrollMenu.FakeSound" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.FakeSound = true
+                end
+            end
+            if v == "TrollMenu.LagGame" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.LagGame = true
+                end
+            end
+            if v == "TrollMenu.BlowTyres" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.BlowTyres = true
+                end
+            end
+            if v == "TrollMenu.Eject" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.Eject = true
+                end
+            end
+            if v == "TrollMenu.CrashGame" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.CrashGame = true
+                end
+            end
+            if v == "RockstarEditor" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].RockstarEditor = true
+                end
+            end
+            Player(xPlayer.source).state.TSAdmin = Admins[xPlayer.identifier]
+            local encoded = json.encode(Admins, { indent = true })
+            SaveResourceFile(GetCurrentResourceName(), "server/admin_list.json",encoded, -1)
         end
     end
 end)
 
 RegisterNetEvent('ts-adminmenu:server:RemovePerms', function(data)
     local src= source
-    local ply = data[1]
-    local allowed = CheckAllowed(src,'TSAdmin.FullAccess')
-    if not ply or not allowed then return end
-    local identifier = GetPlayerIdentifier(ply, 1)
+    local xPlayer = ESX.GetPlayerFromId(data[1])
+    local allowed = CheckAllowed(src,'FullAccess')
+    if not xPlayer or not allowed then return end
     local perms = {data[2],data[3],data[4],data[5],data[6]}
     for k,v in ipairs(perms) do
         if v and v ~= "none" then
-            ExecuteCommand("remove_ace identifier."..identifier.." \""..v.."\" allow")
+            if v == "admin" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier] = nil
+                end
+            end
+            if v == "FullAccess" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].FullAccess = false
+                end
+            end
+            if v == "OnlinePlayerOptions" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.FullAccess = false
+                end
+            end
+            if v == "OnlinePlayerOptions.SendMessage" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.SendMessage = false
+                end
+            end
+            if v == "OnlinePlayerOptions.ChangeSkin" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.ChangeSkin = false
+                end
+            end
+            if v == "OnlinePlayerOptions.ChangePed" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.ChangePed = false
+                end
+            end
+            if v == "OnlinePlayerOptions.OpenInventory" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.OpenInventory = false
+                end
+            end
+            if v == "OnlinePlayerOptions.SetJob" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.SetJob = false
+                end
+            end
+            if v == "OnlinePlayerOptions.GiveItemList" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.GiveItemList = false
+                end
+            end
+            if v == "OnlinePlayerOptions.GiveItemCode" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.GiveItemCode = false
+                end
+            end
+            if v == "OnlinePlayerOptions.GiveCar" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.GiveCar = false
+                end
+            end
+            if v == "OnlinePlayerOptions.RemoveInventoryItem" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.RemoveInventoryItem = false
+                end
+            end
+            if v == "OnlinePlayerOptions.HealPlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.HealPlayer = false
+                end
+            end
+            if v == "OnlinePlayerOptions.GiveAccountMoney" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.GiveAccountMoney = false
+                end
+            end
+            if v == "OnlinePlayerOptions.RemoveAccountMoney" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.RemoveAccountMoney = false
+                end
+            end
+            if v == "OnlinePlayerOptions.TPVeh" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.TPVeh = false
+                end
+            end
+            if v == "OnlinePlayerOptions.RevivePlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.RevivePlayer = false
+                end
+            end
+            if v == "OnlinePlayerOptions.Goto" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.Goto = false
+                end
+            end
+            if v == "OnlinePlayerOptions.ToggleLicense" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.ToggleLicense = false
+                end
+            end
+            if v == "OnlinePlayerOptions.Bring" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.Bring = false
+                end
+            end
+            if v == "OnlinePlayerOptions.Waypoint" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.Waypoint = false
+                end
+            end
+            if v == "OnlinePlayerOptions.PrintID" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.PrintID = false
+                end
+            end
+            if v == "OnlinePlayerOptions.KillPlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.KillPlayer = false
+                end
+            end
+            if v == "OnlinePlayerOptions.Kick" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.Kick = false
+                end
+            end
+            if v == "OnlinePlayerOptions.Spectate" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.Spectate = false
+                end
+            end
+            if v == "OnlinePlayerOptions.Screenshot" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].OnlinePlayerOptions.Screenshot = false
+                end
+            end
+            if v == "PlayerOptions" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.FullAccess = false
+                end
+            end
+            if v == "PlayerOptions.Godmode" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.Godmode = false
+                end
+            end
+            if v == "PlayerOptions.Invisible" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.Invisible = false
+                end
+            end
+            if v == "PlayerOptions.UnlimitedStamina" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.UnlimitedStamina = false
+                end
+            end
+            if v == "PlayerOptions.FastRun" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.FastRun = false
+                end
+            end
+            if v == "PlayerOptions.FastSwim" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.FastSwim = false
+                end
+            end
+            if v == "PlayerOptions.SuperJump" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.SuperJump = false
+                end
+            end
+            if v == "PlayerOptions.NoRagdoll" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.NoRagdoll = false
+                end
+            end
+            if v == "PlayerOptions.NeverWanted" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.NeverWanted = false
+                end
+            end
+            if v == "PlayerOptions.StayInVeh" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.StayInVeh = false
+                end
+            end
+            if v == "PlayerOptions.HealPlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.HealPlayer = false
+                end
+            end
+            if v == "PlayerOptions.RevivePlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.RevivePlayer = false
+                end
+            end
+            if v == "PlayerOptions.SetArmor" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.SetArmor = false
+                end
+            end
+            if v == "PlayerOptions.CleanClothes" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.CleanClothes = false
+                end
+            end
+            if v == "PlayerOptions.WetClothes" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.WetClothes = false
+                end
+            end
+            if v == "PlayerOptions.DryClothes" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.DryClothes = false
+                end
+            end
+            if v == "PlayerOptions.Suicide" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.Suicide = false
+                end
+            end
+            if v == "PlayerOptions.FreezePlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.FreezePlayer = false
+                end
+            end
+            if v == "PlayerOptions.Noclip" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.Noclip = false
+                end
+            end
+            if v == "PlayerOptions.ChangeSkin" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.ChangeSkin = false
+                end
+            end
+            if v == "PlayerOptions.ChangePed" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].PlayerOptions.ChangePed = false
+                end
+            end
+            if v == "VehicleOptions" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.FullAccess = false
+                end
+            end
+            if v == "VehicleOptions.Spawner" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.Spawner = false
+                end
+            end
+            if v == "VehicleOptions.SpawnerCode" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.SpawnerCode = false
+                end
+            end
+            if v == "VehicleOptions.Modmenu" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.Modmenu = false
+                end
+            end
+            if v == "VehicleOptions.FreezeVehicle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.FreezeVehicle = false
+                end
+            end
+            if v == "VehicleOptions.ChangePlate" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.ChangePlate = false
+                end
+            end
+            if v == "VehicleOptions.ToggleEngine" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.ToggleEngine = false
+                end
+            end
+            if v == "VehicleOptions.ToggleDoors" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.ToggleDoors = false
+                end
+            end
+            if v == "VehicleOptions.TorqueMultiplier" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.TorqueMultiplier = false
+                end
+            end
+            if v == "VehicleOptions.EngineMultiplier" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.EngineMultiplier = false
+                end
+            end
+            if v == "VehicleOptions.FlipVehicle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.FlipVehicle = false
+                end
+            end
+            if v == "VehicleOptions.DeleteVehicle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.DeleteVehicle = false
+                end
+            end
+            if v == "VehicleOptions.RefuelVehicle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.RefuelVehicle = false
+                end
+            end
+            if v == "VehicleOptions.BikeHelmet" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.BikeHelmet = false
+                end
+            end
+            if v == "VehicleOptions.Godmode" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.Godmode = false
+                end
+            end
+            if v == "VehicleOptions.RepairVehicle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.RepairVehicle = false
+                end
+            end
+            if v == "VehicleOptions.WashVehicle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.WashVehicle = false
+                end
+            end
+            if v == "VehicleOptions.KeepClean" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.KeepClean = false
+                end
+            end
+            if v == "VehicleOptions.VehicleDirt" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.VehicleDirt = false
+                end
+            end
+            if v == "VehicleOptions.UnlockVehicle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.UnlockVehicle = false
+                end
+            end
+            if v == "VehicleOptions.DeletePlate" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].VehicleOptions.DeletePlate = false
+                end
+            end
+            if v == "MiscSettings" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.FullAccess = false
+                end
+            end
+            if v == "MiscSettings.TPM" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.TPM = false
+                end
+            end
+            if v == "MiscSettings.TPC" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.TPC = false
+                end
+            end
+            if v == "MiscSettings.ShowCoords" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.TPC = false
+                end
+            end
+            if v == "MiscSettings.CopyCoords" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.CopyCoords = false
+                end
+            end
+            if v == "MiscSettings.PropSpawner" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.PropSpawner = false
+                end
+            end
+            if v == "MiscSettings.ClearArea" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.ClearArea = false
+                end
+            end
+            if v == "MiscSettings.ThermalVision" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.ThermalVision = false
+                end
+            end
+            if v == "MiscSettings.NightVision" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.NightVision = false
+                end
+            end
+            if v == "MiscSettings.PlayerBlips" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.PlayerBlips = false
+                end
+            end
+            if v == "MiscSettings.PlayerNames" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.PlayerNames = false
+                end
+            end
+            if v == "MiscSettings.Timecycle" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.Timecycle = false
+                end
+            end
+            if v == "MiscSettings.JoinQuitNotif" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.JoinQuitNotif = false
+                end
+            end
+            if v == "MiscSettings.KillNotif" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.KillNotif = false
+                end
+            end
+            if v == "MiscSettings.Announcement" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.Announcement = false
+                end
+            end
+            if v == "MiscSettings.StaffChat" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.StaffChat = false
+                end
+            end
+            if v == "MiscSettings.Relog" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.Relog = false
+                end
+            end
+            if v == "MiscSettings.BanPlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.BanPlayer = false
+                end
+            end
+            if v == "MiscSettings.UnbanPlayer" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.UnbanPlayer = false
+                end
+            end
+            if v == "MiscSettings.DeleteLaser" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].MiscSettings.DeleteLaser = false
+                end
+            end
+            if v == "TrollMenu" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.FullAccess = false
+                end
+            end
+            if v == "TrollMenu.Fart" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.Fart = false
+                end
+            end
+            if v == "TrollMenu.TruckPunchline" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.TruckPunchline = false
+                end
+            end
+            if v == "TrollMenu.ClownAttack" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.ClownAttack = false
+                end
+            end
+            if v == "TrollMenu.MerryweatherAttack" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.MerryweatherAttack = false
+                end
+            end
+            if v == "TrollMenu.Flashbang" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.Flashbang = false
+                end
+            end
+            if v == "TrollMenu.FakeSound" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.FakeSound = false
+                end
+            end
+            if v == "TrollMenu.LagGame" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.LagGame = false
+                end
+            end
+            if v == "TrollMenu.BlowTyres" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.BlowTyres = false
+                end
+            end
+            if v == "TrollMenu.Eject" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.Eject = false
+                end
+            end
+            if v == "TrollMenu.CrashGame" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].TrollMenu.CrashGame = false
+                end
+            end
+            if v == "RockstarEditor" then
+                if Admins[xPlayer.identifier] then
+                    Admins[xPlayer.identifier].RockstarEditor = false
+                end
+            end
+            Player(xPlayer.source).state.TSAdmin = Admins[xPlayer.identifier]
+            local encoded = json.encode(Admins, { indent = true })
+            SaveResourceFile(GetCurrentResourceName(), "server/admin_list.json",encoded, -1)
         end
     end
 end)
-RegisterCommand('checkace', function(source,args,raw)
-    print(IsPlayerAceAllowed(args[1],args[2]))
-end)
-
 lib.callback.register('ts-adminmenu:server:GetSpectateData', function(source,pid)
     local src = source
     local target = pid
@@ -503,7 +1608,7 @@ RegisterNetEvent('ts-adminmenu:server:playerDied', function(data)
         msg = '~o~' .. xPlayer.getName() .. '~s~ died Reason: ' .. reason
     end
     for k, v in pairs(Players) do
-        if CheckAllowed(v.playerId, 'TSAdmin.MiscSettings.Kill') then
+        if CheckAllowed(v.playerId, 'KillNotif','MiscSettings') then
             TriggerClientEvent('ts-adminmenu:client:killnotif', v.playerId, msg)
         end
     end
@@ -515,18 +1620,28 @@ AddEventHandler('playerDropped', function(reason)
     local reason = reason
     local Players = ESX.GetExtendedPlayers()
     for k, v in pairs(Players) do
-        if CheckAllowed(v.source, 'TSAdmin.MiscSettings.JoinQNotif') then
+        if CheckAllowed(v.source, 'JoinQuitNotif','MiscSettings') then
             TriggerClientEvent('ts-adminmenu:client:JoinQ', v.playerId,
                 '~o~' .. GetPlayerName(src) .. '~s~ Left The Server Reason: ~y~' .. reason .. '~s~')
         end
     end
+end)
+AddEventHandler('playerDropped', function()
+    local src = source
+    TriggerClientEvent('ts-adminmenu:client:PlayerLeft', -1, src)
+end)
+
+AddEventHandler('playerLeftScope', function(data)
+    local source = tonumber(data['for'])
+    local target = tonumber(data.player)
+    TriggerClientEvent('ts-adminmenu:client:LeftScope', source, target)
 end)
 
 
 RegisterNetEvent('ts-adminmenu:server:HealPlayer', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.Heal')
+    local allowed = CheckAllowed(xPlayer.source, 'HealPlayer','OnlinePlayerOptions')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -564,7 +1679,7 @@ RegisterNetEvent('ts-adminmenu:server:SetJob', function(pid, job, grade)
     local job = job
     local grade = tonumber(grade)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.SetJob')
+    local allowed = CheckAllowed(xPlayer.source, 'SetJob','OnlinePlayerOptions')
     if allowed then
 
         if ESX.DoesJobExist(job, grade) then
@@ -600,7 +1715,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:GiveAccMoney', function(pid, acc, amount)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.GiveMoney')
+    local allowed = CheckAllowed(xPlayer.source, 'GiveAccountMoney','OnlinePlayerOptions')
     local account = acc
     local money = tonumber(amount)
     if allowed then
@@ -636,7 +1751,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:RemoveAccMoney', function(pid, acc, amount)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.GiveMoney')
+    local allowed = CheckAllowed(xPlayer.source, 'RemoveAccountMoney','OnlinePlayerOptions')
     local account = acc
     local money = tonumber(amount)
     if allowed then
@@ -672,7 +1787,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:RevivePlayer', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.Revive')
+    local allowed = CheckAllowed(xPlayer.source, 'RevivePlayer','OnlinePlayerOptions')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -702,7 +1817,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:Goto', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.Goto')
+    local allowed = CheckAllowed(xPlayer.source, 'Goto','OnlinePlayerOptions')
     local yPlyCoords = yPlayer.getCoords()
     if allowed then
         local data = {
@@ -734,7 +1849,7 @@ RegisterNetEvent('ts-adminmenu:server:Bring', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
     local xPlyCoords = xPlayer.getCoords()
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.Bring')
+    local allowed = CheckAllowed(xPlayer.source, 'Bring','OnlinePlayerOptions')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -764,7 +1879,7 @@ RegisterNetEvent('ts-adminmenu:server:SetWaypoint', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
     local yPlyCoords = yPlayer.getCoords(true)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.SetWaypoint')
+    local allowed = CheckAllowed(xPlayer.source, 'Waypoint','OnlinePlayerOptions')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -795,7 +1910,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:PrintID', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.PRINTID')
+    local allowed = CheckAllowed(xPlayer.source, 'PrintID','OnlinePlayerOptions')
     local steamid, license, xbl, ip, discord, liveid = nil, nil, nil, nil, nil, nil
     if allowed then
         local data = {
@@ -842,7 +1957,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:KillPlayer', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.KillPlayer')
+    local allowed = CheckAllowed(xPlayer.source, 'KillPlayer','OnlinePlayerOptions')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -874,7 +1989,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:KickPlayer', function(pid)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.KickPlayer')
+    local allowed = CheckAllowed(xPlayer.source, 'Kick','OnlinePlayerOptions')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -903,7 +2018,7 @@ end)
 
 RegisterNetEvent('ts-adminmenu:server:DeleteVehicle', function(radi)
     local xPlayer = ESX.GetPlayerFromId(source)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.VehicleRelatedOptions.DeleteVehicle')
+    local allowed = CheckAllowed(xPlayer.source, 'DeleteVehicle','VehicleOptions')
     local radius = 1.0
     if radi ~= nil then
         radius = tonumber(radi) + 0.0
@@ -945,15 +2060,15 @@ end)
 RegisterNetEvent('ts-adminmenu:server:ChangeSkin', function(ply)
     local yPlayer = ESX.GetPlayerFromId(ply)
     local xPlayer = ESX.GetPlayerFromId(source)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.ChangeSkin')
-    yPlayer.triggerEvent('esx_skin:openSaveableMenu')
+    local allowed = CheckAllowed(xPlayer.source, 'ChangeSkin','OnlinePlayerOptions')
+    yPlayer.triggerEvent('vms_charcreator:openCreator')
 end)
 
 RegisterNetEvent('ts-adminmenu:server:SendMessage', function(pid, msg)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(pid)
     local message = msg
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.SendMessage')
+    local allowed = CheckAllowed(xPlayer.source, 'SendMessage','OnlinePlayerOptions')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -989,8 +2104,8 @@ RegisterNetEvent('ts-adminmenu:server:GiveItem', function(pid, item, count)
     local titem = item
     local amount = count
     local yPlayer = ESX.GetPlayerFromId(playerId)
-    local allowed = CheckAllowed(source, 'TSAdmin.OnlinePlyOptions.GiveItem') or
-                        CheckAllowed(source, 'TSAdmin.OnlinePlyOptions.GiveItemName')
+    local allowed = CheckAllowed(source, 'GiveItemList','OnlinePlayerOptions') or
+                        CheckAllowed(source, 'GiveItemCode','OnlinePlayerOptions')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1021,13 +2136,9 @@ end)
 RegisterNetEvent('ts-adminmenu:server:GetItems', function(pid)
     local src = source
     local playerId = pid
-    local yPlayer = ESX.GetPlayerFromId(playerId)
     local item = exports.ox_inventory:Inventory(playerId).items
-    local allowed = CheckAllowed(source, 'TSAdmin.OnlinePlyOptions.RemoveInventoryItem')
+    local allowed = CheckAllowed(source, 'RemoveInventoryItem','OnlinePlayerOptions')
     if allowed then
-        table.sort(item, function(a, b)
-            return a.name:upper() < b.name:upper()
-        end)
         TriggerClientEvent('ts-adminmenu:client:RemoveItem', src, pid, item)
     end
 end)
@@ -1038,7 +2149,7 @@ RegisterNetEvent('ts-adminmenu:server:RemoveItem', function(pid, item, count)
     local yPlayer = ESX.GetPlayerFromId(playerId)
     local titem = item
     local amount = count
-    local allowed = CheckAllowed(source, 'TSAdmin.OnlinePlyOptions.RemoveInventoryItem')
+    local allowed = CheckAllowed(source, 'RemoveInventoryItem','OnlinePlayerOptions')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1072,7 +2183,7 @@ RegisterNetEvent('ts-adminmenu:server:SpawnVehicle', function(veh)
     local playerPed = GetPlayerPed(source)
     local model = veh
     local vehicle = GetVehiclePedIsIn(playerPed)
-    local allowed = CheckAllowed(source, 'TSAdmin.VehicleRelatedOptions.Spawner')
+    local allowed = CheckAllowed(source, 'Spawner','VehicleOptions') or CheckAllowed(source,'SpawnerCode','VehicleOptions')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1112,7 +2223,7 @@ RegisterNetEvent('ts-adminmenu:server:PlayerFart', function(type)
     local src = source
     local farttype = type
     local plyList = TSGetPlayers()
-    local allowed = CheckAllowed(src, 'TSAdmin.TrollMenu.Fart')
+    local allowed = CheckAllowed(src, 'Fart','TrollMenu')
     if allowed then
         TriggerClientEvent('ts-adminmenu:client:PlayFart', src, plyList, farttype)
     end
@@ -1120,7 +2231,7 @@ end)
 
 RegisterNetEvent('ts-adminmenu:server:propspawner', function()
     local src = source
-    local allowed = CheckAllowed(src, 'TSAdmin.MiscSettings.PropSpawn')
+    local allowed = CheckAllowed(src, 'PropSpawner','MiscSettings')
     if allowed then
         exports.oxmysql:query('SELECT * FROM props_spawn ORDER BY id DESC', {}, function(result)
             TriggerClientEvent('lg: openPropMenu', src, result)
@@ -1133,7 +2244,7 @@ RegisterNetEvent('ts-adminmenu:server:SendStaff', function(txt)
     local msg = txt
     local xPlayer = ESX.GetPlayerFromId(src)
     local time = os.date('%H:%M')
-    local allowed = CheckAllowed(src, 'TSAdmin.MiscSettings.StaffChat')
+    local allowed = CheckAllowed(src, 'StaffChat','MiscSettings')
     if allowed then
         TriggerClientEvent('chat:addMessage', -1, {
             template = '<div class="chat-message staff"><i class="fas fa-shield-alt"></i> <b><span style="color: #1ebc62">[STAFF] {0}</span>&nbsp;<span style="font-size: 14px; color: #e1e1e1;">{2}</span></b><div style="margin-top: 5px; font-weight: 300;">{1}</div></div>',
@@ -1149,7 +2260,7 @@ RegisterNetEvent('ts-adminmenu:server:PlayFartFromServer', function(data)
     local ply = data.ply
     local yPlayer = ESX.GetPlayerFromId(ply)
     local netId = NetworkGetNetworkIdFromEntity(GetPlayerPed(yPlayer.source))
-    local allowed = CheckAllowed(src, 'TSAdmin.TrollMenu.Fart')
+    local allowed = CheckAllowed(src, 'Fart','TrollMenu')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1187,7 +2298,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:TruckPunchlinePly', function(data)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.Truck')
+    local allowed = CheckAllowed(xPlayer.source, 'TruckPunchline','TrollMenu')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1217,7 +2328,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:ClownAttackPly', function(data)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.Clown')
+    local allowed = CheckAllowed(xPlayer.source, 'ClownAttack','TrollMenu')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1247,7 +2358,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:MerryAttackPly', function(data)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.Merry')
+    local allowed = CheckAllowed(xPlayer.source, 'MerryweatherAttack','TrollMenu')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1277,7 +2388,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:FlashPly', function(data)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.Flash')
+    local allowed = CheckAllowed(xPlayer.source, 'Flashbang','TrollMenu')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1305,16 +2416,16 @@ RegisterNetEvent('ts-adminmenu:server:FlashPly', function(data)
 end)
 
 RegisterNetEvent('ts-adminmenu:server:Announce', function(txt)
-    local allowed = CheckAllowed(source, 'TSAdmin.MiscSettings.Announce')
+    local allowed = CheckAllowed(source, 'Announcement','MiscSettings')
     if allowed then
-        TriggerClientEvent('bvrtck_announce:annouce', -1, txt)
+        TriggerClientEvent('ts-adminmenu:client:Announce', -1, txt)
     end
 end)
 
 RegisterNetEvent('ts-adminmenu:server:FakeCallply', function(data2)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data2.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.FakeSound')
+    local allowed = CheckAllowed(xPlayer.source, 'FakeSound','TrollMenu')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1344,7 +2455,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:LagGame', function(data2)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data2.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.Lag')
+    local allowed = CheckAllowed(xPlayer.source, 'LagGame','TrollMenu')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1374,7 +2485,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:BlowPly', function(data2)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data2.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.BlowTyre')
+    local allowed = CheckAllowed(xPlayer.source, 'BlowTyres','TrollMenu')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1404,7 +2515,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:EjectPly', function(data2)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data2.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.Eject')
+    local allowed = CheckAllowed(xPlayer.source, 'Eject','TrollMenu')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1434,7 +2545,7 @@ end)
 RegisterNetEvent('ts-adminmenu:server:Crashply', function(data2)
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(data2.plyid)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.TrollMenu.Crash')
+    local allowed = CheckAllowed(xPlayer.source, 'CrashGame','TrollMenu')
     if allowed then
         local data = {
             ['Player'] = xPlayer.source, -- You need to set source here
@@ -1468,7 +2579,7 @@ RegisterNetEvent("ts-adminmenu:server:ToggleLicense", function(playerId, license
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
     local yPlayer = ESX.GetPlayerFromId(playerId)
-    local allowed = CheckAllowed(xPlayer.source, 'TSAdmin.OnlinePlyOptions.License')
+    local allowed = CheckAllowed(xPlayer.source, 'ToggleLicense','OnlinePlayerOptions')
     if allowed then
         local found = false
         TriggerEvent("esx_license:getLicensesList", function(licenses)
